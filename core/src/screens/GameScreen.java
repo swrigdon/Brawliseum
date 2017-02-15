@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Application;
+import dungeon.LevelGenerator;
 
 /**
  * Created by steph on 2/8/2017.
@@ -22,11 +23,17 @@ public class GameScreen extends ScreenAdapter {
         //testing variables need to move to separate class 
         public Texture floorTest,wallTest ; 
         public int[][] levelMatrix ;
+        
+        public LevelGenerator generator;
 
         public GameScreen(Application game)
         {
+            generator = new LevelGenerator(Gdx.graphics.getWidth()/32, Gdx.graphics.getHeight()/32);
+            
+            generator.generateMap();
+            
         	
-        	float w = Gdx.graphics.getWidth();
+            float w = Gdx.graphics.getWidth();
             float h = Gdx.graphics.getHeight();
             this.game = game;
             camera = new OrthographicCamera(w, h);
@@ -76,24 +83,35 @@ public class GameScreen extends ScreenAdapter {
         
         //temp handling input method
         private void handleInput(){
-        	if(Gdx.input.isKeyPressed(Input.Keys.W)){
+        	if(Gdx.input.isKeyPressed(Input.Keys.W))
+                {
         		camera.translate(0,3,0);
-        		if(checkOut()){
+        		if(checkOut())
+                        {
         			camera.translate(0,-3,0);
         		}
-        	}else if(Gdx.input.isKeyPressed(Input.Keys.S)){
+        	}
+                else if(Gdx.input.isKeyPressed(Input.Keys.S))
+                {
         		camera.translate(0,-3,0);
-        		if(checkOut()){
+        		if(checkOut())
+                        {
         			camera.translate(0,3,0);
         		}
-        	}else if(Gdx.input.isKeyPressed(Input.Keys.D)){
+        	}
+                else if(Gdx.input.isKeyPressed(Input.Keys.D))
+                {
         		camera.translate(3,0,0);
-        		if(checkOut()){
+        		if(checkOut())
+                        {
         			camera.translate(-3,0,0);
         		}
-        	}else if(Gdx.input.isKeyPressed(Input.Keys.A)){
+        	}
+                else if(Gdx.input.isKeyPressed(Input.Keys.A))
+                {
         		camera.translate(-3,0,0);
-        		if(checkOut()){
+        		if(checkOut())
+                        {
         			camera.translate(3,0,0);
         		}
         	}
