@@ -15,12 +15,23 @@ public class LevelGenerator
 {
     private int height;
     private int width;
-    private int playerStartX = 1;
-    private int playerStartY = 1;
+    private int playerStartX = 2;
+    private int playerStartY = 2;
     private int endLocationX;
     private int endLocationY;
     
-    public LevelGenerator(int height, int width)
+    private DungeonTile[][] map;
+
+    public DungeonTile[][] getMap() 
+    {
+        return map;
+    }
+    public void setMap(DungeonTile[][] map) 
+    {
+        this.map = map;
+    }
+    
+    public LevelGenerator(int width, int height)
     {
         this.height = height;
         this.width = width;
@@ -30,7 +41,10 @@ public class LevelGenerator
     public DungeonTile[][] generateMap()
     {
         int roomStyle;
-        DungeonTile[][] map = new DungeonTile[width][height];
+        map = new DungeonTile[width][height];
+        
+        int randPathX = playerStartX;
+        int randPathY = playerStartY;
         
         //THE hard part
         Random rand = new Random();
@@ -55,13 +69,78 @@ public class LevelGenerator
         //declares player start location on map
         map[playerStartX][playerStartY] = new DungeonTile("floor", playerStartX, playerStartY);
         
+        //declares a random placement of the end location
         endLocationX = rand.nextInt((map.length-2) - (map.length/2)) + ((map.length/2));
         endLocationY = rand.nextInt((map[0].length-2) - (map[0].length/2)) + ((map[0].length/2));
         
+        map[endLocationX][endLocationY] = new DungeonTile("floor", endLocationX, endLocationY);
+        
+        //Makes a random path from player start to the end location
+        //Jason - JUST A TEST, NOT FINAL VERSION
+        while(randPathX != endLocationX || randPathY != endLocationY)
+        {
+            int randInt = rand.nextInt(6)+1;
+            
+            //Chooses a random direction
+            if(randInt == 1 || randInt == 2)
+            {
+                randPathX++;
+            }
+            else if(randInt == 3)
+            {
+                randPathX--;
+            }
+            else if(randInt == 4 || randInt == 5)
+            {
+                randPathY++;
+            }
+            else if(randInt == 6)
+            {
+                randPathY--;
+            }
+            
+            //Sets parameters
+            if(randPathX > endLocationX || randPathX > width+1)
+            {
+                randPathX--;
+            }
+            if(randPathX < 2)
+            {
+                randPathX++;
+            }
+            if(randPathY > endLocationY || randPathY > width+1)
+            {
+                randPathY--;
+            }
+            if(randPathY < 2)
+            {
+                randPathY++;
+            }
+            
+            if(map[randPathX][randPathY].getTileType().equals("empty"))
+            {
+                map[randPathX][randPathY] = new DungeonTile("floor", randPathX, randPathY);
+                
+                /*
+                map[randPathX+1][randPathY] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                map[randPathX][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                map[randPathX+1][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                map[randPathX+1][randPathY-1] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                map[randPathX-1][randPathY] = new DungeonTile("floor", randPathX-1, randPathY-1);
+                map[randPathX][randPathY-1] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                map[randPathX+1][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                map[randPathX-1][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
+                */
+            }
+            
+        }
+        
+        //Print statements to test the locations are properly placed
         System.out.println("LengthX = " + map.length);
         System.out.println("LengthY = " + map[0].length);
         System.out.println("X = " + endLocationX);
         System.out.println("Y = " + endLocationY);
+        
         //random level style
         switch(roomStyle)
         {

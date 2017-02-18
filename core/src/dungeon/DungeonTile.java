@@ -15,11 +15,20 @@ public class DungeonTile
     private int x;
     private int y;
     
-    DungeonTile(String tileType, int x, int y)
+    public DungeonTile(String tileType, int x, int y)
     {
         this.tileType = tileType;
         this.x = x;
         this.y = y;
     }
-    
+
+    public String getTileType() 
+    {
+        return tileType;
+    }
+
+    public void setTileType(String tileType)
+    {
+        this.tileType = tileType;
+    }
 }
