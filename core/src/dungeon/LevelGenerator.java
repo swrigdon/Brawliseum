@@ -5,6 +5,10 @@
  */
 package dungeon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,131 +19,67 @@ public class LevelGenerator
 {
     private int height;
     private int width;
-    private int playerStartX = 2;
-    private int playerStartY = 2;
+    private int playerStartX = 1;
+    private int playerStartY = 1;
     private int endLocationX;
     private int endLocationY;
     
-    private DungeonTile[][] map;
-
-    public DungeonTile[][] getMap() 
-    {
-        return map;
-    }
-    public void setMap(DungeonTile[][] map) 
-    {
-        this.map = map;
-    }
-    
-    public LevelGenerator(int width, int height)
+    public LevelGenerator(int height, int width)
     {
         this.height = height;
         this.width = width;
     }
     
     //UNDER CONSTRUCTION
-    public DungeonTile[][] generateMap()
+    private DungeonTile[][] generateMap()
     {
         int roomStyle;
-        map = new DungeonTile[width][height];
-        
-        int randPathX = playerStartX;
-        int randPathY = playerStartY;
-        
+        //DungeonTile[][] map = new DungeonTile[width][height];
+        DungeonTile[][] map = new DungeonTile[21][21] ;
         //THE hard part
         Random rand = new Random();
         roomStyle = rand.nextInt(2);
         
-        //declares the wall perimeter of the map
+        //different map start generation to work with the algorithm 
         for(int x = 0; x < map.length; x++)
         {
             for(int y = 0; y < map[0].length; y++)
             {
-                if(x == 0 || y == 0 || x == map.length -1 || y == map[0].length -1)
-                {
-                    map[x][y] = new DungeonTile("wall", x, y);
-                }
-                else
+                if((x%2!=0)&&(y%2!=0)) 
                 {
                     map[x][y] = new DungeonTile("empty", x, y);
                 }
+                else
+                {
+                    map[x][y] = new DungeonTile("wall", x, y);
+                }
             }
         }
         
-        //declares player start location on map
-        map[playerStartX][playerStartY] = new DungeonTile("floor", playerStartX, playerStartY);
+        System.out.println(" Starting map " );
+        System.out.println("-----------------------------------" );
+        printGrid(map) ; //print the map
         
-        //declares a random placement of the end location
+        //declares player start location on map
+        map[playerStartX][playerStartY] = new DungeonTile("START", playerStartX, playerStartY);
+        
         endLocationX = rand.nextInt((map.length-2) - (map.length/2)) + ((map.length/2));
         endLocationY = rand.nextInt((map[0].length-2) - (map[0].length/2)) + ((map[0].length/2));
         
-        map[endLocationX][endLocationY] = new DungeonTile("floor", endLocationX, endLocationY);
-        
-        //Makes a random path from player start to the end location
-        //Jason - JUST A TEST, NOT FINAL VERSION
-        while(randPathX != endLocationX || randPathY != endLocationY)
-        {
-            int randInt = rand.nextInt(6)+1;
-            
-            //Chooses a random direction
-            if(randInt == 1 || randInt == 2)
-            {
-                randPathX++;
-            }
-            else if(randInt == 3)
-            {
-                randPathX--;
-            }
-            else if(randInt == 4 || randInt == 5)
-            {
-                randPathY++;
-            }
-            else if(randInt == 6)
-            {
-                randPathY--;
-            }
-            
-            //Sets parameters
-            if(randPathX > endLocationX || randPathX > width+1)
-            {
-                randPathX--;
-            }
-            if(randPathX < 2)
-            {
-                randPathX++;
-            }
-            if(randPathY > endLocationY || randPathY > width+1)
-            {
-                randPathY--;
-            }
-            if(randPathY < 2)
-            {
-                randPathY++;
-            }
-            
-            if(map[randPathX][randPathY].getTileType().equals("empty"))
-            {
-                map[randPathX][randPathY] = new DungeonTile("floor", randPathX, randPathY);
-                
-                /*
-                map[randPathX+1][randPathY] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                map[randPathX][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                map[randPathX+1][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                map[randPathX+1][randPathY-1] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                map[randPathX-1][randPathY] = new DungeonTile("floor", randPathX-1, randPathY-1);
-                map[randPathX][randPathY-1] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                map[randPathX+1][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                map[randPathX-1][randPathY+1] = new DungeonTile("floor", randPathX+1, randPathY+1);
-                */
-            }
-            
-        }
-        
-        //Print statements to test the locations are properly placed
         System.out.println("LengthX = " + map.length);
         System.out.println("LengthY = " + map[0].length);
         System.out.println("X = " + endLocationX);
         System.out.println("Y = " + endLocationY);
+        System.out.println("Room number: "+ roomStyle);
+        
+        //generate the maze (we can put this under room style later ) 
+        map = generateMaze(map,playerStartX,playerStartY) ; 
+        
+        
+        System.out.println(" Ending map " );
+        System.out.println("-----------------------------------" );
+        printGrid(map) ; //print the map
+
         
         //random level style
         switch(roomStyle)
@@ -151,17 +91,79 @@ public class LevelGenerator
                 case 2:
                     break;
         }
-        
-        
-                    
-        
+      
         return map;
     }
     
+    //recursive method to make the maze 
+    private DungeonTile[][] generateMaze(DungeonTile[][] map, int x, int y)
+    {
+    	//uses an array list of directions because i wanted to randomly loop through them with collections 
+    	ArrayList<Integer> directions = new ArrayList<Integer>(Arrays.asList(0,1,2,3)) ;
+    	 
+    	Collections.shuffle(directions); //mixes up the directions 
+    	
+    	for(int direction:directions){ //loops through the directions 
+    		if(direction == 0){ //up 
+    			if(!(y+2 >= map[0].length)){
+    				if((map[x][y+2].getTileType().equals("empty"))){ //check if we have been here
+            			map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
+            			map[x][y+2].setTileType("floor"); //tile is valid carve path through wall there
+            			generateMaze(map,x,y+2) ; //call function again from new square 
+            		}
+    			}
+        		
+        	}else if(direction == 1){ //down 
+        		if(!(y-2<0)){
+        			if(map[x][y-2].getTileType().equals("empty")){ //check if we have been here
+            			map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
+            			map[x][y-2].setTileType("floor"); //tile is valid carve path through wall there
+            			generateMaze(map,x,y-2) ; //call function again from new square 
+            		}
+        		}
+        		
+        	}else if(direction == 2){ //left 
+        		if(!(x-2 < 0)){
+	        		if(map[x-2][y].getTileType().equals("empty")){ //check if we have been here
+	        			map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
+	        			map[x-2][y].setTileType("floor"); //tile is valid carve path through wall there
+	        			generateMaze(map,x-2,y) ; //call function again from new square 
+	        		}
+        		}
+        	}else if(direction == 3){ //right
+        		if(!(x+2 >= map.length))
+	        		if(map[x+2][y].getTileType().equals("empty")){ //check if we have been here
+	        			map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
+	        			map[x+2][y].setTileType("floor"); //tile is valid carve path through wall there
+	        			generateMaze(map,x+2,y) ; //call function again from new square 
+	        		}
+        	}
+    	}
+
+		return map ; //backtracking 
+    }
+    
+    //helper function to print the grid to the console. we should delete this in final solution but it will be usefull to check for now 
+    private void printGrid(DungeonTile [][] grid)
+    {
+       for(int i = 0; i < grid.length; i++)
+       {
+          for(int j = 0; j < grid[0].length; j++)
+          {
+             System.out.printf("%5s ", grid[i][j].getTileType());
+          }
+          System.out.println();
+       }
+    }
+    
+    
     public Level generateLevel(int levelNumber)
     {
-        Level newLevel = new Level();
+    	//create a new level 
+        Level newLevel = new Level(generateMap());
         
+        
+        //return the level to the game class 
         return newLevel;
     }
 }
