@@ -8,35 +8,40 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Application;
+
+import dungeon.DungeonTile;
+import dungeon.Level;
 import dungeon.LevelGenerator;
 
 /**
  * Created by steph on 2/8/2017.
  */
 
-public class GameScreen extends ScreenAdapter 
-{
+public class GameScreen extends ScreenAdapter {
+
         Application game;
         private final SpriteBatch batch;
         private final OrthographicCamera camera;
         
         //testing variables need to move to separate class 
         public Texture floorTest,wallTest ; 
-        public int[][] levelMatrix ;
+        public DungeonTile[][] levelMatrix ;
         
-        //Jason Comment - testing the variables inside the LevelGenerator class
         public LevelGenerator generator;
+        public Level currentLevel  ; 
 
         public GameScreen(Application game)
         {
             generator = new LevelGenerator(Gdx.graphics.getWidth()/32, Gdx.graphics.getHeight()/32);
-            generator.generateMap();
+            
+            currentLevel = generator.generateLevel(0);
+            
         	
             float w = Gdx.graphics.getWidth();
             float h = Gdx.graphics.getHeight();
             this.game = game;
             camera = new OrthographicCamera(w, h);
-            camera.setToOrtho(false, 568, 320); //numbers are pixels player can see //was 320, 320
+            camera.setToOrtho(false, 320, 320); //numbers are pixels player can see 
             batch = new SpriteBatch();
             
             //test temp textures
@@ -44,21 +49,9 @@ public class GameScreen extends ScreenAdapter
             wallTest = new Texture("wallTest.png"); 
             
             //creating test matrix
-            levelMatrix = new int[Gdx.graphics.getWidth()/32][(Gdx.graphics.getHeight()/32)] ; 
-            for(int x=0; x<levelMatrix.length; x++)
-            {
-            	for(int y=0; y<levelMatrix[0].length; y++)
-                {
-                    if(x==0 || y==0 || x==levelMatrix.length-1 || y==levelMatrix[0].length-1)
-                    {
-            		levelMatrix[x][y] = 1 ;
-                    }
-                    else
-                    {
-            		levelMatrix[x][y] = 0 ;
-                    }
-            	}
-            }
+            levelMatrix = currentLevel.getMap() ; 
+            
+
         }
 
         public void render (float delta)
@@ -67,35 +60,16 @@ public class GameScreen extends ScreenAdapter
 
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
-            
             //testing drawing code
-            //Using the DungeonTile[][] matrix
-            for(int x = 0; x < generator.getMap().length; x++)
-            {
-                for(int y = 0; y < generator.getMap()[0].length; y++)
-                {
-                    if(generator.getMap()[x][y].getTileType().equals("floor"))
-                    {
-                        batch.draw(floorTest, x*floorTest.getWidth(), y*floorTest.getHeight());
-                    }
-                    else if(generator.getMap()[x][y].getTileType().equals("wall"))
-                    {
-                        batch.draw(wallTest, x*wallTest.getWidth(), y*wallTest.getHeight());
-                    }
-                }
-            }
-            //Using the test matrix
-            /*
             for(int x=0;x<levelMatrix.length;x++){
             	for(int y=0;y<levelMatrix[0].length;y++){
-            		if(levelMatrix[x][y]==1){
+            		if(levelMatrix[x][y].getTileType().equals("wall")){
             			batch.draw(wallTest, x*wallTest.getWidth(), y*wallTest.getHeight());
-            		}else{
+            		}else if(levelMatrix[x][y].getTileType().equals("floor")||levelMatrix[x][y].getTileType().equals("START")){
             			batch.draw(floorTest, x*floorTest.getWidth(), y*floorTest.getHeight());
             		}
             	}
             }
-                    */
             batch.end();
             
             //update checks
