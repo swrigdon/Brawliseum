@@ -11,5 +11,17 @@ package dungeon;
  */
 public class Level 
 {
-    
+	private DungeonTile[][] map; 
+	
+	public Level(DungeonTile [][] map){
+		this.setMap(map) ; 
+	}
+
+	public DungeonTile[][] getMap() {
+		return map;
+	}
+
+	public void setMap(DungeonTile[][] map) {
+		this.map = map;
+	}
 }
