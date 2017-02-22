@@ -41,7 +41,7 @@ public class GameScreen extends ScreenAdapter {
             float h = Gdx.graphics.getHeight();
             this.game = game;
             camera = new OrthographicCamera(w, h);
-            camera.setToOrtho(false, 320, 320); //numbers are pixels player can see 
+            camera.setToOrtho(false, 320*(w/h), 320); //numbers are pixels player can see 
             batch = new SpriteBatch();
             
             //test temp textures
