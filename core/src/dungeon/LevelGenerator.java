@@ -130,9 +130,11 @@ public class LevelGenerator
     			if(!(y+4 >= map[0].length)){
     				if((map[x][y+4].getTileType().equals("empty"))){ //check if we have been here
     					
+    					//generating a random # from 1-3 to decide which path to take to the new tile
     					Random randy = new Random();
     					int pathTaken = randy.nextInt(3) + 1;
     					
+    					//path through upper left square
     					if(pathTaken == 1){
     						
     						map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
@@ -144,6 +146,7 @@ public class LevelGenerator
                 			
     					}
 
+    					//path through upper middle square
     					if(pathTaken == 2){
     						
     						map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
@@ -152,6 +155,7 @@ public class LevelGenerator
                 			map[x][y+4].setTileType("floor"); //tile is valid carve path through wall there
     					}
     					
+    					//path through upper right square
     					if(pathTaken == 3){
     						
     						map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
@@ -161,6 +165,7 @@ public class LevelGenerator
                 			map[x+1][y+4].setTileType("floor"); //tile is valid carve path through wall there
                 			map[x][y+4].setTileType("floor"); //tile is valid carve path through wall there
     					}
+    					
             			generateMaze(map,x,y+4) ; //call function again from new square 
             		}
     			}
@@ -169,9 +174,11 @@ public class LevelGenerator
         		if(!(y-4 < 0)){
         			if(map[x][y-4].getTileType().equals("empty")){ //check if we have been here
         				
+        				//generating a random # from 1-3 to decide which path to take to the new tile
         				Random randy = new Random();
     					int pathTaken = randy.nextInt(3) + 1;
     					
+    					//path through lower left square
     					if(pathTaken == 1){
     						
     						map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
@@ -182,6 +189,7 @@ public class LevelGenerator
                 			map[x][y-4].setTileType("floor"); //tile is valid carve path through wall there
     					}
 
+    					//path through lower middle square
     					if(pathTaken == 2){
     						
     						map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
@@ -190,6 +198,7 @@ public class LevelGenerator
                 			map[x][y-4].setTileType("floor"); //tile is valid carve path through wall there
     					}
     					
+    					//path through lower right square
     					if(pathTaken == 3){
     						
     						map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
@@ -208,9 +217,11 @@ public class LevelGenerator
         		if(!(x-4 < 0)){
 	        		if(map[x-4][y].getTileType().equals("empty")){ //check if we have been here
 	        			
+	        			//generating a random # from 1-3 to decide which path to take to the new tile
 	        			Random randy = new Random();
     					int pathTaken = randy.nextInt(3) + 1;
     					
+    					//path through lower left square
     					if(pathTaken == 1){
     						
     						map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
@@ -221,6 +232,7 @@ public class LevelGenerator
                 			map[x-4][y].setTileType("floor"); //tile is valid carve path through wall there
     					}
 
+    					//path through left middle square
     					if(pathTaken == 2){
     						
     						map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
@@ -229,6 +241,7 @@ public class LevelGenerator
                 			map[x-4][y].setTileType("floor"); //tile is valid carve path through wall there
     					}
     					
+    					//path through upper left square
     					if(pathTaken == 3){
     						
     						map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
@@ -247,9 +260,11 @@ public class LevelGenerator
         		if(!(x+4 >= map.length))
 	        		if(map[x+4][y].getTileType().equals("empty")){ //check if we have been here
 	        			
+	        			//generating a random # from 1-3 to decide which path to take to the new tile
 	        			Random randy = new Random();
     					int pathTaken = randy.nextInt(3) + 1;
     					
+    					//path through lower right square
     					if(pathTaken == 1){
     						
     						map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
@@ -259,7 +274,8 @@ public class LevelGenerator
                 			map[x+4][y-1].setTileType("floor"); //tile is valid carve path through wall there
                 			map[x+4][y].setTileType("floor"); //tile is valid carve path through wall there
     					}
-
+    					
+    					//path through right middle square
     					if(pathTaken == 2){
     						
     						map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
@@ -268,6 +284,7 @@ public class LevelGenerator
                 			map[x+4][y].setTileType("floor"); //tile is valid carve path through wall there
     					}
     					
+    					//path through upper right square
     					if(pathTaken == 3){
     						
     						map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
