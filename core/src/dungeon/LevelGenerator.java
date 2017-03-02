@@ -19,8 +19,8 @@ public class LevelGenerator
 {
     private int height;
     private int width;
-    private int playerStartX = 1;
-    private int playerStartY = 1;
+    private int playerStartX = 2;
+    private int playerStartY = 2;
     private int endLocationX;
     private int endLocationY;
     
@@ -49,6 +49,17 @@ public class LevelGenerator
                 {
                     map[x][y] = new DungeonTile("empty", x, y);
                 }
+                
+                if((x%3!=0)&&(y%3!=0)) 
+                {
+                    map[x][y] = new DungeonTile("empty", x, y);
+                }
+                
+                if((x%4!=0)&&(y%4!=0)) 
+                {
+                    map[x][y] = new DungeonTile("empty", x, y);
+                }
+                
                 else
                 {
                     map[x][y] = new DungeonTile("wall", x, y);
@@ -99,45 +110,178 @@ public class LevelGenerator
     private DungeonTile[][] generateMaze(DungeonTile[][] map, int x, int y)
     {
     	//uses an array list of directions because i wanted to randomly loop through them with collections 
-    	ArrayList<Integer> directions = new ArrayList<Integer>(Arrays.asList(0,1,2,3)) ;
+    	ArrayList<Integer> directions = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3)) ;
     	 
     	Collections.shuffle(directions); //mixes up the directions 
     	
+    	//filling up the 3x3 with floor tiles after each recursive call
+    	map[x][y+1].setTileType("floor"); 
+		map[x][y-1].setTileType("floor"); 
+		map[x+1][y].setTileType("floor"); 
+		map[x-1][y].setTileType("floor");
+		map[x+1][y+1].setTileType("floor"); 
+		map[x+1][y-1].setTileType("floor"); 
+		map[x-1][y+1].setTileType("floor"); 
+		map[x-1][y-1].setTileType("floor"); 
+		
+    	
     	for(int direction:directions){ //loops through the directions 
     		if(direction == 0){ //up 
-    			if(!(y+2 >= map[0].length)){
-    				if((map[x][y+2].getTileType().equals("empty"))){ //check if we have been here
-            			map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
-            			map[x][y+2].setTileType("floor"); //tile is valid carve path through wall there
-            			generateMaze(map,x,y+2) ; //call function again from new square 
+    			if(!(y+4 >= map[0].length)){
+    				if((map[x][y+4].getTileType().equals("empty"))){ //check if we have been here
+    					
+    					Random randy = new Random();
+    					int pathTaken = randy.nextInt(3) + 1;
+    					
+    					if(pathTaken == 1){
+    						
+    						map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y+2].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y+3].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y+4].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y+4].setTileType("floor"); //tile is valid carve path through wall there
+                			
+    					}
+
+    					if(pathTaken == 2){
+    						
+    						map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y+2].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y+3].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y+4].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+    					
+    					if(pathTaken == 3){
+    						
+    						map[x][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y+2].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y+3].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y+4].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y+4].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+            			generateMaze(map,x,y+4) ; //call function again from new square 
             		}
     			}
         		
         	}else if(direction == 1){ //down 
-        		if(!(y-2<0)){
-        			if(map[x][y-2].getTileType().equals("empty")){ //check if we have been here
-            			map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
-            			map[x][y-2].setTileType("floor"); //tile is valid carve path through wall there
-            			generateMaze(map,x,y-2) ; //call function again from new square 
+        		if(!(y-4 < 0)){
+        			if(map[x][y-4].getTileType().equals("empty")){ //check if we have been here
+        				
+        				Random randy = new Random();
+    					int pathTaken = randy.nextInt(3) + 1;
+    					
+    					if(pathTaken == 1){
+    						
+    						map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y-2].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y-3].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y-4].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y-4].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+
+    					if(pathTaken == 2){
+    						
+    						map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y-2].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y-3].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y-4].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+    					
+    					if(pathTaken == 3){
+    						
+    						map[x][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y-2].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y-3].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y-4].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x][y-4].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+            			
+            			generateMaze(map,x,y-4) ; //call function again from new square 
             		}
         		}
         		
         	}else if(direction == 2){ //left 
-        		if(!(x-2 < 0)){
-	        		if(map[x-2][y].getTileType().equals("empty")){ //check if we have been here
-	        			map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
-	        			map[x-2][y].setTileType("floor"); //tile is valid carve path through wall there
-	        			generateMaze(map,x-2,y) ; //call function again from new square 
+        		if(!(x-4 < 0)){
+	        		if(map[x-4][y].getTileType().equals("empty")){ //check if we have been here
+	        			
+	        			Random randy = new Random();
+    					int pathTaken = randy.nextInt(3) + 1;
+    					
+    					if(pathTaken == 1){
+    						
+    						map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-2][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-3][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-4][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-4][y].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+
+    					if(pathTaken == 2){
+    						
+    						map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-2][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-3][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-4][y].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+    					
+    					if(pathTaken == 3){
+    						
+    						map[x-1][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-1][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-2][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-3][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-4][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x-4][y].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+	        			
+	        			generateMaze(map,x-4,y) ; //call function again from new square
 	        		}
         		}
+        		
         	}else if(direction == 3){ //right
-        		if(!(x+2 >= map.length))
-	        		if(map[x+2][y].getTileType().equals("empty")){ //check if we have been here
-	        			map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
-	        			map[x+2][y].setTileType("floor"); //tile is valid carve path through wall there
-	        			generateMaze(map,x+2,y) ; //call function again from new square 
+        		if(!(x+4 >= map.length))
+	        		if(map[x+4][y].getTileType().equals("empty")){ //check if we have been here
+	        			
+	        			Random randy = new Random();
+    					int pathTaken = randy.nextInt(3) + 1;
+    					
+    					if(pathTaken == 1){
+    						
+    						map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+2][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+3][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+4][y-1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+4][y].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+
+    					if(pathTaken == 2){
+    						
+    						map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+2][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+3][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+4][y].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+    					
+    					if(pathTaken == 3){
+    						
+    						map[x+1][y].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+1][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+2][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+3][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+4][y+1].setTileType("floor"); //tile is valid carve path through wall there
+                			map[x+4][y].setTileType("floor"); //tile is valid carve path through wall there
+    					}
+	        			
+	        			generateMaze(map,x+4,y) ; //call function again from new square 
 	        		}
         	}
+    		
     	}
 
 		return map ; //backtracking 
