@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Application;
 
 import dungeon.DungeonTile;
 import dungeon.Level;
 import dungeon.LevelGenerator;
+import entities.Player;
 
 /**
  * Created by steph on 2/8/2017.
@@ -24,18 +26,21 @@ public class GameScreen extends ScreenAdapter {
         private final OrthographicCamera camera;
         
         //testing variables need to move to separate class 
-        public Texture floorTest,wallTest ; 
+        public Texture floorTest,wallTest,tempTest,endTest; 
         public DungeonTile[][] levelMatrix ;
+        public Rectangle rect;
+        public Rectangle[][] collisionMatrix;
         
         public LevelGenerator generator;
         public Level currentLevel  ; 
+        public Player player;
+        
 
         public GameScreen(Application game)
         {
             generator = new LevelGenerator(Gdx.graphics.getWidth()/32, Gdx.graphics.getHeight()/32);
             
-            currentLevel = generator.generateLevel(0);
-            
+            currentLevel = generator.generateLevel(0);        
         	
             float w = Gdx.graphics.getWidth();
             float h = Gdx.graphics.getHeight();
@@ -47,11 +52,13 @@ public class GameScreen extends ScreenAdapter {
             //test temp textures
             floorTest = new Texture("floorTest.png"); 
             wallTest = new Texture("wallTest.png"); 
+            tempTest = new Texture("tempTest.png");
+            endTest = new Texture("endTest.png");
             
             //creating test matrix
-            levelMatrix = currentLevel.getMap() ; 
+            levelMatrix = currentLevel.getMap() ;
             
-
+            player = new Player(1,1, tempTest, currentLevel);
         }
 
         public void render (float delta)
@@ -61,15 +68,30 @@ public class GameScreen extends ScreenAdapter {
             batch.setProjectionMatrix(camera.combined);
             batch.begin();
             //testing drawing code
-            for(int x=0;x<levelMatrix.length;x++){
+            
+            for(int x=0;x<levelMatrix.length;x++)
+            {
             	for(int y=0;y<levelMatrix[0].length;y++){
-            		if(levelMatrix[x][y].getTileType().equals("wall")){
+            		if(levelMatrix[x][y].getTileType().equals("wall") || levelMatrix[x][y].getTileType().equals("empty")){
             			batch.draw(wallTest, x*wallTest.getWidth(), y*wallTest.getHeight());
             		}else if(levelMatrix[x][y].getTileType().equals("floor")||levelMatrix[x][y].getTileType().equals("START")){
             			batch.draw(floorTest, x*floorTest.getWidth(), y*floorTest.getHeight());
             		}
+                        
+                        if(levelMatrix[x][y].getTileType().equals("END")){
+            			batch.draw(endTest, x*endTest.getWidth(), y*endTest.getHeight());
+                        }
+                                
+                        
             	}
             }
+            batch.draw(player.getEntityTexture(), player.getxLocation() * floorTest.getWidth(), 
+                                                  player.getyLocation() * floorTest.getHeight());
+            
+            //Sets the camera position to the "player" so that it will follow it
+            camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
+            
+            
             batch.end();
             
             //update checks
@@ -78,7 +100,14 @@ public class GameScreen extends ScreenAdapter {
         }
         
         //temp handling input method
-        private void handleInput(){
+        private void handleInput()
+        { 
+            player.move();
+            //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
+            //System.out.println(player.getX() + " " + player.getY());
+
+            
+            /*
         	if(Gdx.input.isKeyPressed(Input.Keys.W))
                 {
         		camera.translate(0,3,0);
@@ -111,6 +140,7 @@ public class GameScreen extends ScreenAdapter {
         			camera.translate(3,0,0);
         		}
         	}
+                    */
         }
         
         //temp function to check if viewport is out of the screen. returns true if out of bounds

@@ -5,6 +5,11 @@
  */
 package entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import dungeon.Level;
+
 /**
  *
  * @author Jason
@@ -17,18 +22,87 @@ public class Player extends Entity
     private float experience;
     private float baseAttack;
     private float baseDefense;
-    private int level;
+    private int level;    
     
 
+    public Player(int x, int y, Texture playerTexture, Level currentLevel)
+    {
+        this.setEntityTexture(playerTexture);
+        this.setX(x);
+        this.setY(y);
+        this.setxLocation(x);
+        this.setyLocation(y);
+        this.setCurrentLevel(currentLevel);
+        this.setSpeed(5);
+        
+        this.set(x, y, this.getEntityTexture().getWidth(), this.getEntityTexture().getWidth());
+        
+        System.out.println("Player width: " + playerTexture.getWidth() + " Player height: " + playerTexture.getHeight());
+        System.out.println("Wall width: " + currentLevel.getMap()[0][0].getWidth() + " Wall height: " +currentLevel.getMap()[0][0].getHeight());
+    }
+    
     @Override
     public void move() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Added by Jason
+        if(Gdx.input.isKeyPressed(Input.Keys.W))
+        {
+            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
+            if(this.getCurrentLevel().getMap()[Math.round(this.getxLocation())]
+                    [(int)Math.ceil(this.getyLocation()-(this.getHeight()/100))].getTileType().equals("floor"))
+            {
+                this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+                //System.out.println("true");
+            }
+            else
+            {
+                //System.out.println("false");
+            }
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.S))
+        {
+            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
+            if(this.getCurrentLevel().getMap()[Math.round(this.getxLocation())][(int)Math.floor(this.getyLocation())].getTileType().equals("floor"))
+            {
+                this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+                //System.out.println("true");
+            }
+            else
+            {
+                //System.out.println("false");
+            }
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.D))
+        {
+            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
+            if(this.getCurrentLevel().getMap()[(int)Math.ceil(this.getxLocation()-(this.getWidth()/100))]
+                    [Math.round(this.getyLocation())].getTileType().equals("floor"))
+            {
+                this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+                //System.out.println("true");
+            }
+            else
+            {
+                //System.out.println("false");
+            }
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
+            if(this.getCurrentLevel().getMap()[(int)Math.floor(this.getxLocation())][Math.round(this.getyLocation())].getTileType().equals("floor"))
+            {
+                this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+                //System.out.println("true");
+            }
+            else
+            {
+                //System.out.println("false");
+            }
+        }
     }
     
     public float attack()
     {
-        
         return 0;
     }
     
@@ -132,6 +206,18 @@ public class Player extends Entity
     {
         this.level = level;
     }
-    
-    
+
+    /**
+     * @return the playerClass
+     */
+    public String getPlayerClass() {
+        return playerClass;
+    }
+
+    /**
+     * @param playerClass the playerClass to set
+     */
+    public void setPlayerClass(String playerClass) {
+        this.playerClass = playerClass;
+    }
 }
