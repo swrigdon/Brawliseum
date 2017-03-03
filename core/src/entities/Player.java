@@ -33,12 +33,15 @@ public class Player extends Entity
         this.setxLocation(x);
         this.setyLocation(y);
         this.setCurrentLevel(currentLevel);
-        this.setSpeed(5);
+        this.setSpeedx(5);
+        this.setSpeedy(5);
         
-        this.set(x, y, this.getEntityTexture().getWidth(), this.getEntityTexture().getWidth());
+        this.setMovingX(false);
+        this.setMovingY(false);
+        this.setMovingNX(false);
+        this.setMovingNY(false);
         
-        System.out.println("Player width: " + playerTexture.getWidth() + " Player height: " + playerTexture.getHeight());
-        System.out.println("Wall width: " + currentLevel.getMap()[0][0].getWidth() + " Wall height: " +currentLevel.getMap()[0][0].getHeight());
+        this.set(x, y, (float)playerTexture.getWidth()/32, (float)playerTexture.getHeight()/32);
     }
     
     @Override
@@ -47,61 +50,43 @@ public class Player extends Entity
         //Added by Jason
         if(Gdx.input.isKeyPressed(Input.Keys.W))
         {
-            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
-            if(this.getCurrentLevel().getMap()[Math.round(this.getxLocation())]
-                    [(int)Math.ceil(this.getyLocation()-(this.getHeight()/100))].getTileType().equals("wall"))
-            {
-                //this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("true");
-            }
-            else
-            {
-                this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("false");
-            }
+            this.setyLocation(this.getyLocation() + this.getSpeedy()*Gdx.graphics.getDeltaTime());
+            this.setMovingY(true);
+            this.setMovingX(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S))
         {
-            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
-            if(this.getCurrentLevel().getMap()[Math.round(this.getxLocation())][(int)Math.floor(this.getyLocation())].getTileType().equals("wall"))
-            {
-                //this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("true");
-            }
-            else
-            {
-                this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("false");
-            }
+            this.setyLocation(this.getyLocation() - this.getSpeedy()*Gdx.graphics.getDeltaTime());
+            this.setMovingNY(true);
+            this.setMovingX(false);
+            this.setMovingY(false);
+            this.setMovingNX(false);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D))
         {
-            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
-            if(this.getCurrentLevel().getMap()[(int)Math.ceil(this.getxLocation()-(this.getWidth()/100))]
-                    [Math.round(this.getyLocation())].getTileType().equals("wall"))
-            {
-                //this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("true");
-            }
-            else
-            {
-                this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("false");
-            }
+            this.setxLocation(this.getxLocation() + this.getSpeedx()*Gdx.graphics.getDeltaTime());
+            this.setMovingX(true);
+            this.setMovingY(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A))
         {
-            //This checks to see if the "player" is still on a floor tile, and if it is then it can keep moving
-            if(this.getCurrentLevel().getMap()[(int)Math.floor(this.getxLocation())][Math.round(this.getyLocation())].getTileType().equals("wall"))
-            {
-                //this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("true");
-            }
-            else
-            {
-                this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-                //System.out.println("false");
-            }
+            this.setxLocation(this.getxLocation() - this.getSpeedx()*Gdx.graphics.getDeltaTime());
+            this.setMovingNX(true);
+            this.setMovingY(false);
+            this.setMovingX(false);
+            this.setMovingNY(false);
+
+        }
+        else
+        {
+            this.setMovingX(false);
+            this.setMovingY(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
         }
     }
     

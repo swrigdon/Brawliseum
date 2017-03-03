@@ -11,6 +11,7 @@ public class DesktopLauncher
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.height = 720;
 		config.width = 1280;
+                config.foregroundFPS = 60;
 		new LwjglApplication(new Application(), config);
 	}
 }

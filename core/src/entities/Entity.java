@@ -18,8 +18,15 @@ public abstract class Entity extends Rectangle
    private float xLocation;
    private float yLocation;
    private float speed;
+   private float speedx;
+   private float speedy;
    private Texture entityTexture;
    private Level currentLevel;
+   
+   private boolean movingY;
+   private boolean movingX;
+   private boolean movingNY;
+   private boolean movingNX;
    
    public abstract void move();
 
@@ -91,6 +98,90 @@ public abstract class Entity extends Rectangle
      */
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    /**
+     * @return the speedx
+     */
+    public float getSpeedx() {
+        return speedx;
+    }
+
+    /**
+     * @param speedx the speedx to set
+     */
+    public void setSpeedx(float speedx) {
+        this.speedx = speedx;
+    }
+
+    /**
+     * @return the speedy
+     */
+    public float getSpeedy() {
+        return speedy;
+    }
+
+    /**
+     * @param speedy the speedy to set
+     */
+    public void setSpeedy(float speedy) {
+        this.speedy = speedy;
+    }
+
+    /**
+     * @return the movingY
+     */
+    public boolean isMovingY() {
+        return movingY;
+    }
+
+    /**
+     * @param movingY the movingY to set
+     */
+    public void setMovingY(boolean movingY) {
+        this.movingY = movingY;
+    }
+
+    /**
+     * @return the movingX
+     */
+    public boolean isMovingX() {
+        return movingX;
+    }
+
+    /**
+     * @param movingX the movingX to set
+     */
+    public void setMovingX(boolean movingX) {
+        this.movingX = movingX;
+    }
+
+    /**
+     * @return the movingNY
+     */
+    public boolean isMovingNY() {
+        return movingNY;
+    }
+
+    /**
+     * @param movingNY the movingNY to set
+     */
+    public void setMovingNY(boolean movingNY) {
+        this.movingNY = movingNY;
+    }
+
+    /**
+     * @return the movingNX
+     */
+    public boolean isMovingNX() {
+        return movingNX;
+    }
+
+    /**
+     * @param movingNX the movingNX to set
+     */
+    public void setMovingNX(boolean movingNX) {
+        this.movingNX = movingNX;
     }
    
 }

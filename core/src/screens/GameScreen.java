@@ -14,6 +14,7 @@ import dungeon.DungeonTile;
 import dungeon.Level;
 import dungeon.LevelGenerator;
 import entities.Player;
+import java.util.ArrayList;
 
 /**
  * Created by steph on 2/8/2017.
@@ -29,7 +30,7 @@ public class GameScreen extends ScreenAdapter {
         public Texture floorTest,wallTest,tempTest,endTest; 
         public DungeonTile[][] levelMatrix ;
         public Rectangle rect;
-        public Rectangle[][] collisionMatrix;
+        ArrayList<Rectangle> collisionMatrix = new ArrayList<Rectangle>();
         
         public LevelGenerator generator;
         public Level currentLevel  ; 
@@ -72,8 +73,14 @@ public class GameScreen extends ScreenAdapter {
             for(int x=0;x<levelMatrix.length;x++)
             {
             	for(int y=0;y<levelMatrix[0].length;y++){
-            		if(levelMatrix[x][y].getTileType().equals("wall") || levelMatrix[x][y].getTileType().equals("empty")){
+            		if(levelMatrix[x][y].getTileType().equals("wall") || levelMatrix[x][y].getTileType().equals("empty"))
+                        {
             			batch.draw(wallTest, x*wallTest.getWidth(), y*wallTest.getHeight());
+                                
+                                //This makes a new rectangle the size of the wall tile
+                                rect = new Rectangle(x,y,1,1);
+                                //And this adds that rectangle to the Array List of rectangles
+                                collisionMatrix.add(rect);
             		}else if(levelMatrix[x][y].getTileType().equals("floor")||levelMatrix[x][y].getTileType().equals("START")){
             			batch.draw(floorTest, x*floorTest.getWidth(), y*floorTest.getHeight());
             		}
@@ -91,6 +98,8 @@ public class GameScreen extends ScreenAdapter {
             //Sets the camera position to the "player" so that it will follow it
             camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
             
+            batch.draw(endTest, rect.getX()*32, rect.getY()*32);
+            
             
             batch.end();
             
@@ -102,10 +111,38 @@ public class GameScreen extends ScreenAdapter {
         //temp handling input method
         private void handleInput()
         { 
+            //Added by Jason
             player.move();
-            //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
-            //System.out.println(player.getX() + " " + player.getY());
-
+            player.set(player.getxLocation(), player.getyLocation(), player.getWidth(), player.getHeight());
+            
+            //This handles the collision detection for the player and walls, this will probably have to be moved into it's own
+            //method, but for now, it is finally working
+            for(int i = 0; i < collisionMatrix.size(); i++)
+            {
+                if(player.overlaps(collisionMatrix.get(i)))
+                {
+                    if(player.isMovingY())
+                    {
+                        player.setyLocation(player.getyLocation() - (float)5*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                    if(player.isMovingX())
+                    {
+                        player.setxLocation(player.getxLocation() - (float)5*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                    if(player.isMovingNY())
+                    {
+                        player.setyLocation(player.getyLocation() + (float)5*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                    if(player.isMovingNX())
+                    {
+                        player.setxLocation(player.getxLocation() + (float)5*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                }
+            }
             
             /*
         	if(Gdx.input.isKeyPressed(Input.Keys.W))

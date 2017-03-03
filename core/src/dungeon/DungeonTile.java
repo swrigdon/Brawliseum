@@ -5,27 +5,21 @@
  */
 package dungeon;
 
-import com.badlogic.gdx.math.Rectangle;
-import screens.GameScreen;
-
 /**
  *
  * @author Jason
  */
-public class DungeonTile extends Rectangle
+public class DungeonTile
 {
     private String tileType;
-    private int x;
-    private int y;
-    GameScreen gscreen;
+    private final int x;
+    private final int y;
     
     public DungeonTile(String tileType, int x, int y)
     {
         this.tileType = tileType;
         this.x = x;
         this.y = y;
-        
-        this.set(x, y, 32, 32);
     }
 
     public String getTileType() 

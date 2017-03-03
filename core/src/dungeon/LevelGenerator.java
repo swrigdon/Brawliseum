@@ -35,7 +35,7 @@ public class LevelGenerator
     {
         int roomStyle;
         //DungeonTile[][] map = new DungeonTile[width][height];
-        DungeonTile[][] map = new DungeonTile[22][22] ;
+        DungeonTile[][] map = new DungeonTile[21][21] ;
         //THE hard part
         Random rand = new Random();
         roomStyle = rand.nextInt(2);
