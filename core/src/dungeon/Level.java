@@ -5,15 +5,21 @@
  */
 package dungeon;
 
+import entities.Enemy;
+import java.util.ArrayList;
+
 /**
  *
  * @author Jason
  */
 public class Level 
 {
-	private DungeonTile[][] map; 
+	private DungeonTile[][] map;
+        private ArrayList<Enemy> enemies;
 	
-	public Level(DungeonTile [][] map){
+	public Level(DungeonTile [][] map, ArrayList<Enemy> enemies)
+        {
+                this.enemies = enemies;
 		this.setMap(map) ; 
 	}
 
@@ -24,4 +30,18 @@ public class Level
 	public void setMap(DungeonTile[][] map) {
 		this.map = map;
 	}
+
+    /**
+     * @return the enemies
+     */
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    /**
+     * @param enemies the enemies to set
+     */
+    public void setEnemies(ArrayList<Enemy> enemies) {
+        this.enemies = enemies;
+    }
 }

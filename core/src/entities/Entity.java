@@ -18,8 +18,6 @@ public abstract class Entity extends Rectangle
    private float xLocation;
    private float yLocation;
    private float speed;
-   private float speedx;
-   private float speedy;
    private Texture entityTexture;
    private Level currentLevel;
    
@@ -98,34 +96,6 @@ public abstract class Entity extends Rectangle
      */
     public void setSpeed(float speed) {
         this.speed = speed;
-    }
-
-    /**
-     * @return the speedx
-     */
-    public float getSpeedx() {
-        return speedx;
-    }
-
-    /**
-     * @param speedx the speedx to set
-     */
-    public void setSpeedx(float speedx) {
-        this.speedx = speedx;
-    }
-
-    /**
-     * @return the speedy
-     */
-    public float getSpeedy() {
-        return speedy;
-    }
-
-    /**
-     * @param speedy the speedy to set
-     */
-    public void setSpeedy(float speedy) {
-        this.speedy = speedy;
     }
 
     /**

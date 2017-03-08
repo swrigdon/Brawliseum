@@ -31,5 +31,47 @@ public class Enemy extends Entity
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    /**
+     * @return the health
+     */
+    public float getHealth() {
+        return health;
+    }
+
+    /**
+     * @param health the health to set
+     */
+    public void setHealth(float health) {
+        this.health = health;
+    }
+
+    /**
+     * @return the damage
+     */
+    public float getDamage() {
+        return damage;
+    }
+
+    /**
+     * @param damage the damage to set
+     */
+    public void setDamage(float damage) {
+        this.damage = damage;
+    }
+
+    /**
+     * @return the defense
+     */
+    public float getDefense() {
+        return defense;
+    }
+
+    /**
+     * @param defense the defense to set
+     */
+    public void setDefense(float defense) {
+        this.defense = defense;
+    }
     
 }

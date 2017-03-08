@@ -33,8 +33,7 @@ public class Player extends Entity
         this.setxLocation(x);
         this.setyLocation(y);
         this.setCurrentLevel(currentLevel);
-        this.setSpeedx(5);
-        this.setSpeedy(5);
+        this.setSpeed(3);
         
         this.setMovingX(false);
         this.setMovingY(false);
@@ -50,7 +49,7 @@ public class Player extends Entity
         //Added by Jason
         if(Gdx.input.isKeyPressed(Input.Keys.W))
         {
-            this.setyLocation(this.getyLocation() + this.getSpeedy()*Gdx.graphics.getDeltaTime());
+            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
             this.setMovingY(true);
             this.setMovingX(false);
             this.setMovingNY(false);
@@ -58,7 +57,7 @@ public class Player extends Entity
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S))
         {
-            this.setyLocation(this.getyLocation() - this.getSpeedy()*Gdx.graphics.getDeltaTime());
+            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
             this.setMovingNY(true);
             this.setMovingX(false);
             this.setMovingY(false);
@@ -66,7 +65,7 @@ public class Player extends Entity
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D))
         {
-            this.setxLocation(this.getxLocation() + this.getSpeedx()*Gdx.graphics.getDeltaTime());
+            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
             this.setMovingX(true);
             this.setMovingY(false);
             this.setMovingNY(false);
@@ -74,7 +73,7 @@ public class Player extends Entity
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A))
         {
-            this.setxLocation(this.getxLocation() - this.getSpeedx()*Gdx.graphics.getDeltaTime());
+            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
             this.setMovingNX(true);
             this.setMovingY(false);
             this.setMovingX(false);
