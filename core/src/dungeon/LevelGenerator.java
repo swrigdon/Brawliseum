@@ -89,8 +89,54 @@ public class LevelGenerator
         //Generates the end location (NEEDS WORK)
         endLocationX = rand.nextInt((map.length-2) - ((map.length*3)/4)) + (((map.length*3)/4));
         endLocationY = rand.nextInt((map[0].length-2) - ((map[0].length*3)/4)) + (((map[0].length*3)/4));
+        /*
         System.out.println("X = " + endLocationX);
         System.out.println("Y = " + endLocationY);
+        */
+        while(map[(int)endLocationX][(int)endLocationY].getTileType().equals("wall"))
+        {
+            if(!(map[(int)endLocationX][(int)endLocationY+1].getTileType().equals("wall")))
+            {
+                endLocationY++;
+            }
+            else if(!(map[(int)endLocationX][(int)endLocationY-1].getTileType().equals("wall")))
+            {
+                endLocationY--;
+            }
+            else if(!(map[(int)endLocationX+1][(int)endLocationY].getTileType().equals("wall")))
+            {
+                endLocationX++;
+            }
+            else if(!(map[(int)endLocationX-1][(int)endLocationY].getTileType().equals("wall")))
+            {
+                endLocationX--;
+            }
+            else if(!(map[(int)endLocationX+1][(int)endLocationY+1].getTileType().equals("wall")))
+            {
+                endLocationX++;
+                endLocationY++;
+            }
+            else if(!(map[(int)endLocationX-1][(int)endLocationY-1].getTileType().equals("wall")))
+            {
+                endLocationX--;
+                endLocationY--;
+            }
+            else if(!(map[(int)endLocationX+1][(int)endLocationY-1].getTileType().equals("wall")))
+            {
+                endLocationX++;
+                endLocationY--;
+            }
+            else if(!(map[(int)endLocationX-1][(int)endLocationY+1].getTileType().equals("wall")))
+            {
+                endLocationX--;
+                endLocationY++;
+            }
+            else//FAIL SAFE
+            {
+                endLocationX = rand.nextInt((map.length-2) - ((map.length*3)/4)) + (((map.length*3)/4));
+                endLocationY = rand.nextInt((map[0].length-2) - ((map[0].length*3)/4)) + (((map[0].length*3)/4));
+            }
+        }
         
         map[endLocationX][endLocationY].setTileType("END");
         
@@ -620,7 +666,7 @@ public class LevelGenerator
         
         for(int i = 0; i < enemyNumber; i++)
         {
-            holderEnemy = new Enemy();
+            holderEnemy = new Enemy(map);
             holderEnemy.setHealth(100);
             holderEnemy.setDamage(100);
             holderEnemy.setDefense(100);
@@ -630,21 +676,54 @@ public class LevelGenerator
             enemyLocationX = rand.nextInt((map.length-2) - 1)+1;
             enemyLocationY = rand.nextInt((map[0].length-2 - 1))+1;
             
+            /*
             System.out.println(enemyLocationX);
             System.out.println(enemyLocationY);
-            
+            */
             
             while(map[(int)enemyLocationX][(int)enemyLocationY].getTileType().equals("wall"))
             {
-                //System.out.println(map[(int)enemyLocationX][(int)enemyLocationY].getTileType().equals("wall"));
-                if(enemyLocationX + 1 >= map.length-1)
+                if(!(map[(int)enemyLocationX][(int)enemyLocationY+1].getTileType().equals("wall")))
+                {
+                    enemyLocationY++;
+                }
+                else if(!(map[(int)enemyLocationX][(int)enemyLocationY-1].getTileType().equals("wall")))
+                {
+                    enemyLocationY--;
+                }
+                else if(!(map[(int)enemyLocationX+1][(int)enemyLocationY].getTileType().equals("wall")))
+                {
+                    enemyLocationX++;
+                }
+                else if(!(map[(int)enemyLocationX-1][(int)enemyLocationY].getTileType().equals("wall")))
                 {
                     enemyLocationX--;
                 }
-                else
+                else if(!(map[(int)enemyLocationX+1][(int)enemyLocationY+1].getTileType().equals("wall")))
                 {
                     enemyLocationX++;
-                }  
+                    enemyLocationY++;
+                }
+                else if(!(map[(int)enemyLocationX-1][(int)enemyLocationY-1].getTileType().equals("wall")))
+                {
+                    enemyLocationX--;
+                    enemyLocationY--;
+                }
+                else if(!(map[(int)enemyLocationX+1][(int)enemyLocationY-1].getTileType().equals("wall")))
+                {
+                    enemyLocationX++;
+                    enemyLocationY--;
+                }
+                else if(!(map[(int)enemyLocationX-1][(int)enemyLocationY+1].getTileType().equals("wall")))
+                {
+                    enemyLocationX--;
+                    enemyLocationY++;
+                }
+                else//FAIL SAFE
+                {
+                    enemyLocationX = rand.nextInt((map.length-2) - 1)+1;
+                    enemyLocationY = rand.nextInt((map[0].length-2 - 1))+1;
+                }
             }
             
             holderEnemy.setxLocation(enemyLocationX);

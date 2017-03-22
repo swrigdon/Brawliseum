@@ -116,6 +116,9 @@ public class GameScreen extends ScreenAdapter
         
         for(Enemy enemy: currentLevel.getEnemies())
         {
+            enemy.setEndX(player.getxLocation());
+            enemy.setEndY(player.getyLocation());
+            //enemy.move();
             batch.draw(enemy.getEntityTexture(), enemy.getxLocation() * floorTest.getWidth(), 
                                               enemy.getyLocation() * floorTest.getHeight());
         }
