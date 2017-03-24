@@ -5,19 +5,16 @@
  */
 package entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import dungeon.DungeonTile;
-import dungeon.Level;
 import java.util.ArrayList;
 
 /**
  *
- * @author Jason
+ * @author Sebastian
  */
 public class Enemy extends Entity
 {
-    private final int MAX_VISION = 10;
+    private final int MAX_VISION = 600;
     private float health;
     private float damage;
     private float defense;
@@ -61,6 +58,7 @@ public class Enemy extends Entity
             //This means that the current location is already at the player
             if(current == map[(int)endX][(int)endY])
             {
+            	System.out.println("WE'RE BREAKING FREEE");
                 break;
             }
             
@@ -86,36 +84,31 @@ public class Enemy extends Entity
                     
                     if(!(map[neighborX][neighborY].getTileType().equals("wall")))
                     {
-                    	
-                        DungeonTile neighbor = map[neighborX][neighborY] ; 
-                        System.out.println("Visiting");
-                        
-                        if(!open.contains(neighbor)&&!(closed.contains(neighbor)))
-                        {
-                        	neighbor.getHeuristic() ; 
-                        	maxDepth = Math.max(maxDepth, neighbor.setParent(current)) ; 
-                        	open.add(neighbor) ; 
+                        DungeonTile neighbor= map[neighborX][neighborY]; 
+                        if(!open.contains(neighbor) && !closed.contains(neighbor)){
+                        	//System.out.println("THIS IS A TEST");
+                        	neighbor.getHeuristic();
+                        	maxDepth= Math.max(maxDepth, neighbor.setParent(current));
+                        	open.add(neighbor);
+                        	System.out.println(open.size());
                         }
                     }
                 }
             }
-        }  
-        
-        if(map[(int) endX][(int) endY].getParent()==null)
-        {
-        	System.out.println("null");
-        	return null ; 
+        }      
+        if(map[(int)endX][(int)endY].getParent()==null){
+        	return null;
         }
         
-        ArrayList<DungeonTile> path = new ArrayList<DungeonTile>() ; 
-        DungeonTile target = map[(int) endX][(int) endY] ; 
-        while(target !=  map[(int)this.getxLocation()][(int)this.getyLocation()])
-        {
-        	path.add(target) ;
-        	target = target.getParent() ; 
+        ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
+        DungeonTile target = map[(int)endX][(int)endY];
+        while(target!= map[(int)this.getxLocation()][(int)this.getyLocation()]){
+        	System.out.println("Tile X: "+ target.getX());
+    		System.out.println("Tile Y: "+ target.getY());
+        	path.add(target);
+        	target=target.getParent();
         }
-        
-        return path ; 
+        return path;
     }
     
     //public movementCost(neighborX, neighborY, )
@@ -124,26 +117,29 @@ public class Enemy extends Entity
     @Override
     public void move() 
     {
+    	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY){
+    		return;
+    	}
+    	System.out.println("Enemy is at: "+ this.getxLocation() +"  "+ this.getyLocation());
+    	ArrayList<DungeonTile> path = aStar(); 
+    	System.out.println(path.size());
+    	System.out.println("START!!!!!!!!");
+    	System.out.println("__________________");
+    	for(DungeonTile e:path){
+    		System.out.println("Real Tile X: "+ e.getX());
+    		System.out.println("Real Tile Y: "+ e.getY());
+    	}
+    	System.out.println("END!!!!!!!!!!!!!!!!!");
+    	System.out.println("______________");
         /*
         System.out.println("Enemy EndX: " + this.getEndX());
         System.out.println("Enemy EndY: " + this.getEndY());
         */
+        this.setxLocation(path.get(path.size()-1).getX());
+        this.setyLocation(path.get(path.size()-1).getY());
         
-    	ArrayList<DungeonTile> path = aStar() ; 
-    	//System.out.println("Path bool: "+path.size());
-    	if(path!=null)
-    	{
-    		System.out.println("CurrLoc: "+this.getX()+","+this.getY());
-    		System.out.println("TargetLoc: "+path.get(0).getX()+","+path.get(0).getX());
-	    	if(this.getX()<path.get(0).getX())
-	    	{
-	    		this.setX(this.getxLocation() + (float)this.getSpeed()*Gdx.graphics.getDeltaTime()) ; 
-	    	}else if(this.getY()<path.get(0).getY())
-	    	{
-	    		this.setY(this.getyLocation() + (float)this.getSpeed()*Gdx.graphics.getDeltaTime()) ; 
-	    	}
-    	}
-    	
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     /**
