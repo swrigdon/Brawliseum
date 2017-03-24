@@ -42,7 +42,7 @@ public class GameScreen extends ScreenAdapter
     {
         generator = new LevelGenerator(29, 29);
 
-        currentLevel = generator.generateLevel(51);        
+        currentLevel = generator.generateLevel(3);        
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -118,7 +118,7 @@ public class GameScreen extends ScreenAdapter
         {
             enemy.setEndX(player.getxLocation());
             enemy.setEndY(player.getyLocation());
-            //enemy.move();
+            enemy.move();
             batch.draw(enemy.getEntityTexture(), enemy.getxLocation() * floorTest.getWidth(), 
                                               enemy.getyLocation() * floorTest.getHeight());
         }
