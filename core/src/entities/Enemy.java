@@ -8,6 +8,9 @@ package entities;
 import dungeon.DungeonTile;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
 /**
  *
  * @author Sebastian
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 public class Enemy extends Entity
 {
     private final int MAX_VISION = 600;
+    private final int MAX_RANGE = 10 ; 
     private float health;
     private float damage;
     private float defense;
@@ -114,32 +118,79 @@ public class Enemy extends Entity
     //public movementCost(neighborX, neighborY, )
     //test comment
     
+    private int calcDistance(){
+    	return (int) Math.sqrt(Math.pow(endX-this.getxLocation(), 2)+Math.pow(endY-this.getyLocation(), 2)) ; 
+    }
+    
     @Override
     public void move() 
     {
     	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY){
     		return;
     	}
-    	System.out.println("Enemy is at: "+ this.getxLocation() +"  "+ this.getyLocation());
-    	ArrayList<DungeonTile> path = aStar(); 
-    	System.out.println(path.size());
-    	System.out.println("START!!!!!!!!");
-    	System.out.println("__________________");
-    	for(DungeonTile e:path){
-    		System.out.println("Real Tile X: "+ e.getX());
-    		System.out.println("Real Tile Y: "+ e.getY());
+    	
+    	
+    	//outside the range of pathfinding 
+    	if(calcDistance() >= MAX_RANGE)
+    	{
+
+    	}else{
+    		System.out.println("Enemy is at: "+ this.getxLocation() +"  "+ this.getyLocation());
+        	ArrayList<DungeonTile> path = aStar(); 
+        	System.out.println(path.size());
+        	System.out.println("START!!!!!!!!");
+        	System.out.println("__________________");
+        	for(DungeonTile e:path){
+        		System.out.println("Real Tile X: "+ e.getX());
+        		System.out.println("Real Tile Y: "+ e.getY());
+        	}
+        	System.out.println("END!!!!!!!!!!!!!!!!!");
+        	System.out.println("______________");
+            /*
+            System.out.println("Enemy EndX: " + this.getEndX());
+            System.out.println("Enemy EndY: " + this.getEndY());
+            */
+        	 
+        	
+        	System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
+        	System.out.println("from: (" + this.getxLocation() + ", " + this.getyLocation() + ")");
+            this.setxLocation(path.get(path.size()-1).getX());
+            this.setyLocation(path.get(path.size()-1).getY());
+        	
+        	//changeLocation(path.get(path.size()-1)) ;
     	}
-    	System.out.println("END!!!!!!!!!!!!!!!!!");
-    	System.out.println("______________");
-        /*
-        System.out.println("Enemy EndX: " + this.getEndX());
-        System.out.println("Enemy EndY: " + this.getEndY());
-        */
-        this.setxLocation(path.get(path.size()-1).getX());
-        this.setyLocation(path.get(path.size()-1).getY());
+    	
+    	
         
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
+    }
+    
+    private void changeLocation(DungeonTile newLocation)
+    {
+    	float xDiff = (this.getxLocation() - newLocation.getX()) ; 
+    	float yDiff = (this.getyLocation() - newLocation.getY()) ; 
+    	
+    	System.out.println("xdiff: " + xDiff);
+    	System.out.println("ydiff: " + yDiff);
+    	
+    	
+    	 if(xDiff>0)
+         {
+             this.setxLocation(newLocation.getX() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+         }
+         else if(xDiff<0)
+         {
+        	 this.setxLocation(newLocation.getX() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+         }
+         else if(yDiff>0)
+         {
+             this.setyLocation(newLocation.getY() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+         }
+         else if(yDiff<0)
+         {
+             this.setyLocation(newLocation.getY() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+         }
     }
 
     /**
