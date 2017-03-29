@@ -62,7 +62,7 @@ public class Enemy extends Entity
             //This means that the current location is already at the player
             if(current == map[(int)endX][(int)endY])
             {
-            	System.out.println("WE'RE BREAKING FREEE");
+            	//System.out.println("WE'RE BREAKING FREEE");
                 break;
             }
             
@@ -94,7 +94,7 @@ public class Enemy extends Entity
                         	neighbor.getHeuristic();
                         	maxDepth= Math.max(maxDepth, neighbor.setParent(current));
                         	open.add(neighbor);
-                        	System.out.println(open.size());
+                        	//System.out.println(open.size());
                         }
                     }
                 }
@@ -104,11 +104,13 @@ public class Enemy extends Entity
         	return null;
         }
         
+        
+        
         ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
         DungeonTile target = map[(int)endX][(int)endY];
         while(target!= map[(int)this.getxLocation()][(int)this.getyLocation()]){
-        	System.out.println("Tile X: "+ target.getX());
-    		System.out.println("Tile Y: "+ target.getY());
+        	//System.out.println("Tile X: "+ target.getX());
+    		//System.out.println("Tile Y: "+ target.getY());
         	path.add(target);
         	target=target.getParent();
         }
@@ -134,18 +136,21 @@ public class Enemy extends Entity
     	if(calcDistance() >= MAX_RANGE)
     	{
 
-    	}else{
-    		System.out.println("Enemy is at: "+ this.getxLocation() +"  "+ this.getyLocation());
-        	ArrayList<DungeonTile> path = aStar(); 
-        	System.out.println(path.size());
-        	System.out.println("START!!!!!!!!");
-        	System.out.println("__________________");
+    	}
+        else
+        {
+            //System.out.println("Enemy is at: "+ this.getxLocation() +"  "+ this.getyLocation());
+        	ArrayList<DungeonTile> path = aStar();
+                
+        	//System.out.println(path.size());
+        	//System.out.println("START!!!!!!!!");
+        	//System.out.println("__________________");
         	for(DungeonTile e:path){
-        		System.out.println("Real Tile X: "+ e.getX());
-        		System.out.println("Real Tile Y: "+ e.getY());
+        		//System.out.println("Real Tile X: "+ e.getX());
+        		//System.out.println("Real Tile Y: "+ e.getY());
         	}
-        	System.out.println("END!!!!!!!!!!!!!!!!!");
-        	System.out.println("______________");
+        	//System.out.println("END!!!!!!!!!!!!!!!!!");
+        	//System.out.println("______________");
             /*
             System.out.println("Enemy EndX: " + this.getEndX());
             System.out.println("Enemy EndY: " + this.getEndY());
@@ -154,10 +159,10 @@ public class Enemy extends Entity
         	
         	System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
         	System.out.println("from: (" + this.getxLocation() + ", " + this.getyLocation() + ")");
-            this.setxLocation(path.get(path.size()-1).getX());
-            this.setyLocation(path.get(path.size()-1).getY());
-        	
-        	//changeLocation(path.get(path.size()-1)) ;
+                //this.setxLocation(path.get(path.size()-1).getX());
+                //this.setyLocation(path.get(path.size()-1).getY());
+                
+        	changeLocation(path.get(path.size()-1)) ;
     	}
     	
     	
@@ -168,29 +173,40 @@ public class Enemy extends Entity
     
     private void changeLocation(DungeonTile newLocation)
     {
-    	float xDiff = (this.getxLocation() - newLocation.getX()) ; 
-    	float yDiff = (this.getyLocation() - newLocation.getY()) ; 
+    	float xDiff = this.getxLocation() - newLocation.getX() ; 
+    	float yDiff = this.getyLocation() - newLocation.getY() ; 
+        float xyDiff = Math.abs(Math.abs(xDiff) - Math.abs(yDiff));
     	
     	System.out.println("xdiff: " + xDiff);
-    	System.out.println("ydiff: " + yDiff);
+    	System.out.println("ydiff: " + yDiff + "\n");
     	
-    	
-    	 if(xDiff>0)
-         {
-             this.setxLocation(newLocation.getX() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-         }
-         else if(xDiff<0)
-         {
-        	 this.setxLocation(newLocation.getX() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-         }
-         else if(yDiff>0)
-         {
-             this.setyLocation(newLocation.getY() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-         }
-         else if(yDiff<0)
-         {
-             this.setyLocation(newLocation.getY() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-         }
+        if(xyDiff < .001)
+        {
+            this.setxLocation(newLocation.getX());
+            //this.setyLocation(newLocation.getY());
+        }
+        else if(Math.abs(xDiff) > Math.abs(yDiff))
+        {
+            if(xDiff>0)
+            {
+                this.setxLocation(this.getxLocation() - (float).1);
+            }
+            else if(xDiff<0)
+            {
+                this.setxLocation(this.getxLocation() + (float).1);
+            }
+        }
+        else if(Math.abs(yDiff) > Math.abs(xDiff))
+        {
+            if(yDiff>0)
+            {
+                this.setyLocation(this.getyLocation() - (float).1);
+            }
+            else if(yDiff<0)
+            {
+                this.setyLocation(this.getyLocation() + (float).1);
+            }
+        }
     }
 
     /**

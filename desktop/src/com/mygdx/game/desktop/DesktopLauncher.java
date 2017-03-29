@@ -8,11 +8,11 @@ public class DesktopLauncher
 {
 	public static void main (String[] arg) 
         {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.height = 1080;
-		config.width = 1920;
-        config.foregroundFPS = 60;
-        config.title = "The Brawliseum - A Procedural Death Labyrinth" ;
-		new LwjglApplication(new Application(), config);
+            LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+            config.height = 1080;
+            config.width = 1920;
+            config.foregroundFPS = 60;
+            config.title = "The Brawliseum - A Procedural Death Labyrinth" ;
+            new LwjglApplication(new Application(), config);
 	}
 }

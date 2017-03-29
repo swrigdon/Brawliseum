@@ -645,13 +645,13 @@ public class LevelGenerator
         
         Random rand = new Random();
         
-        if(levelNumber % 5 == 0)
-        {
-            enemyNumber = 1;
-        }
-        else if(levelNumber == 0)
+        if(levelNumber == 0)
         {
             enemyNumber = 2;
+        }
+        else if(levelNumber % 5 == 0)
+        {
+            enemyNumber = 1;
         }
         else
         {
@@ -670,7 +670,7 @@ public class LevelGenerator
             holderEnemy.setHealth(100);
             holderEnemy.setDamage(100);
             holderEnemy.setDefense(100);
-            holderEnemy.setSpeed(5);
+            holderEnemy.setSpeed(3);
             holderEnemy.setEntityTexture(enemyTexture);
             
             enemyLocationX = rand.nextInt((map.length-2) - 1)+1;
