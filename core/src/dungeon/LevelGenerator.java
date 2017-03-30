@@ -670,7 +670,7 @@ public class LevelGenerator
             holderEnemy.setHealth(100);
             holderEnemy.setDamage(100);
             holderEnemy.setDefense(100);
-            holderEnemy.setSpeed(3);
+            holderEnemy.setSpeed(2);
             holderEnemy.setEntityTexture(enemyTexture);
             
             enemyLocationX = rand.nextInt((map.length-2) - 1)+1;

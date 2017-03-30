@@ -41,7 +41,7 @@ public class GameScreen extends ScreenAdapter
     public GameScreen(Application game)
     {
         generator = new LevelGenerator(29, 29);
-        currentLevel = generator.generateLevel(5);        
+        currentLevel = generator.generateLevel(6);        
 
 
         float w = Gdx.graphics.getWidth();
