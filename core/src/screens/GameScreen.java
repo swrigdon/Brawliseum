@@ -29,13 +29,15 @@ public class GameScreen extends ScreenAdapter
 
     //testing variables need to move to separate class 
     public Texture floorTest,wallTest,tempTest,endTest; 
-    public DungeonTile[][] levelMatrix ;
+    public DungeonTile[][] map ;
     public Rectangle rect;
     ArrayList<Rectangle> collisionMatrix = new ArrayList<Rectangle>();
 
     public LevelGenerator generator;
     public Level currentLevel  ; 
     public Player player;
+    
+    private String playerClass;
 
 
     public GameScreen(Application game)
@@ -49,6 +51,7 @@ public class GameScreen extends ScreenAdapter
         this.game = game;
         camera = new OrthographicCamera(w, h);
         //AFTER TESTING THIS SHOULD BE: camera.setToOrtho(false, 320*(w/h), 320);
+        //camera.setToOrtho(false, 320*(w/h), 320);
         camera.setToOrtho(false, 1920, 1080); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
@@ -59,11 +62,14 @@ public class GameScreen extends ScreenAdapter
         endTest = new Texture("endTest.png");
 
         //creating test matrix
-        levelMatrix = currentLevel.getMap() ;
+        map = currentLevel.getMap() ;
 
         genWall(collisionMatrix, currentLevel);
+        
+        //TEMP
+        playerClass = "sword";
 
-        player = new Player(2,2, tempTest, currentLevel);
+        player = new Player(2,2, tempTest, currentLevel, playerClass);
         
     }
 
@@ -94,19 +100,19 @@ public class GameScreen extends ScreenAdapter
         batch.begin();
 
         //testing drawing code
-        for(int x=0;x<levelMatrix.length;x++)
+        for(int x=0;x<map.length;x++)
         {
-            for(int y=0;y<levelMatrix[0].length;y++)
+            for(int y=0;y<map[0].length;y++)
             {
-                if(levelMatrix[x][y].getTileType().equals("wall") || levelMatrix[x][y].getTileType().equals("empty"))
+                if(map[x][y].getTileType().equals("wall") || map[x][y].getTileType().equals("empty"))
                 {
                     batch.draw(wallTest, x*wallTest.getWidth(), y*wallTest.getHeight());
                 }
-                else if(levelMatrix[x][y].getTileType().equals("floor")||levelMatrix[x][y].getTileType().equals("START"))
+                else if(map[x][y].getTileType().equals("floor")||map[x][y].getTileType().equals("START"))
                 {
                     batch.draw(floorTest, x*floorTest.getWidth(), y*floorTest.getHeight());
                 }      
-                else if(levelMatrix[x][y].getTileType().equals("END"))
+                else if(map[x][y].getTileType().equals("END"))
                 {
                     batch.draw(endTest, x*endTest.getWidth(), y*endTest.getHeight());
                 }      
@@ -115,13 +121,29 @@ public class GameScreen extends ScreenAdapter
         batch.draw(player.getEntityTexture(), player.getxLocation() * floorTest.getWidth(), 
                                               player.getyLocation() * floorTest.getHeight());
         
-        for(Enemy enemy: currentLevel.getEnemies())
+   
+        //int i = 0;
+        for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
-            enemy.setEndX(player.getxLocation());
-            enemy.setEndY(player.getyLocation());
-            enemy.move();
-            batch.draw(enemy.getEntityTexture(), enemy.getxLocation() * floorTest.getWidth(), 
-                                              enemy.getyLocation() * floorTest.getHeight());
+            if(currentLevel.getEnemies().get(i).getHealth() <= 0)
+            {
+                System.out.println(currentLevel.getEnemies().size());
+                System.out.println("i = " + i);
+                map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setOccupied(false);
+                map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setEnemyOnTile(null);
+                
+                currentLevel.getEnemies().remove(currentLevel.getEnemies().get(i));
+                
+                System.out.println(currentLevel.getEnemies().size());
+                //continue;
+            }
+            //System.out.println("i = " + i);
+            currentLevel.getEnemies().get(i).setEndX(player.getxLocation());
+            currentLevel.getEnemies().get(i).setEndY(player.getyLocation());
+            currentLevel.getEnemies().get(i).move(map);
+            
+            batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * floorTest.getWidth(), 
+                                              currentLevel.getEnemies().get(i).getyLocation() * floorTest.getHeight());
         }
 
         //Sets the camera position to the "player" so that it will follow it
@@ -139,7 +161,7 @@ public class GameScreen extends ScreenAdapter
     private void handleInput()
     { 
         //Added by Jason
-        player.move();
+        player.move(map);
         player.set(player.getxLocation(), player.getyLocation(), player.getWidth(), player.getHeight());
 
         //This handles the collision detection for the player and walls, this will probably have to be moved into it's own

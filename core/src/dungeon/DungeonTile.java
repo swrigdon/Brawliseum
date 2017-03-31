@@ -5,6 +5,8 @@
  */
 package dungeon;
 
+import entities.Enemy;
+
 /**
  *
  * @author Jason
@@ -19,11 +21,17 @@ public class DungeonTile implements Comparable
     private float heuristic;
     private int depth;
     
+    private Enemy enemyOnTile;
+    
+    private boolean occupied;
+    
     public DungeonTile(String tileType, int x, int y)
     {
         this.tileType = tileType;
         this.x = x;
         this.y = y;
+        this.occupied = false;
+        this.enemyOnTile = null;
     }
 
     public String getTileType() 
@@ -108,5 +116,33 @@ public class DungeonTile implements Comparable
      */
     public int getY() {
         return y;
+    }
+
+    /**
+     * @return the occupied
+     */
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    /**
+     * @param occupied the occupied to set
+     */
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
+    /**
+     * @return the enemyOnTile
+     */
+    public Enemy getEnemyOnTile() {
+        return enemyOnTile;
+    }
+
+    /**
+     * @param enemyOnTile the enemyOnTile to set
+     */
+    public void setEnemyOnTile(Enemy enemyOnTile) {
+        this.enemyOnTile = enemyOnTile;
     }
 }

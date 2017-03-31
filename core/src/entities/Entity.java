@@ -7,6 +7,7 @@ package entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import dungeon.DungeonTile;
 import dungeon.Level;
 
 /**
@@ -26,7 +27,7 @@ public abstract class Entity extends Rectangle
    private boolean movingNY;
    private boolean movingNX;
    
-   public abstract void move();
+   public abstract void move(DungeonTile[][] map);
 
     /**
      * @return the entityTexture

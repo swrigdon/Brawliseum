@@ -5,6 +5,8 @@
  */
 package entities;
 
+import dungeon.DungeonTile;
+
 /**
  *
  * @author Jason
@@ -13,7 +15,7 @@ public class GroundItem extends Entity
 {
 
     @Override
-    public void move() 
+    public void move(DungeonTile[][] map) 
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

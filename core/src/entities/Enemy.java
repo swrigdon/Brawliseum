@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  *
@@ -25,6 +27,9 @@ public class Enemy extends Entity
     private float endX;
     private float endY;
     private DungeonTile[][] map;
+    private DungeonTile newLocation;
+    
+    private boolean pathFind = false;
     
     ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
     
@@ -33,7 +38,7 @@ public class Enemy extends Entity
     public Enemy(DungeonTile[][] map)
     {
         this.map  = map;
-        
+        newLocation = null;
     }
     
     public void setPath()
@@ -135,7 +140,7 @@ public class Enemy extends Entity
     }
     
     @Override
-    public void move() 
+    public void move(DungeonTile[][] map) 
     {
     	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY)
         {
@@ -146,37 +151,114 @@ public class Enemy extends Entity
     	//outside the range of pathfinding 
     	if(calcDistance() >= MAX_RANGE)
     	{
-
+            /*
+            ArrayList<Integer> directions = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3)) ;
+    	 
+            Collections.shuffle(directions);
+            
+            if(newLocation == null)
+            {
+                if(!pathFind)
+                {
+                    if(directions.get(0) == 0 )
+                    {      
+                        if(!map[(int)this.getxLocation()][(int)this.getyLocation()+1].getTileType().equals("wall"))
+                        {
+                            newLocation = map[(int)this.getxLocation()][(int)this.getyLocation()+1];
+                            changeLocation(map[(int)this.getxLocation()][(int)this.getyLocation()+1]);
+                        }
+                    }
+                    else if(directions.get(0) == 1)
+                    {
+                        if(!map[(int)this.getxLocation()+1][(int)this.getyLocation()].getTileType().equals("wall"))
+                        {
+                            newLocation = map[(int)this.getxLocation()+1][(int)this.getyLocation()];
+                            changeLocation(map[(int)this.getxLocation()+1][(int)this.getyLocation()]);
+                        }
+                    }
+                    else if(directions.get(0) == 2)
+                    {
+                        if(!map[(int)this.getxLocation()][(int)this.getyLocation()-1].getTileType().equals("wall"))
+                        {
+                            newLocation = map[(int)this.getxLocation()][(int)this.getyLocation()-1];
+                            changeLocation(map[(int)this.getxLocation()][(int)this.getyLocation()-1]);
+                        }
+                    }
+                    else if(directions.get(0) == 3)
+                    {
+                        if(!map[(int)this.getxLocation()-1][(int)this.getyLocation()].getTileType().equals("wall"))
+                        {
+                            newLocation = map[(int)this.getxLocation()-1][(int)this.getyLocation()];
+                            changeLocation(map[(int)this.getxLocation()-1][(int)this.getyLocation()]);
+                        } 
+                    }
+                }
+            }
+            else if(Math.abs(this.getxLocation()) - newLocation.getX() != 0 ||
+                    Math.abs(this.getyLocation()) - newLocation.getY() != 0)
+            {
+                changeLocation(newLocation);
+            }
+            else
+            {
+                newLocation = null;
+            }
+            */
     	}
         else
         {
-            if(path.size() > 1)
-            {
-                System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
-                System.out.println("from: (" + (int)this.getxLocation() + ", " + (int)this.getyLocation() + ")");
-                changeLocation(path.get(path.size()-1)) ;
+            //if(newLocation != null)
+            //{
+                if(path.size() > 1)
+                {
+                    //System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
+                    //System.out.println("from: (" + (int)this.getxLocation() + ", " + (int)this.getyLocation() + ")");
 
-                if(!(Math.abs(this.getxLocation() - path.get(path.size()-1).getX()) != 0 ||
-                     Math.abs(this.getyLocation() - path.get(path.size()-1).getY()) != 0))
+                    changeLocation(path.get(path.size()-1)) ;
+
+                    if(!(Math.abs(this.getxLocation() - path.get(path.size()-1).getX()) != 0 ||
+                         Math.abs(this.getyLocation() - path.get(path.size()-1).getY()) != 0))
+                    {
+                        if(map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile() == this)
+                        {
+                            map[(int)this.getxLocation()][(int)this.getyLocation()+1].setOccupied(false);
+                            map[(int)this.getxLocation()][(int)this.getyLocation()+1].setEnemyOnTile(null);
+                        }
+                        else if(map[(int)this.getxLocation()+1][(int)this.getyLocation()].getEnemyOnTile() == this)
+                        {
+                            map[(int)this.getxLocation()+1][(int)this.getyLocation()].setOccupied(false);
+                            map[(int)this.getxLocation()+1][(int)this.getyLocation()].setEnemyOnTile(null);
+                        }
+                        else if(map[(int)this.getxLocation()][(int)this.getyLocation()-1].getEnemyOnTile() == this)
+                        {
+                            map[(int)this.getxLocation()][(int)this.getyLocation()-1].setOccupied(false);
+                            map[(int)this.getxLocation()][(int)this.getyLocation()-1].setEnemyOnTile(null);
+                        }
+                        else if(map[(int)this.getxLocation()-1][(int)this.getyLocation()].getEnemyOnTile() == this)
+                        {
+                            map[(int)this.getxLocation()-1][(int)this.getyLocation()].setOccupied(false);
+                            map[(int)this.getxLocation()-1][(int)this.getyLocation()].setEnemyOnTile(null);
+                        }
+                        
+                        map[(int)this.getxLocation()][(int)this.getyLocation()].setOccupied(true);
+                        map[(int)this.getxLocation()][(int)this.getyLocation()].setEnemyOnTile(this);
+                        path = aStar();
+                    }
+                }
+                else 
                 {
                     path = aStar();
                 }
-            }
-            else 
-            {
-                path = aStar();
-            }
+            //}
+            //else
+            //{
+            //    pathFind = true;
+            //}
     	}
     }
     
     private void changeLocation(DungeonTile newLocation)
     {
-        /*
-        System.out.println("(int) X Location " + (int)this.getxLocation());
-    	System.out.println("(int) Y Location: " + (int)this.getyLocation() + "\n");
-        System.out.println("(float) X Location " + this.getxLocation());
-    	System.out.println("(float) Y Location: " + this.getyLocation() + "\n");
-    	*/
         
         if(newLocation.getX() < this.getxLocation())
         {
@@ -214,6 +296,13 @@ public class Enemy extends Entity
                 this.setyLocation(newLocation.getY());
             }
         }   
+    }
+    
+    public void getHit(float damage)
+    {
+        System.out.println("Tis but a flesh wound ");
+        this.setHealth(this.getHealth()-damage);
+        //System.out.println("My health: " + this.getHealth() + "\n");
     }
 
     /**

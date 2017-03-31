@@ -729,10 +729,13 @@ public class LevelGenerator
             holderEnemy.setxLocation(enemyLocationX);
             holderEnemy.setyLocation(enemyLocationY);
             
+            map[(int)enemyLocationX][(int)enemyLocationY].setOccupied(true);
+            
             holderEnemy.setEndX(2);
             holderEnemy.setEndY(2);
             
             holderEnemy.setPath();
+            map[(int)enemyLocationX][(int)enemyLocationY].setEnemyOnTile(holderEnemy);
             
             enemies.add(holderEnemy);
         }
