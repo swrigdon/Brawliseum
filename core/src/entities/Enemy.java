@@ -115,6 +115,7 @@ public class Enemy extends Entity
                 }
             }
         }      
+        
         if(map[(int)endX][(int)endY].getParent()==null){
         	return null;
         }
@@ -209,6 +210,7 @@ public class Enemy extends Entity
         {
             //if(newLocation != null)
             //{
+        	if(path!= null){
                 if(path.size() > 1)
                 {
                     //System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
@@ -249,6 +251,7 @@ public class Enemy extends Entity
                 {
                     path = aStar();
                 }
+        	}
             //}
             //else
             //{
@@ -259,48 +262,50 @@ public class Enemy extends Entity
     
     private void changeLocation(DungeonTile newLocation)
     {
-        
-        if(newLocation.getX() < this.getxLocation())
+        if(!newLocation.isOccupied())
         {
-            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-
-            if((this.getxLocation() < newLocation.getX()))
-            {
-                this.setxLocation(newLocation.getX());
-            }
+	        if(newLocation.getX() < this.getxLocation())
+	        {
+	            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+	
+	            if((this.getxLocation() < newLocation.getX()))
+	            {
+	                this.setxLocation(newLocation.getX());
+	            }
+	        }
+	        else if(newLocation.getX() > (this.getxLocation()))
+	        {
+	            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+	
+	            if((this.getxLocation() > newLocation.getX()))
+	            {
+	                this.setxLocation(newLocation.getX());
+	            }
+	        }
+	        else if(newLocation.getY() < this.getyLocation())
+	        {
+	            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+	
+	            if((this.getyLocation() < newLocation.getY()))
+	            {
+	                this.setyLocation(newLocation.getY());
+	            }
+	        }
+	        else if(newLocation.getY() > this.getyLocation())
+	        {
+	            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+	
+	            if((this.getyLocation() > newLocation.getY()))
+	            {
+	                this.setyLocation(newLocation.getY());
+	            }
+	        }   
         }
-        else if(newLocation.getX() > (this.getxLocation()))
-        {
-            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-
-            if((this.getxLocation() > newLocation.getX()))
-            {
-                this.setxLocation(newLocation.getX());
-            }
-        }
-        else if(newLocation.getY() < this.getyLocation())
-        {
-            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-
-            if((this.getyLocation() < newLocation.getY()))
-            {
-                this.setyLocation(newLocation.getY());
-            }
-        }
-        else if(newLocation.getY() > this.getyLocation())
-        {
-            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-
-            if((this.getyLocation() > newLocation.getY()))
-            {
-                this.setyLocation(newLocation.getY());
-            }
-        }   
     }
     
     public void getHit(float damage)
     {
-        System.out.println("Tis but a flesh wound ");
+        //System.out.println("Tis but a flesh wound ");
         this.setHealth(this.getHealth()-damage);
         //System.out.println("My health: " + this.getHealth() + "\n");
     }

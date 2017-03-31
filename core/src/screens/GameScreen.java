@@ -71,6 +71,25 @@ public class GameScreen extends ScreenAdapter
 
         player = new Player(2,2, tempTest, currentLevel, playerClass);
         
+        printGrid(map)  ; 
+        
+    }
+    
+    public static void printGrid(DungeonTile [][] grid)
+    {
+    	System.out.println("Starting Grid Printing");
+    	System.out.println("------------------------------------");
+       for(int i = 0; i < grid.length; i++)
+       {
+          for(int j = 0; j < grid[0].length; j++)
+          {
+             System.out.printf("%5s ", grid[i][j].isOccupied());
+          }
+          System.out.println();
+       }
+       
+   		System.out.println("------------------------------------ \n");
+
     }
 
     public final void genWall(ArrayList<Rectangle> collisionMatrix, Level currentLevel)
@@ -127,15 +146,18 @@ public class GameScreen extends ScreenAdapter
         {
             if(currentLevel.getEnemies().get(i).getHealth() <= 0)
             {
-                System.out.println(currentLevel.getEnemies().size());
-                System.out.println("i = " + i);
+                //System.out.println(currentLevel.getEnemies().size());
+               // System.out.println("i = " + i);
                 map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setOccupied(false);
                 map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setEnemyOnTile(null);
                 
-                currentLevel.getEnemies().remove(currentLevel.getEnemies().get(i));
+                System.out.println("Enemy removed loc: (" + (int)currentLevel.getEnemies().get(i).getxLocation() + "," +(int)currentLevel.getEnemies().get(i).getyLocation()+")");
+                
+                
+                currentLevel.getEnemies().remove(i);
                 
                 System.out.println(currentLevel.getEnemies().size());
-                //continue;
+                continue;
             }
             //System.out.println("i = " + i);
             currentLevel.getEnemies().get(i).setEndX(player.getxLocation());
@@ -146,6 +168,8 @@ public class GameScreen extends ScreenAdapter
                                               currentLevel.getEnemies().get(i).getyLocation() * floorTest.getHeight());
         }
 
+        updateEnemy() ; 
+        
         //Sets the camera position to the "player" so that it will follow it
         //AFTER TESTING, UNCOMMENT
         //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
@@ -155,6 +179,33 @@ public class GameScreen extends ScreenAdapter
         //update checks
         handleInput() ; 
         camera.update();
+    }
+    
+    private void updateEnemy()
+    {
+    	boolean real = false; 
+    	for(int i = 0; i < map.length; i++)
+        {
+           for(int j = 0; j < map[0].length; j++)
+           {
+        	  if( map[i][j].isOccupied())
+        	  {
+        		  for(Enemy enemy:currentLevel.getEnemies())
+        		  {
+        			  if(map[(int) enemy.getxLocation()][(int) enemy.getyLocation()].equals(map[i][j]))
+        			  {
+        				  real = true  ; 
+        			  }
+        		  }
+        		  
+        		  if(!real)
+        		  {
+        			  map[i][j].setOccupied(false);
+        			  map[i][j].setEnemyOnTile(null);
+        		  }
+        	  }
+           }
+        }
     }
 
     //temp handling input method
@@ -171,7 +222,7 @@ public class GameScreen extends ScreenAdapter
             if(player.overlaps(collisionMatrix.get(i)))
             {
                 if(player.isMovingY())
-                {
+                {	
                     player.setyLocation(player.getyLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
                     break;
                 }
