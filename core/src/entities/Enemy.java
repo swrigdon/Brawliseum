@@ -26,9 +26,19 @@ public class Enemy extends Entity
     private float endY;
     private DungeonTile[][] map;
     
+    ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
+    
+    //private boolean finished = true;
+    
     public Enemy(DungeonTile[][] map)
     {
         this.map  = map;
+        
+    }
+    
+    public void setPath()
+    {
+        path = aStar();
     }
     
     public float attack()
@@ -127,7 +137,8 @@ public class Enemy extends Entity
     @Override
     public void move() 
     {
-    	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY){
+    	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY)
+        {
     		return;
     	}
     	
@@ -139,93 +150,70 @@ public class Enemy extends Entity
     	}
         else
         {
-            //System.out.println("Enemy is at: "+ this.getxLocation() +"  "+ this.getyLocation());
-        	ArrayList<DungeonTile> path = aStar();
-                
-        	//System.out.println(path.size());
-        	//System.out.println("START!!!!!!!!");
-        	//System.out.println("__________________");
-        	//for(DungeonTile e:path){
-        		//System.out.println("Real Tile X: "+ e.getX());
-        		//System.out.println("Real Tile Y: "+ e.getY());
-        	//}
-        	//System.out.println("END!!!!!!!!!!!!!!!!!");
-        	//System.out.println("______________");
-            /*
-            System.out.println("Enemy EndX: " + this.getEndX());
-            System.out.println("Enemy EndY: " + this.getEndY());
-            */
-        	 
-        	
-        	System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
-        	System.out.println("from: (" + (int)this.getxLocation() + ", " + (int)this.getyLocation() + ")");
-                //this.setxLocation(path.get(path.size()-1).getX());
-                //this.setyLocation(path.get(path.size()-1).getY());
-                
-        	changeLocation(path.get(path.size()-1)) ;
-    	}
-    	
-    	
-        
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if(path.size() > 1)
+            {
+                System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
+                System.out.println("from: (" + (int)this.getxLocation() + ", " + (int)this.getyLocation() + ")");
+                changeLocation(path.get(path.size()-1)) ;
 
+                if(!(Math.abs(this.getxLocation() - path.get(path.size()-1).getX()) != 0 ||
+                     Math.abs(this.getyLocation() - path.get(path.size()-1).getY()) != 0))
+                {
+                    path = aStar();
+                }
+            }
+            else 
+            {
+                path = aStar();
+            }
+    	}
     }
     
     private void changeLocation(DungeonTile newLocation)
     {
-    	int xDiff = (int)(this.getxLocation()) - (int)newLocation.getX() ; 
-    	int yDiff = (int)(this.getyLocation()) - (int)newLocation.getY() ; 
-        //float xyDiff = Math.abs(Math.abs(xDiff) - Math.abs(yDiff));
-    	
-    	System.out.println("xdiff: " + xDiff);
-    	System.out.println("ydiff: " + yDiff + "\n");
-        
+        /*
         System.out.println("(int) X Location " + (int)this.getxLocation());
     	System.out.println("(int) Y Location: " + (int)this.getyLocation() + "\n");
         System.out.println("(float) X Location " + this.getxLocation());
     	System.out.println("(float) Y Location: " + this.getyLocation() + "\n");
-    	
+    	*/
         
-        if(xDiff != 0)
+        if(newLocation.getX() < this.getxLocation())
         {
-            if(xDiff>0 )
+            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getxLocation() < newLocation.getX()))
             {
-                //if((Math.abs(this.getxLocation()-(int)this.getxLocation()) !=0))
-                //System.out.println(this.getxLocation());
-                //System.out.println((int)(this.getxLocation()));
-                this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-                
-                if((Math.abs(this.getxLocation() - Math.floor(this.getxLocation())) > .01))
-                    this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-            }
-            else if(xDiff<0 )
-            {
-                //if((Math.abs(this.getxLocation()-(int)this.getxLocation()) != 0))
-                this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                
-                if((Math.abs(this.getxLocation() - Math.floor(this.getxLocation())) > .0001))
-                    this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+                this.setxLocation(newLocation.getX());
             }
         }
-        else if(yDiff != 0)
+        else if(newLocation.getX() > (this.getxLocation()))
         {
-            if(yDiff>0 )
+            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getxLocation() > newLocation.getX()))
             {
-                //if((Math.abs(this.getyLocation()-(int)this.getyLocation()) != 0))
-                this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-                
-                if((Math.abs(this.getyLocation() - Math.floor(this.getyLocation())) > .0001))
-                    this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+                this.setxLocation(newLocation.getX());
             }
-            else if(yDiff<0 )
-            {
-                //if((Math.abs(this.getyLocation()-(int)this.getyLocation()) != 0))
-                this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                
-                if((Math.abs(this.getyLocation() - Math.floor(this.getyLocation())) > .0001))
-                    this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-            }   
         }
+        else if(newLocation.getY() < this.getyLocation())
+        {
+            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getyLocation() < newLocation.getY()))
+            {
+                this.setyLocation(newLocation.getY());
+            }
+        }
+        else if(newLocation.getY() > this.getyLocation())
+        {
+            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getyLocation() > newLocation.getY()))
+            {
+                this.setyLocation(newLocation.getY());
+            }
+        }   
     }
 
     /**

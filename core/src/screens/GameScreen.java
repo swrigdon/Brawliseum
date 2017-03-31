@@ -48,6 +48,7 @@ public class GameScreen extends ScreenAdapter
         float h = Gdx.graphics.getHeight();
         this.game = game;
         camera = new OrthographicCamera(w, h);
+        //AFTER TESTING THIS SHOULD BE: camera.setToOrtho(false, 320*(w/h), 320);
         camera.setToOrtho(false, 1920, 1080); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
@@ -124,6 +125,7 @@ public class GameScreen extends ScreenAdapter
         }
 
         //Sets the camera position to the "player" so that it will follow it
+        //AFTER TESTING, UNCOMMENT
         //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
 
         batch.end();

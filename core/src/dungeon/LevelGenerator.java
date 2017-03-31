@@ -729,6 +729,11 @@ public class LevelGenerator
             holderEnemy.setxLocation(enemyLocationX);
             holderEnemy.setyLocation(enemyLocationY);
             
+            holderEnemy.setEndX(2);
+            holderEnemy.setEndY(2);
+            
+            holderEnemy.setPath();
+            
             enemies.add(holderEnemy);
         }
         
