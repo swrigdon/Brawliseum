@@ -158,7 +158,6 @@ public class GameScreen extends ScreenAdapter
                 
                 continue;
             }
-            System.out.println("Enemy " + i);
             currentLevel.getEnemies().get(i).setEndX(player.getxLocation());
             currentLevel.getEnemies().get(i).setEndY(player.getyLocation());
             currentLevel.getEnemies().get(i).move(map);
@@ -191,22 +190,18 @@ public class GameScreen extends ScreenAdapter
                 {
                     //System.out.println("Collision Going Up");
                     enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
                 }else if(enemy.getDirection() == 1)
                 {
                     //System.out.println("Collision Going Right");
                     enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
                 }else if(enemy.getDirection() == 2)
                 {
                     //System.out.println("Collision Going Down");
                     enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
                 }else if(enemy.getDirection() == 3)
                 {
                     //System.out.println("Collision Going Left");
                     enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
                 }
             }
     		
@@ -216,28 +211,26 @@ public class GameScreen extends ScreenAdapter
                 {
                     continue;
                 }
-                    if(enemy.overlaps(enemy2))
-                    {
-                            if(enemy.getDirection()==0)
-                            {
-                                    enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                                    break;
-                            }else if(enemy.getDirection() == 1)
-                            {
-                                    enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                                    break;
-                            }else if(enemy.getDirection() == 2)
-                            {
-                                    enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                                    break;
-                            }else if(enemy.getDirection() == 3)
-                            {
-                                    enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                                    break;
-                            }
-                    }
+                if(enemy.overlaps(enemy2))
+                {
+                   if(enemy.getDirection()==0)
+                   {
+                       enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                   }else if(enemy.getDirection() == 1)
+                   {
+                	   enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                   }
+                   else if(enemy.getDirection() == 2)
+                   {
+                       enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                   }else if(enemy.getDirection() == 3)
+                   {
+                       enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                   }
+               }
 
             }
+            /*
             for(int i = 0; i < collisionMatrix.size(); i++)
             {
                 if(player.overlaps(collisionMatrix.get(i)))
@@ -245,25 +238,22 @@ public class GameScreen extends ScreenAdapter
                     if(enemy.getDirection() == GameConstants.UP)
                     {	
                         enemy.setyLocation(enemy.getyLocation() - (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                        break;
                     }
                     else if(enemy.getDirection() == GameConstants.RIGHT)
                     {
                         enemy.setxLocation(enemy.getxLocation() - (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                        break;
                     }
                     else if(enemy.getDirection() == GameConstants.DOWN)
                     {
                         enemy.setyLocation(enemy.getyLocation() + (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                        break;
                     }
                     else if(enemy.getDirection() == GameConstants.LEFT)
                     {
                         enemy.setxLocation(enemy.getxLocation() + (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                        break;
                     }
                 }
-            }        
+            } 
+            */       
     	}
     }
 

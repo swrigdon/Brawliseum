@@ -274,8 +274,8 @@ public class Enemy extends Entity
     
     private void changeLocation(DungeonTile newLocation)
     {
-        //if(!newLocation.isOccupied())
-        //{
+        if(!newLocation.isOccupied())
+        {
 	        if(newLocation.getX() < this.getxLocation())
 	        {
 	        	direction = 3 ; 
@@ -320,7 +320,7 @@ public class Enemy extends Entity
 	                this.setyLocation(newLocation.getY());
 	            }
 	        }   
-        //}
+        }
     }
     
     public void getHit(float damage)
