@@ -6,6 +6,8 @@
 package dungeon;
 
 import com.badlogic.gdx.graphics.Texture;
+
+import constants.GameConstants;
 import entities.Enemy;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +23,8 @@ public class LevelGenerator
 {
     private final int height;
     private final int width;
-    private final int playerStartX = 2;
-    private final int playerStartY = 2;
     private int endLocationX;
     private int endLocationY;
-    private final int BASE_NUM_ENEMIES = 5;
-    private final int CAP_NUM_ENEMIES = 20;
     
     public LevelGenerator(int height, int width)
     {
@@ -75,7 +73,7 @@ public class LevelGenerator
         printGrid(map) ; //print the map
         
         //declares player start location on map
-        map[playerStartX][playerStartY] = new DungeonTile("START", playerStartX, playerStartY);
+        map[GameConstants.PLAYER_START_X][GameConstants.PLAYER_START_Y] = new DungeonTile("START", GameConstants.PLAYER_START_X, GameConstants.PLAYER_START_Y);
         
         System.out.println("LengthX = " + map.length);
         System.out.println("LengthY = " + map[0].length);
@@ -84,7 +82,7 @@ public class LevelGenerator
         System.out.println("Room number: "+ roomStyle);
         
         //generate the maze (we can put this under room style later ) 
-        map = generateMaze(map,playerStartX,playerStartY) ; 
+        map = generateMaze(map,GameConstants.PLAYER_START_X,GameConstants.PLAYER_START_Y) ; 
         
         //Generates the end location (NEEDS WORK)
         endLocationX = rand.nextInt((map.length-2) - ((map.length*3)/4)) + (((map.length*3)/4));
@@ -171,12 +169,12 @@ public class LevelGenerator
     	//filling up the 3x3 with floor tiles after each recursive call
     	map[x][y+1].setTileType("floor"); 
         map[x][y-1].setTileType("floor"); 
-	map[x+1][y].setTileType("floor"); 
-	map[x-1][y].setTileType("floor");
-	map[x+1][y+1].setTileType("floor"); 
-	map[x+1][y-1].setTileType("floor"); 
-	map[x-1][y+1].setTileType("floor"); 
-	map[x-1][y-1].setTileType("floor"); 	
+		map[x+1][y].setTileType("floor"); 
+		map[x-1][y].setTileType("floor");
+		map[x+1][y+1].setTileType("floor"); 
+		map[x+1][y-1].setTileType("floor"); 
+		map[x-1][y+1].setTileType("floor"); 
+		map[x-1][y-1].setTileType("floor"); 	
     	
     	for(int direction:directions)
         { //loops through the directions 
@@ -655,10 +653,10 @@ public class LevelGenerator
         }
         else
         {
-            enemyNumber = BASE_NUM_ENEMIES + levelNumber/2;
-            if(enemyNumber > CAP_NUM_ENEMIES)
+            enemyNumber = GameConstants.BASE_NUM_ENEMIES + levelNumber/2;
+            if(enemyNumber > GameConstants.CAP_NUM_ENEMIES)
             {
-                enemyNumber = CAP_NUM_ENEMIES;
+                enemyNumber = GameConstants.CAP_NUM_ENEMIES;
             }
         }
         
@@ -667,10 +665,10 @@ public class LevelGenerator
         for(int i = 0; i < enemyNumber; i++)
         {
             holderEnemy = new Enemy(map);
-            holderEnemy.setHealth(100);
-            holderEnemy.setDamage(100);
+            holderEnemy.setHealth(GameConstants.ENEMY_STARTING_HEALTH);
+            holderEnemy.setDamage(GameConstants.ENEMY_STARTING_DAMAGE);
             holderEnemy.setDefense(100);
-            holderEnemy.setSpeed(2);
+            holderEnemy.setSpeed(GameConstants.ENEMY_BASE_SPEED);
             holderEnemy.setEntityTexture(enemyTexture);
             
             enemyLocationX = rand.nextInt((map.length-2) - 1)+1;

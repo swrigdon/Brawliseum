@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Application;
 
+import constants.GameConstants;
 import dungeon.DungeonTile;
 import dungeon.Level;
 import dungeon.LevelGenerator;
@@ -28,7 +29,7 @@ public class GameScreen extends ScreenAdapter
     private final OrthographicCamera camera;
 
     //testing variables need to move to separate class 
-    public Texture floorTest,wallTest,tempTest,endTest; 
+    public Texture endTest; 
     public DungeonTile[][] map ;
     public Rectangle rect;
     ArrayList<Rectangle> collisionMatrix = new ArrayList<Rectangle>();
@@ -52,13 +53,10 @@ public class GameScreen extends ScreenAdapter
         camera = new OrthographicCamera(w, h);
         //AFTER TESTING THIS SHOULD BE: camera.setToOrtho(false, 320*(w/h), 320);
         //camera.setToOrtho(false, 320*(w/h), 320);
-        camera.setToOrtho(false, 1920, 1080); //numbers are pixels player can see 
+        camera.setToOrtho(false, GameConstants.PLAYER_VIEW_X, GameConstants.PLAYER_VIEW_Y); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
         //test temp textures
-        floorTest = new Texture("floorTest.png"); 
-        wallTest = new Texture("wallTest.png"); 
-        tempTest = new Texture("tempTest.png");
         endTest = new Texture("endTest.png");
 
         //creating test matrix
@@ -69,7 +67,7 @@ public class GameScreen extends ScreenAdapter
         //TEMP
         playerClass = "sword";
 
-        player = new Player(2,2, tempTest, currentLevel, playerClass);
+        player = new Player(2,2, GameConstants.PLAYER_TEXTURE, currentLevel, playerClass);
         
         printGrid(map)  ; 
         
@@ -125,11 +123,11 @@ public class GameScreen extends ScreenAdapter
             {
                 if(map[x][y].getTileType().equals("wall") || map[x][y].getTileType().equals("empty"))
                 {
-                    batch.draw(wallTest, x*wallTest.getWidth(), y*wallTest.getHeight());
+                    batch.draw(GameConstants.WALL_TEXTURE, x*GameConstants.WALL_TEXTURE.getWidth(), y*GameConstants.WALL_TEXTURE.getHeight());
                 }
                 else if(map[x][y].getTileType().equals("floor")||map[x][y].getTileType().equals("START"))
                 {
-                    batch.draw(floorTest, x*floorTest.getWidth(), y*floorTest.getHeight());
+                    batch.draw(GameConstants.FLOOR_TEXTURE, x*GameConstants.FLOOR_TEXTURE.getWidth(), y*GameConstants.FLOOR_TEXTURE.getHeight());
                 }      
                 else if(map[x][y].getTileType().equals("END"))
                 {
@@ -137,8 +135,8 @@ public class GameScreen extends ScreenAdapter
                 }      
             }
         }
-        batch.draw(player.getEntityTexture(), player.getxLocation() * floorTest.getWidth(), 
-                                              player.getyLocation() * floorTest.getHeight());
+        batch.draw(player.getEntityTexture(), player.getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                                              player.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
         
    
         //int i = 0;
@@ -164,11 +162,12 @@ public class GameScreen extends ScreenAdapter
             currentLevel.getEnemies().get(i).setEndY(player.getyLocation());
             currentLevel.getEnemies().get(i).move(map);
             
-            batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * floorTest.getWidth(), 
-                                              currentLevel.getEnemies().get(i).getyLocation() * floorTest.getHeight());
+            batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                                              currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
         }
-
-        updateEnemy() ; 
+        
+        //checks for enemy collisions with the player and other enemies
+        checkEnemies() ; 
         
         //Sets the camera position to the "player" so that it will follow it
         //AFTER TESTING, UNCOMMENT
@@ -181,31 +180,47 @@ public class GameScreen extends ScreenAdapter
         camera.update();
     }
     
-    private void updateEnemy()
+    private void checkEnemies()
     {
-    	boolean real = false; 
-    	for(int i = 0; i < map.length; i++)
-        {
-           for(int j = 0; j < map[0].length; j++)
-           {
-        	  if( map[i][j].isOccupied())
-        	  {
-        		  for(Enemy enemy:currentLevel.getEnemies())
-        		  {
-        			  if(map[(int) enemy.getxLocation()][(int) enemy.getyLocation()].equals(map[i][j]))
-        			  {
-        				  real = true  ; 
-        			  }
-        		  }
-        		  
-        		  if(!real)
-        		  {
-        			  map[i][j].setOccupied(false);
-        			  map[i][j].setEnemyOnTile(null);
-        		  }
-        	  }
-           }
-        }
+    	for(Enemy enemy : currentLevel.getEnemies())
+    	{
+    		if(enemy.overlaps(player))
+    		{
+    			if(enemy.getDirection()==0)
+    			{
+    				enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+    			}else if(enemy.getDirection() == 1)
+    			{
+    				enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+    			}else if(enemy.getDirection() == 2)
+    			{
+    				enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+    			}else if(enemy.getDirection() == 3)
+    			{
+    				enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+    			}
+    		}
+    		
+    		for(Enemy enemy2 : currentLevel.getEnemies())
+    		{
+    			if(enemy.overlaps(enemy2))
+    			{
+    				if(enemy.getDirection()==0)
+        			{
+        				enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+        			}else if(enemy.getDirection() == 1)
+        			{
+        				enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+        			}else if(enemy.getDirection() == 2)
+        			{
+        				enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+        			}else if(enemy.getDirection() == 3)
+        			{
+        				enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+        			}
+    			}
+    		}
+    	}
     }
 
     //temp handling input method

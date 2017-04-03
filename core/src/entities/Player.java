@@ -8,6 +8,8 @@ package entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+
+import constants.GameConstants;
 import dungeon.DungeonTile;
 import dungeon.Level;
 import screens.GameScreen;
@@ -39,10 +41,10 @@ public class Player extends Entity
         this.setxLocation(x);
         this.setyLocation(y);
         this.setCurrentLevel(currentLevel);
-        this.setSpeed(3);
+        this.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         this.setPlayerClass(playerClass);
         
-        this.setPlayerDirection(0);
+        this.setPlayerDirection(GameConstants.UP); 
         
         this.setMovingX(false);
         this.setMovingY(false);
@@ -51,7 +53,9 @@ public class Player extends Entity
         
         this.set(x, y, (float)playerTexture.getWidth()/32, (float)playerTexture.getHeight()/32);
         
-        attackSpeed = 600000000L ; 
+        attackSpeed = GameConstants.PLAYER_BASE_ATTACK_SPEED ; 
+        
+        this.setHealth(GameConstants.PLAYER_STARTING_HEALTH);
     }
     
     @Override
@@ -60,56 +64,43 @@ public class Player extends Entity
         //Added by Jason
         if(Gdx.input.isKeyPressed(Input.Keys.W))
         {
-        	if(!map[(int) this.getxLocation()][(int) (this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime())].isOccupied())
-            {
         		this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
                 this.setMovingY(true);
-                this.setPlayerDirection(0);
+                this.setPlayerDirection(GameConstants.UP);
                 
                 this.setMovingX(false);
                 this.setMovingNY(false);
                 this.setMovingNX(false);
-            }  
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S))
         {
-        	if(!map[(int) this.getxLocation()][(int) (this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime())].isOccupied())
-            {
 	            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
 	            this.setMovingNY(true);
-	            this.setPlayerDirection(2);
+	            this.setPlayerDirection(GameConstants.DOWN);
 	            
 	            this.setMovingX(false);
 	            this.setMovingY(false);
 	            this.setMovingNX(false);
-            }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D))
         {
-        	if(!map[(int) (this.getxLocation()+ this.getSpeed()*Gdx.graphics.getDeltaTime())][(int) (this.getyLocation() )].isOccupied())
-            {
 	            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
 	            this.setMovingX(true);
-	            this.setPlayerDirection(1);
+	            this.setPlayerDirection(GameConstants.RIGHT);
 	            
 	            this.setMovingY(false);
 	            this.setMovingNY(false);
 	            this.setMovingNX(false);
-            }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A))
         {
-        	if(!map[(int) (this.getxLocation()- this.getSpeed()*Gdx.graphics.getDeltaTime())][(int) (this.getyLocation() )].isOccupied())
-            {
 	            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
 	            this.setMovingNX(true);
-	            this.setPlayerDirection(3);
+	            this.setPlayerDirection(GameConstants.LEFT);
 	            
 	            this.setMovingY(false);
 	            this.setMovingX(false);
 	            this.setMovingNY(false);
-            }
-
         }       
         else
         {
@@ -141,7 +132,7 @@ public class Player extends Entity
     
     private void swordAttack(DungeonTile[][] map)
     {
-        if(playerDirection == 0)
+        if(playerDirection == GameConstants.UP)
         {
             if(map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile() != null)
             {
@@ -164,7 +155,7 @@ public class Player extends Entity
                 }
             }
         }
-        else if(playerDirection == 1)
+        else if(playerDirection == GameConstants.RIGHT)
         {
             if(map[(int)this.getxLocation()+1][(int)this.getyLocation()].getEnemyOnTile() != null)
             {
@@ -187,7 +178,7 @@ public class Player extends Entity
                 }
             }
         }
-        else if(playerDirection == 2)
+        else if(playerDirection == GameConstants.DOWN)
         {
             if(map[(int)this.getxLocation()][(int)this.getyLocation()-1].getEnemyOnTile() != null)
             {
@@ -210,7 +201,7 @@ public class Player extends Entity
                 }
             }
         }
-        else if(playerDirection == 3)
+        else if(playerDirection == GameConstants.LEFT)
         {
             if(map[(int)this.getxLocation()-1][(int)this.getyLocation()].getEnemyOnTile() != null)
             {

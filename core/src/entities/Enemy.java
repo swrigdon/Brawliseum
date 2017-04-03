@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
+import constants.GameConstants;
+
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -28,8 +31,10 @@ public class Enemy extends Entity
     private float endY;
     private DungeonTile[][] map;
     private DungeonTile newLocation;
-    
-    private boolean pathFind = false;
+    private int direction ; 
+
+
+	private boolean pathFind = false;
     
     ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
     
@@ -39,6 +44,8 @@ public class Enemy extends Entity
     {
         this.map  = map;
         newLocation = null;
+        
+        direction = GameConstants.ENEMY_STARTING_DIRECTION ; 
     }
     
     public void setPath()
@@ -266,6 +273,8 @@ public class Enemy extends Entity
         {
 	        if(newLocation.getX() < this.getxLocation())
 	        {
+	        	direction = 3 ; 
+	        	
 	            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
 	            if((this.getxLocation() < newLocation.getX()))
@@ -275,6 +284,8 @@ public class Enemy extends Entity
 	        }
 	        else if(newLocation.getX() > (this.getxLocation()))
 	        {
+	        	direction = 1 ; 
+	        	
 	            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
 	            if((this.getxLocation() > newLocation.getX()))
@@ -284,6 +295,8 @@ public class Enemy extends Entity
 	        }
 	        else if(newLocation.getY() < this.getyLocation())
 	        {
+	        	direction = 2 ; 
+	        	
 	            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
 	            if((this.getyLocation() < newLocation.getY()))
@@ -293,6 +306,8 @@ public class Enemy extends Entity
 	        }
 	        else if(newLocation.getY() > this.getyLocation())
 	        {
+	        	direction = 0 ;
+	        	
 	            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
 	            if((this.getyLocation() > newLocation.getY()))
@@ -379,5 +394,14 @@ public class Enemy extends Entity
     public void setEndY(float endY) {
         this.endY = endY;
     }
+    
+    
+    public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
     
 }
