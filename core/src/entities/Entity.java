@@ -54,6 +54,7 @@ public abstract class Entity extends Rectangle
      * @param xLocation the xLocation to set
      */
     public void setxLocation(float xLocation) {
+        this.setX(xLocation);
         this.xLocation = xLocation;
     }
 
@@ -68,6 +69,7 @@ public abstract class Entity extends Rectangle
      * @param yLocation the yLocation to set
      */
     public void setyLocation(float yLocation) {
+        this.setY(yLocation);
         this.yLocation = yLocation;
     }
 

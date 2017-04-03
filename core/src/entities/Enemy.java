@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 
 import constants.GameConstants;
 
@@ -40,10 +41,14 @@ public class Enemy extends Entity
     
     //private boolean finished = true;
     
-    public Enemy(DungeonTile[][] map)
+    public Enemy(DungeonTile[][] map, Texture enemyTexture)
     {
         this.map  = map;
         newLocation = null;
+
+        this.setEntityTexture(enemyTexture);
+        
+        this.set(this.getxLocation(), this.getyLocation(), (float)enemyTexture.getWidth()/32, (float)enemyTexture.getHeight()/32);
         
         direction = GameConstants.ENEMY_STARTING_DIRECTION ; 
     }
@@ -269,8 +274,8 @@ public class Enemy extends Entity
     
     private void changeLocation(DungeonTile newLocation)
     {
-        if(!newLocation.isOccupied())
-        {
+        //if(!newLocation.isOccupied())
+        //{
 	        if(newLocation.getX() < this.getxLocation())
 	        {
 	        	direction = 3 ; 
@@ -315,7 +320,7 @@ public class Enemy extends Entity
 	                this.setyLocation(newLocation.getY());
 	            }
 	        }   
-        }
+        //}
     }
     
     public void getHit(float damage)

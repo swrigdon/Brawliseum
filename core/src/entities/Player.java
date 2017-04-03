@@ -64,43 +64,43 @@ public class Player extends Entity
         //Added by Jason
         if(Gdx.input.isKeyPressed(Input.Keys.W))
         {
-        		this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-                this.setMovingY(true);
-                this.setPlayerDirection(GameConstants.UP);
-                
-                this.setMovingX(false);
-                this.setMovingNY(false);
-                this.setMovingNX(false);
+            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+            this.setMovingY(true);
+            this.setPlayerDirection(GameConstants.UP);
+
+            this.setMovingX(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S))
         {
-	            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-	            this.setMovingNY(true);
-	            this.setPlayerDirection(GameConstants.DOWN);
-	            
-	            this.setMovingX(false);
-	            this.setMovingY(false);
-	            this.setMovingNX(false);
+            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+            this.setMovingNY(true);
+            this.setPlayerDirection(GameConstants.DOWN);
+
+            this.setMovingX(false);
+            this.setMovingY(false);
+            this.setMovingNX(false);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D))
         {
-	            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-	            this.setMovingX(true);
-	            this.setPlayerDirection(GameConstants.RIGHT);
-	            
-	            this.setMovingY(false);
-	            this.setMovingNY(false);
-	            this.setMovingNX(false);
+            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+            this.setMovingX(true);
+            this.setPlayerDirection(GameConstants.RIGHT);
+
+            this.setMovingY(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.A))
         {
-	            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-	            this.setMovingNX(true);
-	            this.setPlayerDirection(GameConstants.LEFT);
-	            
-	            this.setMovingY(false);
-	            this.setMovingX(false);
-	            this.setMovingNY(false);
+            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+            this.setMovingNX(true);
+            this.setPlayerDirection(GameConstants.LEFT);
+
+            this.setMovingY(false);
+            this.setMovingX(false);
+            this.setMovingNY(false);
         }       
         else
         {
@@ -218,7 +218,8 @@ public class Player extends Entity
                 System.out.println("Enemy at me 3");
                 map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
                 
-                if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall"))
+                if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall") &&
+                        this.getyLocation()-2 > 0)
                 {
                 	map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
                 }

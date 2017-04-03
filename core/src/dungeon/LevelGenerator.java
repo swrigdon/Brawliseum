@@ -664,12 +664,12 @@ public class LevelGenerator
         
         for(int i = 0; i < enemyNumber; i++)
         {
-            holderEnemy = new Enemy(map);
+            holderEnemy = new Enemy(map, enemyTexture);
             holderEnemy.setHealth(GameConstants.ENEMY_STARTING_HEALTH);
             holderEnemy.setDamage(GameConstants.ENEMY_STARTING_DAMAGE);
             holderEnemy.setDefense(100);
             holderEnemy.setSpeed(GameConstants.ENEMY_BASE_SPEED);
-            holderEnemy.setEntityTexture(enemyTexture);
+            //holderEnemy.setEntityTexture(enemyTexture);
             
             enemyLocationX = rand.nextInt((map.length-2) - 1)+1;
             enemyLocationY = rand.nextInt((map[0].length-2 - 1))+1;

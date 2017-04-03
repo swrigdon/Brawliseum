@@ -154,10 +154,11 @@ public class GameScreen extends ScreenAdapter
                 
                 currentLevel.getEnemies().remove(i);
                 
-                System.out.println(currentLevel.getEnemies().size());
+                System.out.println("Enemy List Size:  " + currentLevel.getEnemies().size());
+                
                 continue;
             }
-            //System.out.println("i = " + i);
+            System.out.println("Enemy " + i);
             currentLevel.getEnemies().get(i).setEndX(player.getxLocation());
             currentLevel.getEnemies().get(i).setEndY(player.getyLocation());
             currentLevel.getEnemies().get(i).move(map);
@@ -176,7 +177,7 @@ public class GameScreen extends ScreenAdapter
         batch.end();
 
         //update checks
-        handleInput() ; 
+        checkPlayer() ; 
         camera.update();
     }
     
@@ -184,47 +185,90 @@ public class GameScreen extends ScreenAdapter
     {
     	for(Enemy enemy : currentLevel.getEnemies())
     	{
-    		if(enemy.overlaps(player))
-    		{
-    			if(enemy.getDirection()==0)
-    			{
-    				enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-    			}else if(enemy.getDirection() == 1)
-    			{
-    				enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-    			}else if(enemy.getDirection() == 2)
-    			{
-    				enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-    			}else if(enemy.getDirection() == 3)
-    			{
-    				enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-    			}
-    		}
+            if(enemy.overlaps(player))
+            {
+                if(enemy.getDirection()==0)
+                {
+                    //System.out.println("Collision Going Up");
+                    enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }else if(enemy.getDirection() == 1)
+                {
+                    //System.out.println("Collision Going Right");
+                    enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }else if(enemy.getDirection() == 2)
+                {
+                    //System.out.println("Collision Going Down");
+                    enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }else if(enemy.getDirection() == 3)
+                {
+                    //System.out.println("Collision Going Left");
+                    enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }
+            }
     		
-    		for(Enemy enemy2 : currentLevel.getEnemies())
-    		{
-    			if(enemy.overlaps(enemy2))
-    			{
-    				if(enemy.getDirection()==0)
-        			{
-        				enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-        			}else if(enemy.getDirection() == 1)
-        			{
-        				enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-        			}else if(enemy.getDirection() == 2)
-        			{
-        				enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-        			}else if(enemy.getDirection() == 3)
-        			{
-        				enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-        			}
-    			}
-    		}
+            for(Enemy enemy2 : currentLevel.getEnemies())
+            {
+                if(enemy.equals(enemy2))
+                {
+                    continue;
+                }
+                    if(enemy.overlaps(enemy2))
+                    {
+                            if(enemy.getDirection()==0)
+                            {
+                                    enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                                    break;
+                            }else if(enemy.getDirection() == 1)
+                            {
+                                    enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                                    break;
+                            }else if(enemy.getDirection() == 2)
+                            {
+                                    enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                                    break;
+                            }else if(enemy.getDirection() == 3)
+                            {
+                                    enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                                    break;
+                            }
+                    }
+
+            }
+            for(int i = 0; i < collisionMatrix.size(); i++)
+            {
+                if(player.overlaps(collisionMatrix.get(i)))
+                {
+                    if(enemy.getDirection() == GameConstants.UP)
+                    {	
+                        enemy.setyLocation(enemy.getyLocation() - (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                    else if(enemy.getDirection() == GameConstants.RIGHT)
+                    {
+                        enemy.setxLocation(enemy.getxLocation() - (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                    else if(enemy.getDirection() == GameConstants.DOWN)
+                    {
+                        enemy.setyLocation(enemy.getyLocation() + (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                    else if(enemy.getDirection() == GameConstants.LEFT)
+                    {
+                        enemy.setxLocation(enemy.getxLocation() + (float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        break;
+                    }
+                }
+            }        
     	}
     }
 
     //temp handling input method
-    private void handleInput()
+    private void checkPlayer()
     { 
         //Added by Jason
         player.move(map);
@@ -253,6 +297,36 @@ public class GameScreen extends ScreenAdapter
                 }
                 else if(player.isMovingNX())
                 {
+                    player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }
+            }
+        }
+        for(int i = 0; i < currentLevel.getEnemies().size(); i++)
+        {
+            if(player.overlaps(currentLevel.getEnemies().get(i)))
+            {
+                if(player.isMovingY())
+                {	
+                    //System.out.println("Player Collision Going Up");
+                    player.setyLocation(player.getyLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }
+                else if(player.isMovingX())
+                {
+                    //System.out.println("Player Collision Going Right");
+                    player.setxLocation(player.getxLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }
+                else if(player.isMovingNY())
+                {
+                    //System.out.println("Player Collision Going Down");
+                    player.setyLocation(player.getyLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
+                    break;
+                }
+                else if(player.isMovingNX())
+                {
+                    //System.out.println("Player Collision Going Left");
                     player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
                     break;
                 }
