@@ -66,8 +66,12 @@ public class GameScreen extends ScreenAdapter
         
         //TEMP
         playerClass = "sword";
+        
+        System.out.println("........" + ((float)1-(float)(GameConstants.PLAYER_TEXTURE.getWidth())/64));
 
-        player = new Player(2,2, GameConstants.PLAYER_TEXTURE, currentLevel, playerClass);
+        player = new Player(2 + ((float)(1)-((float)(GameConstants.PLAYER_TEXTURE.getWidth())/32))/2, 
+                            2 + ((float)(1)-((float)(GameConstants.PLAYER_TEXTURE.getHeight())/32))/2,
+                GameConstants.PLAYER_TEXTURE, currentLevel, playerClass);
         
         printGrid(map)  ; 
         
@@ -186,19 +190,19 @@ public class GameScreen extends ScreenAdapter
     	{
             if(enemy.overlaps(player))
             {
-                if(enemy.getDirection()==0)
+                if(enemy.getDirection()== GameConstants.UP)
                 {
                     //System.out.println("Collision Going Up");
                     enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                }else if(enemy.getDirection() == 1)
+                }else if(enemy.getDirection() == GameConstants.RIGHT)
                 {
                     //System.out.println("Collision Going Right");
                     enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                }else if(enemy.getDirection() == 2)
+                }else if(enemy.getDirection() == GameConstants.DOWN)
                 {
                     //System.out.println("Collision Going Down");
                     enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                }else if(enemy.getDirection() == 3)
+                }else if(enemy.getDirection() == GameConstants.LEFT)
                 {
                     //System.out.println("Collision Going Left");
                     enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
@@ -216,14 +220,16 @@ public class GameScreen extends ScreenAdapter
                    if(enemy.getDirection()==0)
                    {
                        enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                   }else if(enemy.getDirection() == 1)
+                   }
+                   else if(enemy.getDirection() == 1)
                    {
                 	   enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == 2)
                    {
                        enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                   }else if(enemy.getDirection() == 3)
+                   }
+                   else if(enemy.getDirection() == 3)
                    {
                        enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
@@ -273,25 +279,26 @@ public class GameScreen extends ScreenAdapter
                 if(player.isMovingY())
                 {	
                     player.setyLocation(player.getyLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
                 else if(player.isMovingX())
                 {
                     player.setxLocation(player.getxLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
                 else if(player.isMovingNY())
                 {
                     player.setyLocation(player.getyLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
                 else if(player.isMovingNX())
                 {
                     player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
             }
         }
+        
         for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
             if(player.overlaps(currentLevel.getEnemies().get(i)))
@@ -300,67 +307,32 @@ public class GameScreen extends ScreenAdapter
                 {	
                     //System.out.println("Player Collision Going Up");
                     player.setyLocation(player.getyLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
                 else if(player.isMovingX())
                 {
                     //System.out.println("Player Collision Going Right");
                     player.setxLocation(player.getxLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
                 else if(player.isMovingNY())
                 {
                     //System.out.println("Player Collision Going Down");
                     player.setyLocation(player.getyLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
                 else if(player.isMovingNX())
                 {
                     //System.out.println("Player Collision Going Left");
                     player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    break;
+                    //break;
                 }
             }
         }
+                
 
         //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
         camera.update();
-
-
-        /*
-            if(Gdx.input.isKeyPressed(Input.Keys.W))
-            {
-                    camera.translate(0,3,0);
-                    if(checkOut())
-                    {
-                            camera.translate(0,-3,0);
-                    }
-            }
-            else if(Gdx.input.isKeyPressed(Input.Keys.S))
-            {
-                    camera.translate(0,-3,0);
-                    if(checkOut())
-                    {
-                            camera.translate(0,3,0);
-                    }
-            }
-            else if(Gdx.input.isKeyPressed(Input.Keys.D))
-            {
-                    camera.translate(3,0,0);
-                    if(checkOut())
-                    {
-                            camera.translate(-3,0,0);
-                    }
-            }
-            else if(Gdx.input.isKeyPressed(Input.Keys.A))
-            {
-                    camera.translate(-3,0,0);
-                    if(checkOut())
-                    {
-                            camera.translate(3,0,0);
-                    }
-            }
-            */
     }
 
     //temp function to check if viewport is out of the screen. returns true if out of bounds

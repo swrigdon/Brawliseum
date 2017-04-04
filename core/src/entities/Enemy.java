@@ -230,8 +230,10 @@ public class Enemy extends Entity
 
                     changeLocation(path.get(path.size()-1)) ;
 
-                    if(!(Math.abs(this.getxLocation() - path.get(path.size()-1).getX()) != 0 ||
-                         Math.abs(this.getyLocation() - path.get(path.size()-1).getY()) != 0))
+                    if(!(Math.abs(this.getxLocation() - ((float)path.get(path.size()-1).getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2)) 
+                            != 0 ||
+                         Math.abs(this.getyLocation() - ((float)path.get(path.size()-1).getY()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2)) 
+                            != 0))
                     {
                         if(map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile() == this)
                         {
@@ -274,53 +276,54 @@ public class Enemy extends Entity
     
     private void changeLocation(DungeonTile newLocation)
     {
-        if(!newLocation.isOccupied())
-        {
-	        if(newLocation.getX() < this.getxLocation())
+        //System.out.println("..............." + ((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2));
+        //if(!newLocation.isOccupied())
+        //{
+	        if(((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2) < this.getxLocation())
 	        {
 	        	direction = 3 ; 
 	        	
 	            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
-	            if((this.getxLocation() < newLocation.getX()))
+	            if((this.getxLocation() < (float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2))
 	            {
-	                this.setxLocation(newLocation.getX());
+	                this.setxLocation((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2);
 	            }
 	        }
-	        else if(newLocation.getX() > (this.getxLocation()))
+	        else if((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2 > (this.getxLocation()))
 	        {
 	        	direction = 1 ; 
 	        	
 	            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
-	            if((this.getxLocation() > newLocation.getX()))
+	            if((this.getxLocation() > (float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2))
 	            {
-	                this.setxLocation(newLocation.getX());
+	                this.setxLocation((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2);
 	            }
 	        }
-	        else if(newLocation.getY() < this.getyLocation())
+	        else if((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2 < this.getyLocation())
 	        {
 	        	direction = 2 ; 
 	        	
 	            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
-	            if((this.getyLocation() < newLocation.getY()))
+	            if((this.getyLocation() < (float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2))
 	            {
-	                this.setyLocation(newLocation.getY());
+	                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
 	            }
 	        }
-	        else if(newLocation.getY() > this.getyLocation())
+	        else if((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2 > this.getyLocation())
 	        {
 	        	direction = 0 ;
 	        	
 	            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
 	
-	            if((this.getyLocation() > newLocation.getY()))
+	            if((this.getyLocation() > (float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2))
 	            {
-	                this.setyLocation(newLocation.getY());
+	                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
 	            }
 	        }   
-        }
+        //}
     }
     
     public void getHit(float damage)

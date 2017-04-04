@@ -33,7 +33,7 @@ public class Player extends Entity
 	private int playerDirection;
     
 
-    public Player(int x, int y, Texture playerTexture, Level currentLevel, String playerClass)
+    public Player(float x, float y, Texture playerTexture, Level currentLevel, String playerClass)
     {
         this.setEntityTexture(playerTexture);
         this.setX(x);
