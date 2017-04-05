@@ -12,7 +12,7 @@ public class DesktopLauncher
             config.height = 1080;
             config.width = 1920;
             config.foregroundFPS = 60;
-            config.title = "The Brawliseum - A Procedural Death Labyrinth" ;
+            config.title = "The Brawliseum - A Procedural Death Labyrinthawwww" ;
             new LwjglApplication(new Application(), config);
 	}
 }

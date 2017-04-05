@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import constants.GameConstants;
 import dungeon.DungeonTile;
 import dungeon.Level;
+import java.util.ArrayList;
 import screens.GameScreen;
 
 /**
@@ -31,7 +32,9 @@ public class Player extends Entity
     private long lastAttack ; 
     private long attackSpeed ; 
 
-	private int playerDirection;
+    private int playerDirection;
+    
+    private ArrayList<Projectile> projectiles;
     
 
     public Player(float x, float y, Texture playerTexture, Level currentLevel, String playerClass)
@@ -53,6 +56,8 @@ public class Player extends Entity
         this.setMovingNY(false);
         
         this.set(x, y, (float)playerTexture.getWidth()/32, (float)playerTexture.getHeight()/32);
+        
+        projectiles = new ArrayList<Projectile>();
         
         attackSpeed = GameConstants.PLAYER_BASE_ATTACK_SPEED ; 
         
@@ -126,9 +131,9 @@ public class Player extends Entity
             {
                 swordAttack(map);
             }
-            else if(playerClass.equals("bow"))
+            else if(playerClass.equals("bow") || playerClass.equals("mage"))
             {
-                bowAttack();
+                rangeAttack(map);
             }
             
             lastAttack = com.badlogic.gdx.utils.TimeUtils.nanoTime();
@@ -146,20 +151,11 @@ public class Player extends Entity
                 System.out.println("Enemy above me");
                 map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile().getHit(attack());
                 
-                if(!map[(int)this.getxLocation()][(int)this.getyLocation()+2].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile().setyLocation((int)this.getyLocation()+2);
-                }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
             {
                 System.out.println("Enemy at me 0");
                 map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
-                
-                if(!map[(int)this.getxLocation()][(int)this.getyLocation()+1].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setyLocation((int)this.getyLocation()+1);
-                }
             }
         }
         else if(playerDirection == GameConstants.RIGHT)
@@ -168,21 +164,11 @@ public class Player extends Entity
             {
                 System.out.println("Enemy to the right of me");
                 map[(int)this.getxLocation()+1][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
-                
-                if(!map[(int)this.getxLocation()+1][(int)this.getyLocation()].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()+1][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()+2);
-                }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
             {
                 System.out.println("Enemy at me 1");
                 map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
-                
-                if(!map[(int)this.getxLocation()+1][(int)this.getyLocation()].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()+1);
-                }
             }
         }
         else if(playerDirection == GameConstants.DOWN)
@@ -192,20 +178,11 @@ public class Player extends Entity
                 System.out.println("Enemy below me");
                 map[(int)this.getxLocation()][(int)this.getyLocation()-1].getEnemyOnTile().getHit(attack());
                 
-                if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()][(int)this.getyLocation()-1].getEnemyOnTile().setyLocation((int)this.getyLocation()-2);
-                }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
             {
                 System.out.println("Enemy at me 2");
                 map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
-                
-                if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setyLocation((int)this.getyLocation()-2);
-                }
             }
         }
         else if(playerDirection == GameConstants.LEFT)
@@ -215,27 +192,21 @@ public class Player extends Entity
                 System.out.println("Enemy to the left of me");
                 map[(int)this.getxLocation()-1][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
                 
-                if(!map[(int)this.getxLocation()-2][(int)this.getyLocation()].getTileType().equals("wall"))
-                {
-                	//map[(int)this.getxLocation()-1][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
-                }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
             {
                 System.out.println("Enemy at me 3");
                 map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().getHit(attack());
-                
-                if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall") &&
-                        this.getyLocation()-2 > 0)
-                {
-                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
-                }
+
             }
         }
     }
-    private void bowAttack()
-    {
+    private void rangeAttack(DungeonTile[][] map)
+    {   
+        Projectile newProjectile = new Projectile(playerClass, attack(), this.getxLocation(), this.getyLocation(), (this.getSpeed()*2), playerDirection);
         
+        projectiles.add(newProjectile);
+          
     }
     
     public float attack()
@@ -379,4 +350,18 @@ public class Player extends Entity
 	public void setAttackSpeed(long attackSpeed) {
 		this.attackSpeed = attackSpeed;
 	}
+
+    /**
+     * @return the projectiles
+     */
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    /**
+     * @param projectiles the projectiles to set
+     */
+    public void setProjectiles(ArrayList<Projectile> projectiles) {
+        this.projectiles = projectiles;
+    }
 }

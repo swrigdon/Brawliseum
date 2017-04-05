@@ -33,9 +33,11 @@ public class Enemy extends Entity
     private DungeonTile[][] map;
     private DungeonTile newLocation;
     private int direction ; 
+    
+    public boolean visited = false;
 
 
-	private boolean pathFind = false;
+    private boolean pathFind = false;
     
     ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
     

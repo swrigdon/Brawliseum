@@ -37,4 +37,5 @@ public class GameConstants {
 	public static final Texture FLOOR_TEXTURE = new Texture("floorTest.png"); 
 	public static final Texture WALL_TEXTURE = new Texture("wallTest.png");
 	public static final Texture PLAYER_TEXTURE = new Texture("tempTest.png");
+        public static final Texture ARROW_TEXTURE = new Texture("arrowTest.png");
 }

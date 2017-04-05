@@ -15,6 +15,7 @@ import dungeon.Level;
 import dungeon.LevelGenerator;
 import entities.Enemy;
 import entities.Player;
+import entities.Projectile;
 import java.util.ArrayList;
 
 /**
@@ -37,6 +38,7 @@ public class GameScreen extends ScreenAdapter
     public LevelGenerator generator;
     public Level currentLevel  ; 
     public Player player;
+    ArrayList<Projectile> projectiles;
     
     private String playerClass;
 
@@ -44,7 +46,7 @@ public class GameScreen extends ScreenAdapter
     public GameScreen(Application game)
     {
         generator = new LevelGenerator(29, 29);
-        currentLevel = generator.generateLevel(6);        
+        currentLevel = generator.generateLevel(1);        
 
 
         float w = Gdx.graphics.getWidth();
@@ -65,7 +67,7 @@ public class GameScreen extends ScreenAdapter
         genWall(collisionMatrix, currentLevel);
         
         //TEMP
-        playerClass = "sword";
+        playerClass = "bow";
         
         System.out.println("........" + ((float)1-(float)(GameConstants.PLAYER_TEXTURE.getWidth())/64));
 
@@ -161,6 +163,15 @@ public class GameScreen extends ScreenAdapter
                                               currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
         }
     }
+    
+    private void drawProjectiles(SpriteBatch batch)
+    {
+        for(Projectile projectile: player.getProjectiles())
+        {
+            projectile.move(map);
+            projectile.draw(batch);
+        }
+    }
 
     public void render (float delta)
     {
@@ -173,6 +184,9 @@ public class GameScreen extends ScreenAdapter
 
         //draw map 
         drawMap(batch) ; 
+        
+        //draw projectile
+        drawProjectiles(batch);
         
         //draw player
         player.draw(batch);
@@ -187,11 +201,14 @@ public class GameScreen extends ScreenAdapter
         //cant draw after this point
         batch.end();
 
-        //checks for enemy collisions with the player and other enemies
+        //checks for enemy collisions with the player and other enemies and projectiles
         checkEnemies() ; 
         
-        //checks player's collision
+        //checks player's collision 
         checkPlayer() ; 
+        
+        //checks projectile and wall collision
+        checkProjectiles();
         
         //check for beating the level 
         if(levelWin())
@@ -235,6 +252,7 @@ public class GameScreen extends ScreenAdapter
     {
     	for(Enemy enemy : currentLevel.getEnemies())
     	{
+            
             if(enemy.overlaps(player))
             {
                 if(enemy.getDirection()== GameConstants.UP)
@@ -262,31 +280,46 @@ public class GameScreen extends ScreenAdapter
                 {
                     continue;
                 }
+                
+                
                 if(enemy.overlaps(enemy2))
                 {
-                   if(enemy.getDirection()==0)
+                    System.out.println("Enemy 1 X: " + enemy.getxLocation());
+                    System.out.println("Enemy 1 Y: " + enemy.getyLocation());
+                    
+                    System.out.println("Enemy 2 X: " + enemy2.getxLocation());
+                    System.out.println("Enemy 2 Y: " + enemy2.getyLocation());
+                    
+                    
+                   if(enemy.getDirection()== GameConstants.UP)
                    {
                        enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                       //enemy2.setyLocation(enemy2.getyLocation()+(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
-                   else if(enemy.getDirection() == 1)
+                   else if(enemy.getDirection() == GameConstants.RIGHT)
                    {
-                	   enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        //enemy2.setxLocation(enemy2.getxLocation()+(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
-                   else if(enemy.getDirection() == 2)
+                   else if(enemy.getDirection() == GameConstants.DOWN)
                    {
                        enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                       //enemy2.setyLocation(enemy2.getyLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
-                   else if(enemy.getDirection() == 3)
+                   else if(enemy.getDirection() == GameConstants.LEFT)
                    {
                        enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                       //enemy2.setxLocation(enemy2.getxLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
+                   
+                   System.out.println("CHECK....... " + enemy.overlaps(enemy2));
                }
 
             }
-            /*
+            
             for(int i = 0; i < collisionMatrix.size(); i++)
             {
-                if(player.overlaps(collisionMatrix.get(i)))
+                if(enemy.overlaps(collisionMatrix.get(i)))
                 {
                     if(enemy.getDirection() == GameConstants.UP)
                     {	
@@ -306,7 +339,18 @@ public class GameScreen extends ScreenAdapter
                     }
                 }
             } 
-            */       
+            
+            for(int i = 0; i < player.getProjectiles().size(); i++)
+            {
+                if(enemy.overlaps(player.getProjectiles().get(i)))
+                {
+                    enemy.getHit(player.getProjectiles().get(i).getDamage());
+                    player.getProjectiles().remove(i);
+                    break;
+                }
+            }
+                    
+                  
     	}
     }
 
@@ -380,6 +424,26 @@ public class GameScreen extends ScreenAdapter
 
         //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
         camera.update();
+    }
+    
+    private void checkProjectiles()
+    {
+        if(player.getProjectiles().size() > 0)
+        {
+            System.out.println("Before " +player.getProjectiles().size());
+            for(int i = 0; i < player.getProjectiles().size(); i++)
+            {
+                for(int j = 0; j < collisionMatrix.size(); j++)
+                {
+                    if(player.getProjectiles().get(i).overlaps(collisionMatrix.get(j)))
+                    {
+                        player.getProjectiles().remove(i);
+                        break;
+                    }
+                }
+            }
+            System.out.println("After " +player.getProjectiles().size());
+        }
     }
 
     //temp function to check if viewport is out of the screen. returns true if out of bounds
