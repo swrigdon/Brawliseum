@@ -152,7 +152,6 @@ public class Enemy extends Entity
     	return (int) Math.sqrt(Math.pow(endX-this.getxLocation(), 2)+Math.pow(endY-this.getyLocation(), 2)) ; 
     }
     
-    @Override
     public void move(DungeonTile[][] map) 
     {
     	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY)
@@ -277,8 +276,6 @@ public class Enemy extends Entity
     private void changeLocation(DungeonTile newLocation)
     {
         //System.out.println("..............." + ((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2));
-        //if(!newLocation.isOccupied())
-        //{
 	        if(((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2) < this.getxLocation())
 	        {
 	        	direction = 3 ; 
@@ -323,7 +320,6 @@ public class Enemy extends Entity
 	                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
 	            }
 	        }   
-        //}
     }
     
     public void getHit(float damage)
@@ -410,6 +406,5 @@ public class Enemy extends Entity
 
 	public void setDirection(int direction) {
 		this.direction = direction;
-	}
-    
+	}  
 }

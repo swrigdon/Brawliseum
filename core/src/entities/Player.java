@@ -8,6 +8,7 @@ package entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import constants.GameConstants;
 import dungeon.DungeonTile;
@@ -56,6 +57,12 @@ public class Player extends Entity
         attackSpeed = GameConstants.PLAYER_BASE_ATTACK_SPEED ; 
         
         this.setHealth(GameConstants.PLAYER_STARTING_HEALTH);
+    }
+    
+    public void draw(SpriteBatch batch)
+    {
+    	batch.draw(this.getEntityTexture(), this.getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
     }
     
     @Override
@@ -141,7 +148,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()][(int)this.getyLocation()+2].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile().setyLocation((int)this.getyLocation()+2);
+                	//map[(int)this.getxLocation()][(int)this.getyLocation()+1].getEnemyOnTile().setyLocation((int)this.getyLocation()+2);
                 }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
@@ -151,7 +158,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()][(int)this.getyLocation()+1].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setyLocation((int)this.getyLocation()+1);
+                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setyLocation((int)this.getyLocation()+1);
                 }
             }
         }
@@ -164,7 +171,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()+1][(int)this.getyLocation()].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()+1][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()+2);
+                	//map[(int)this.getxLocation()+1][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()+2);
                 }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
@@ -174,7 +181,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()+1][(int)this.getyLocation()].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()+1);
+                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()+1);
                 }
             }
         }
@@ -187,7 +194,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()][(int)this.getyLocation()-1].getEnemyOnTile().setyLocation((int)this.getyLocation()-2);
+                	//map[(int)this.getxLocation()][(int)this.getyLocation()-1].getEnemyOnTile().setyLocation((int)this.getyLocation()-2);
                 }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
@@ -197,7 +204,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setyLocation((int)this.getyLocation()-2);
+                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setyLocation((int)this.getyLocation()-2);
                 }
             }
         }
@@ -210,7 +217,7 @@ public class Player extends Entity
                 
                 if(!map[(int)this.getxLocation()-2][(int)this.getyLocation()].getTileType().equals("wall"))
                 {
-                	map[(int)this.getxLocation()-1][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
+                	//map[(int)this.getxLocation()-1][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
                 }
             }
             else if(map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile() != null)
@@ -221,7 +228,7 @@ public class Player extends Entity
                 if(!map[(int)this.getxLocation()][(int)this.getyLocation()-2].getTileType().equals("wall") &&
                         this.getyLocation()-2 > 0)
                 {
-                	map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
+                	//map[(int)this.getxLocation()][(int)this.getyLocation()].getEnemyOnTile().setxLocation((int)this.getxLocation()-2);
                 }
             }
         }

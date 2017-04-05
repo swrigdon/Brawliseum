@@ -15,26 +15,28 @@ import java.util.ArrayList;
 public class Level 
 {
 	private DungeonTile[][] map;
-        private ArrayList<Enemy> enemies;
+    private ArrayList<Enemy> enemies;
+    private int levelNumber ; 
 	
-	public Level(DungeonTile [][] map, ArrayList<Enemy> enemies)
-        {
-                this.enemies = enemies;
-		this.setMap(map) ; 
+	public Level(DungeonTile [][] map, ArrayList<Enemy> enemies, int levelNumber)
+    {
+		this.setLevelNumber(levelNumber) ; 
+		this.enemies = enemies;
+        this.setMap(map) ; 
 	}
 
-	public DungeonTile[][] getMap() {
+	public DungeonTile[][] getMap(){
 		return map;
 	}
 
-	public void setMap(DungeonTile[][] map) {
+	public void setMap(DungeonTile[][] map){
 		this.map = map;
 	}
 
     /**
      * @return the enemies
      */
-    public ArrayList<Enemy> getEnemies() {
+    public ArrayList<Enemy> getEnemies(){
         return enemies;
     }
 
@@ -44,4 +46,12 @@ public class Level
     public void setEnemies(ArrayList<Enemy> enemies) {
         this.enemies = enemies;
     }
+
+	public int getLevelNumber() {
+		return levelNumber;
+	}
+
+	public void setLevelNumber(int levelNumber) {
+		this.levelNumber = levelNumber;
+	}
 }

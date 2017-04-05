@@ -110,18 +110,10 @@ public class GameScreen extends ScreenAdapter
             }  
         }
     }
-
-    public void render (float delta)
+    
+    private void drawMap(SpriteBatch batch)
     {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //System.out.println("FPS: " + Gdx.graphics.getFramesPerSecond());
-
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-
-        //testing drawing code
-        for(int x=0;x<map.length;x++)
+    	for(int x=0;x<map.length;x++)
         {
             for(int y=0;y<map[0].length;y++)
             {
@@ -139,12 +131,11 @@ public class GameScreen extends ScreenAdapter
                 }      
             }
         }
-        batch.draw(player.getEntityTexture(), player.getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
-                                              player.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
-        
-   
-        //int i = 0;
-        for(int i = 0; i < currentLevel.getEnemies().size(); i++)
+    }
+    
+    private void drawEnemies(SpriteBatch batch)
+    {
+    	for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
             if(currentLevel.getEnemies().get(i).getHealth() <= 0)
             {
@@ -169,19 +160,75 @@ public class GameScreen extends ScreenAdapter
             batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
                                               currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
         }
+    }
+
+    public void render (float delta)
+    {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.setProjectionMatrix(camera.combined);
         
-        //checks for enemy collisions with the player and other enemies
-        checkEnemies() ; 
+        //start the batch
+        batch.begin();
+
+        //draw map 
+        drawMap(batch) ; 
+        
+        //draw player
+        player.draw(batch);
+        
+        //draw enemies
+        drawEnemies(batch) ; 
         
         //Sets the camera position to the "player" so that it will follow it
         //AFTER TESTING, UNCOMMENT
         //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
-
+        
+        //cant draw after this point
         batch.end();
 
-        //update checks
+        //checks for enemy collisions with the player and other enemies
+        checkEnemies() ; 
+        
+        //checks player's collision
         checkPlayer() ; 
+        
+        //check for beating the level 
+        if(levelWin())
+        {
+        	resetLevel() ; 
+        }
+        
+        //update camera
         camera.update();
+        
+    }
+    
+    private void resetLevel()
+    {
+    	//make a new level
+    	currentLevel = generator.generateLevel(currentLevel.getLevelNumber()+1);    
+    	
+    	//make a new map 
+    	map = currentLevel.getMap() ;
+    	
+    	//reset collision matrix
+    	collisionMatrix.removeAll(collisionMatrix) ; 
+    	genWall(collisionMatrix, currentLevel);
+    	
+    	//reset player
+    	player.setxLocation(GameConstants.PLAYER_START_X);
+    	player.setyLocation(GameConstants.PLAYER_START_Y);
+    }
+    
+    private boolean levelWin()
+    {
+    	if(currentLevel.getEnemies().size()==0){
+    		return true ; 
+    	}else
+    	{
+    		return false ; 
+    	}
     }
     
     private void checkEnemies()
@@ -263,7 +310,7 @@ public class GameScreen extends ScreenAdapter
     	}
     }
 
-    //temp handling input method
+    //method to check player's collision 
     private void checkPlayer()
     { 
         //Added by Jason

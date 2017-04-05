@@ -623,14 +623,14 @@ public class LevelGenerator
         ArrayList<Enemy> enemies = generateEnemies(levelNumber, map);
         
     	//create a new level 
-        Level newLevel = new Level(map, enemies);
+        Level newLevel = new Level(map, enemies,levelNumber);
         
         
         //return the level to the game class 
         return newLevel;
     }
     
-    public ArrayList<Enemy> generateEnemies(int levelNumber, DungeonTile[][] map)
+    private ArrayList<Enemy> generateEnemies(int levelNumber, DungeonTile[][] map)
     {
         ArrayList<Enemy> enemies = new ArrayList<Enemy>();
         Enemy holderEnemy;
