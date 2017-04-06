@@ -15,6 +15,7 @@ import dungeon.DungeonTile;
 import dungeon.Level;
 import dungeon.LevelGenerator;
 import entities.Enemy;
+import entities.GroundItem;
 import entities.Player;
 import entities.Projectile;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class GameScreen extends ScreenAdapter
         this.game = game;
         camera = new OrthographicCamera(w, h);
         //AFTER TESTING THIS SHOULD BE: camera.setToOrtho(false, 320*(w/h), 320);
-        //camera.setToOrtho(false, 320*(w/h), 320);
+        //camera.setToOrtho(false, 2*320*(w/h), 2*320);
         camera.setToOrtho(false, GameConstants.PLAYER_VIEW_X, GameConstants.PLAYER_VIEW_Y); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
@@ -143,6 +144,14 @@ public class GameScreen extends ScreenAdapter
         }
     }
     
+    private void drawItems(SpriteBatch batch)
+    {
+        for(GroundItem groundItem: currentLevel.getGroundItems())
+        {
+            groundItem.draw(batch);
+        }
+    }
+    
     private void drawEnemies(SpriteBatch batch)
     {
     	for(int i = 0; i < currentLevel.getEnemies().size(); i++)
@@ -191,7 +200,9 @@ public class GameScreen extends ScreenAdapter
         batch.begin();
 
         //draw map 
-        drawMap(batch) ; 
+        drawMap(batch) ;
+        
+        drawItems(batch);
         
         //draw projectile
         drawProjectiles(batch);
@@ -401,6 +412,18 @@ public class GameScreen extends ScreenAdapter
                     player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
                     //break;
                 }
+            }
+        }
+        
+        for(int i = 0; i < currentLevel.getGroundItems().size(); i++)
+        {
+            if(player.overlaps(currentLevel.getGroundItems().get(i)))
+            {
+                if(player.getPlayerPotion() == null)
+                {
+                    //
+                }
+                currentLevel.getGroundItems().remove(i);
             }
         }
         

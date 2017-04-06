@@ -32,11 +32,11 @@ public class Projectile extends Entity
         this.setyLocation(y);
         this.setSpeed(speed);
         
-        if(projectileType == "bow")
+        if(projectileType.equals("bow"))
         {
-            this.setEntityTexture(GameConstants.ARROW_TEXTURE);
+            this.setEntityTexture(GameConstants.ARROW_UP_TEXTURE);
         }
-        else if(projectileType == "mage")
+        else if(projectileType.equals("mage"))
         {
             
         }
@@ -57,18 +57,54 @@ public class Projectile extends Entity
     {
         if(direction == GameConstants.UP)
         {
+            if(projectileType.equals("bow"))
+            {
+                this.setEntityTexture(GameConstants.ARROW_UP_TEXTURE);
+            }
+            else if(projectileType.equals("mage"))
+            {
+                
+            }
+            
             this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
         }
         else if(direction == GameConstants.DOWN)
         {
+            if(projectileType.equals("bow"))
+            {
+                this.setEntityTexture(GameConstants.ARROW_DOWN_TEXTURE);
+            }
+            else if(projectileType.equals("mage"))
+            {
+                
+            }
+            
             this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
         }
         else if(direction == GameConstants.RIGHT)
         {
+            if(projectileType.equals("bow"))
+            {
+                this.setEntityTexture(GameConstants.ARROW_RIGHT_TEXTURE);
+            }
+            else if(projectileType.equals("mage"))
+            {
+                
+            }
+            
             this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
         }
         else if(direction == GameConstants.LEFT)
         {
+            if(projectileType.equals("bow"))
+            {
+                this.setEntityTexture(GameConstants.ARROW_LEFT_TEXTURE);
+            }
+            else if(projectileType.equals("mage"))
+            {
+                
+            }
+            
             this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
         }
     }   
