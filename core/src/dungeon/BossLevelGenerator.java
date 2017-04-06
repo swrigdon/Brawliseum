@@ -3,6 +3,7 @@ package dungeon;
 import com.badlogic.gdx.graphics.Texture;
 import constants.GameConstants;
 import entities.Enemy;
+import entities.GroundItem;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -80,9 +81,10 @@ public class BossLevelGenerator {
     {
         DungeonTile[][] map = generateMap();
         ArrayList<Enemy> boss = generateBoss(levelNumber, map);
+        ArrayList<GroundItem> items = new ArrayList<>();
 
         //create a new level
-        Level newLevel = new Level(map, boss,levelNumber);
+        Level newLevel = new Level(map, boss, items, levelNumber);
 
         //return the level to the game class
         return newLevel;
