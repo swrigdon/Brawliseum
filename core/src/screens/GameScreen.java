@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Application;
 
 import constants.GameConstants;
+import dungeon.BossLevelGenerator;
 import dungeon.DungeonTile;
 import dungeon.Level;
 import dungeon.LevelGenerator;
@@ -18,9 +19,6 @@ import entities.Player;
 import entities.Projectile;
 import java.util.ArrayList;
 
-/**
- * Created by steph on 2/8/2017.
- */
 
 public class GameScreen extends ScreenAdapter 
 {
@@ -36,18 +34,28 @@ public class GameScreen extends ScreenAdapter
     ArrayList<Rectangle> collisionMatrix = new ArrayList<Rectangle>();
 
     public LevelGenerator generator;
+    public BossLevelGenerator bossGenerator;
     public Level currentLevel  ; 
     public Player player;
     ArrayList<Projectile> projectiles;
     
     private String playerClass;
+    //Goes to boss level if %5==0, goes to maze level otherwise.
+    private int levelNumber = 1;
 
 
     public GameScreen(Application game)
     {
-        generator = new LevelGenerator(29, 29);
-        currentLevel = generator.generateLevel(1);        
-
+        if(levelNumber%5==0)
+        {
+            bossGenerator = new BossLevelGenerator(29, 29);
+            currentLevel = bossGenerator.generateLevel(levelNumber);
+        }
+        else
+        {
+            generator = new LevelGenerator(29, 29);
+            currentLevel = generator.generateLevel(levelNumber);
+        }
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -224,8 +232,14 @@ public class GameScreen extends ScreenAdapter
     private void resetLevel()
     {
     	//make a new level
-    	currentLevel = generator.generateLevel(currentLevel.getLevelNumber()+1);    
-    	
+        if(levelNumber%5==0)
+        {
+            currentLevel = bossGenerator.generateLevel(currentLevel.getLevelNumber()+1);
+        }
+        else
+        {
+            currentLevel = generator.generateLevel(currentLevel.getLevelNumber() + 1);
+        }
     	//make a new map 
     	map = currentLevel.getMap() ;
     	
