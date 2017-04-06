@@ -5,7 +5,11 @@
  */
 package entities;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import constants.GameConstants;
 import dungeon.DungeonTile;
+import items.Potion;
 
 /**
  *
@@ -13,11 +17,24 @@ import dungeon.DungeonTile;
  */
 public class GroundItem extends Entity
 {
+    private Potion potion;
+    
+    public GroundItem(int x, int y, Texture itemTexture)
+    {
+        this.setEntityTexture(itemTexture);
+        this.set(x, y, (float)this.getEntityTexture().getWidth()/32, (float)this.getEntityTexture().getHeight()/32);
+    }
+    
+    public void draw(SpriteBatch batch)
+    {
+        batch.draw(this.getEntityTexture(), this.getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+    }
 
     @Override
     public void move(DungeonTile[][] map) 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

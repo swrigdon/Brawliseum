@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import constants.GameConstants;
 import entities.Enemy;
+import entities.GroundItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -621,13 +622,109 @@ public class LevelGenerator
     {
         DungeonTile[][] map = generateMap();
         ArrayList<Enemy> enemies = generateEnemies(levelNumber, map);
+        ArrayList<GroundItem> groundItems = generateItems(map);
         
     	//create a new level 
-        Level newLevel = new Level(map, enemies,levelNumber);
+        Level newLevel = new Level(map, enemies, groundItems,levelNumber);
         
         
         //return the level to the game class 
         return newLevel;
+    }
+    
+    private ArrayList<GroundItem> generateItems(DungeonTile[][] map)
+    {
+        ArrayList<GroundItem> groundItems = new ArrayList<GroundItem>();
+        GroundItem holderItem;
+        int numItems = GameConstants.NUM_GROUND_ITEMS;
+        Texture itemTexture = GameConstants.ITEM_HEALTH;
+        
+        
+        float itemLocationX;
+        float itemLocationY;
+        
+        for(int i = 0; i < numItems; i++)
+        {           
+            Random rand = new Random();
+            int pickItem = rand.nextInt(3-1)+1;
+            
+            System.out.println("Item Number = " + pickItem);
+            
+            if(pickItem == 1)
+            {
+                itemTexture = GameConstants.ITEM_HEALTH;
+            }
+            else if(pickItem == 2)
+            {
+                itemTexture = GameConstants.ITEM_ATTACK;
+            }
+            else if(pickItem == 3)
+            {
+                //Add at third
+                
+                itemTexture = GameConstants.ITEM_HEALTH;
+            }
+            
+            holderItem = new GroundItem(1,1, itemTexture);
+            holderItem.setSpeed(0);
+            
+            
+            itemLocationX = rand.nextInt((map.length-2) - 1)+1;
+            itemLocationY = rand.nextInt((map[0].length-2 - 1))+1;
+            
+            while(map[(int)itemLocationX][(int)itemLocationY].getTileType().equals("wall"))
+            {
+                if(!(map[(int)itemLocationX][(int)itemLocationY+1].getTileType().equals("wall")))
+                {
+                    itemLocationY++;
+                }
+                else if(!(map[(int)itemLocationX][(int)itemLocationY-1].getTileType().equals("wall")))
+                {
+                    itemLocationY--;
+                }
+                else if(!(map[(int)itemLocationX+1][(int)itemLocationY].getTileType().equals("wall")))
+                {
+                    itemLocationX++;
+                }
+                else if(!(map[(int)itemLocationX-1][(int)itemLocationY].getTileType().equals("wall")))
+                {
+                    itemLocationX--;
+                }
+                else if(!(map[(int)itemLocationX+1][(int)itemLocationY+1].getTileType().equals("wall")))
+                {
+                    itemLocationX++;
+                    itemLocationY++;
+                }
+                else if(!(map[(int)itemLocationX-1][(int)itemLocationY-1].getTileType().equals("wall")))
+                {
+                    itemLocationX--;
+                    itemLocationY--;
+                }
+                else if(!(map[(int)itemLocationX+1][(int)itemLocationY-1].getTileType().equals("wall")))
+                {
+                    itemLocationX++;
+                    itemLocationY--;
+                }
+                else if(!(map[(int)itemLocationX-1][(int)itemLocationY+1].getTileType().equals("wall")))
+                {
+                    itemLocationX--;
+                    itemLocationY++;
+                }
+                else//FAIL SAFE
+                {
+                    itemLocationX = rand.nextInt((map.length-2) - 1)+1;
+                    itemLocationY = rand.nextInt((map[0].length-2 - 1))+1;
+                }
+            }
+            
+            holderItem.setxLocation(itemLocationX+((float)(1)-((float)(itemTexture.getHeight())/32))/2);
+            holderItem.setyLocation(itemLocationY+((float)(1)-((float)(itemTexture.getHeight())/32))/2);
+
+            groundItems.add(holderItem);
+        }
+        
+        
+        return groundItems;
     }
     
     private ArrayList<Enemy> generateEnemies(int levelNumber, DungeonTile[][] map)

@@ -28,6 +28,7 @@ public class GameConstants {
 	public static final int PLAYER_START_Y = 2 ; 
 	public static final int BASE_NUM_ENEMIES = 5 ; 
 	public static final int CAP_NUM_ENEMIES = 20 ; 
+        public static final int NUM_GROUND_ITEMS = 3;
 	
 	//visual constants
 	public static final int PLAYER_VIEW_X = 1920 ;
@@ -37,5 +38,11 @@ public class GameConstants {
 	public static final Texture FLOOR_TEXTURE = new Texture("floorTest.png"); 
 	public static final Texture WALL_TEXTURE = new Texture("wallTest.png");
 	public static final Texture PLAYER_TEXTURE = new Texture("tempTest.png");
-        public static final Texture ARROW_TEXTURE = new Texture("arrowTest.png");
+        public static final Texture ARROW_UP_TEXTURE = new Texture("arrowUpTest.png");
+        public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDownTest.png");
+        public static final Texture ARROW_LEFT_TEXTURE = new Texture("arrowLeftTest.png");
+        public static final Texture ARROW_RIGHT_TEXTURE = new Texture("arrowRightTest.png");
+        
+        public static final Texture ITEM_HEALTH = new Texture("health.png");
+        public static final Texture ITEM_ATTACK = new Texture("attack.png");
 }

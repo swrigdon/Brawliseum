@@ -6,6 +6,7 @@
 package dungeon;
 
 import entities.Enemy;
+import entities.GroundItem;
 import java.util.ArrayList;
 
 /**
@@ -16,13 +17,15 @@ public class Level
 {
 	private DungeonTile[][] map;
     private ArrayList<Enemy> enemies;
+    private ArrayList<GroundItem> groundItems;
     private int levelNumber ; 
 	
-	public Level(DungeonTile [][] map, ArrayList<Enemy> enemies, int levelNumber)
-    {
-		this.setLevelNumber(levelNumber) ; 
-		this.enemies = enemies;
-        this.setMap(map) ; 
+	public Level(DungeonTile [][] map, ArrayList<Enemy> enemies, ArrayList<GroundItem> groundItems, int levelNumber)
+        {
+            this.setLevelNumber(levelNumber) ; 
+            this.enemies = enemies;
+            this.groundItems = groundItems;
+            this.setMap(map) ; 
 	}
 
 	public DungeonTile[][] getMap(){
@@ -54,4 +57,18 @@ public class Level
 	public void setLevelNumber(int levelNumber) {
 		this.levelNumber = levelNumber;
 	}
+
+    /**
+     * @return the groundItems
+     */
+    public ArrayList<GroundItem> getGroundItems() {
+        return groundItems;
+    }
+
+    /**
+     * @param groundItems the groundItems to set
+     */
+    public void setGroundItems(ArrayList<GroundItem> groundItems) {
+        this.groundItems = groundItems;
+    }
 }

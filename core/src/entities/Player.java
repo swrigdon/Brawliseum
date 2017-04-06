@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import constants.GameConstants;
 import dungeon.DungeonTile;
 import dungeon.Level;
+import items.Potion;
 import java.util.ArrayList;
 import screens.GameScreen;
 
@@ -33,6 +34,9 @@ public class Player extends Entity
     private long attackSpeed ; 
 
     private int playerDirection;
+       
+    //
+    private Potion playerPotion;
     
     private ArrayList<Projectile> projectiles;
     
@@ -47,6 +51,7 @@ public class Player extends Entity
         this.setCurrentLevel(currentLevel);
         this.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         this.setPlayerClass(playerClass);
+        this.playerPotion = null;
         
         this.setPlayerDirection(GameConstants.UP); 
         
@@ -203,7 +208,7 @@ public class Player extends Entity
     }
     private void rangeAttack(DungeonTile[][] map)
     {   
-        Projectile newProjectile = new Projectile(playerClass, attack(), this.getxLocation(), this.getyLocation(), (this.getSpeed()*2), playerDirection);
+        Projectile newProjectile = new Projectile(playerClass, attack(), this.getxLocation(), this.getyLocation(), (12), playerDirection);
         
         projectiles.add(newProjectile);
           
@@ -211,7 +216,12 @@ public class Player extends Entity
     
     public float attack()
     {
-        return 50;
+        if(playerClass.equals("sword"))
+        {
+            return 50;
+        }
+        else
+            return 25;
     }
     
     public float defense()
@@ -363,5 +373,19 @@ public class Player extends Entity
      */
     public void setProjectiles(ArrayList<Projectile> projectiles) {
         this.projectiles = projectiles;
+    }
+
+    /**
+     * @return the playerPotion
+     */
+    public Potion getPlayerPotion() {
+        return playerPotion;
+    }
+
+    /**
+     * @param playerPotion the playerPotion to set
+     */
+    public void setPlayerPotion(Potion playerPotion) {
+        this.playerPotion = playerPotion;
     }
 }
