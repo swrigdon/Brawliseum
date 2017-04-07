@@ -42,7 +42,7 @@ public class GameConstants {
         public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDownTest.png");
         public static final Texture ARROW_LEFT_TEXTURE = new Texture("arrowLeftTest.png");
         public static final Texture ARROW_RIGHT_TEXTURE = new Texture("arrowRightTest.png");
-        
+        public static final Texture FIREBALL_TEXTURE = new Texture("fireball.png");
         public static final Texture ITEM_HEALTH = new Texture("healthpot2.png");
         public static final Texture ITEM_ATTACK = new Texture("attackspeedpot.png");
 }
