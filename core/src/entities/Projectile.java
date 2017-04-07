@@ -38,7 +38,7 @@ public class Projectile extends Entity
         }
         else if(projectileType.equals("mage"))
         {
-            
+            this.setEntityTexture(GameConstants.FIREBALL_TEXTURE);
         }
         
         this.setDirection(direction);
@@ -63,7 +63,7 @@ public class Projectile extends Entity
             }
             else if(projectileType.equals("mage"))
             {
-                
+                this.setEntityTexture(GameConstants.FIREBALL_TEXTURE);
             }
             
             this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
@@ -76,7 +76,7 @@ public class Projectile extends Entity
             }
             else if(projectileType.equals("mage"))
             {
-                
+                this.setEntityTexture(GameConstants.FIREBALL_TEXTURE);
             }
             
             this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
@@ -89,7 +89,7 @@ public class Projectile extends Entity
             }
             else if(projectileType.equals("mage"))
             {
-                
+                this.setEntityTexture(GameConstants.FIREBALL_TEXTURE);   
             }
             
             this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
@@ -102,7 +102,7 @@ public class Projectile extends Entity
             }
             else if(projectileType.equals("mage"))
             {
-                
+                this.setEntityTexture(GameConstants.FIREBALL_TEXTURE);
             }
             
             this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
