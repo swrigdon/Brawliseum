@@ -81,7 +81,7 @@ public class BossLevelGenerator {
     {
         DungeonTile[][] map = generateMap();
         ArrayList<Enemy> boss = generateBoss(levelNumber, map);
-        ArrayList<GroundItem> items = new ArrayList<>();
+        ArrayList<GroundItem> items = new ArrayList<GroundItem>();
 
         //create a new level
         Level newLevel = new Level(map, boss, items, levelNumber);

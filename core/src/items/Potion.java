@@ -12,11 +12,14 @@ package items;
 public class Potion 
 {
     private String potionName;
-    private String potionType;
-    private float healAmount;
-    private float energyAmount;
-    private int quantity;
+    private float value;
 
+    public Potion(String potionName, float value)
+    {
+        this.potionName = potionName;
+        this.value = value;
+    }
+    
     /**
      * @return the potionName
      */
@@ -32,60 +35,17 @@ public class Potion
     }
 
     /**
-     * @return the potionType
+     * @return the value
      */
-    public String getPotionType() {
-        return potionType;
+    public float getValue() {
+        return value;
     }
 
     /**
-     * @param potionType the potionType to set
+     * @param value the value to set
      */
-    public void setPotionType(String potionType) {
-        this.potionType = potionType;
+    public void setValue(float value) {
+        this.value = value;
     }
-
-    /**
-     * @return the healAmount
-     */
-    public float getHealAmount() {
-        return healAmount;
-    }
-
-    /**
-     * @param healAmount the healAmount to set
-     */
-    public void setHealAmount(float healAmount) {
-        this.healAmount = healAmount;
-    }
-
-    /**
-     * @return the energyAmount
-     */
-    public float getEnergyAmount() {
-        return energyAmount;
-    }
-
-    /**
-     * @param energyAmount the energyAmount to set
-     */
-    public void setEnergyAmount(float energyAmount) {
-        this.energyAmount = energyAmount;
-    }
-
-    /**
-     * @return the quantity
-     */
-    public int getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * @param quantity the quantity to set
-     */
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-    
-    
+        
 }

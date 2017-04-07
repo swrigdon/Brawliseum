@@ -76,13 +76,13 @@ public class GameScreen extends ScreenAdapter
         genWall(collisionMatrix, currentLevel);
         
         //TEMP
-        playerClass = "bow";
+        playerClass = "mage";
         
         System.out.println("........" + ((float)1-(float)(GameConstants.PLAYER_TEXTURE.getWidth())/64));
 
         player = new Player(2 + ((float)(1)-((float)(GameConstants.PLAYER_TEXTURE.getWidth())/32))/2, 
                             2 + ((float)(1)-((float)(GameConstants.PLAYER_TEXTURE.getHeight())/32))/2,
-                GameConstants.PLAYER_TEXTURE, currentLevel, playerClass);
+                GameConstants.PLAYER_TEXTURE, currentLevel, playerClass, GameConstants.PLAYER_STARTING_HEALTH);
         
         printGrid(map)  ; 
         
@@ -156,6 +156,10 @@ public class GameScreen extends ScreenAdapter
     {
     	for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
+            //THIS WILL NEED TO BE CHANGED
+            currentLevel.getEnemies().get(i).setPlayer(player);
+            //*******************
+            
             if(currentLevel.getEnemies().get(i).getHealth() <= 0)
             {
                 //System.out.println(currentLevel.getEnemies().size());
@@ -261,6 +265,8 @@ public class GameScreen extends ScreenAdapter
     	//reset player
     	player.setxLocation(GameConstants.PLAYER_START_X);
     	player.setyLocation(GameConstants.PLAYER_START_Y);
+        player.setAttackSpeed(GameConstants.PLAYER_BASE_ATTACK_SPEED);
+        player.setSpeed(GameConstants.PLAYER_BASE_SPEED);
     }
     
     private boolean levelWin()
@@ -421,9 +427,9 @@ public class GameScreen extends ScreenAdapter
             {
                 if(player.getPlayerPotion() == null)
                 {
-                    //
+                    player.setPlayerPotion(currentLevel.getGroundItems().get(i).getPotion());
+                    currentLevel.getGroundItems().remove(i);
                 }
-                currentLevel.getGroundItems().remove(i);
             }
         }
         
@@ -467,7 +473,6 @@ public class GameScreen extends ScreenAdapter
     {
         if(player.getProjectiles().size() > 0)
         {
-            System.out.println("Before " +player.getProjectiles().size());
             for(int i = 0; i < player.getProjectiles().size(); i++)
             {
                 for(int j = 0; j < collisionMatrix.size(); j++)
@@ -479,7 +484,6 @@ public class GameScreen extends ScreenAdapter
                     }
                 }
             }
-            System.out.println("After " +player.getProjectiles().size());
         }
     }
 

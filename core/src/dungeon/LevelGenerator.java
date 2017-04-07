@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import constants.GameConstants;
 import entities.Enemy;
 import entities.GroundItem;
+import items.Potion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -622,7 +623,7 @@ public class LevelGenerator
     {
         DungeonTile[][] map = generateMap();
         ArrayList<Enemy> enemies = generateEnemies(levelNumber, map);
-        ArrayList<GroundItem> groundItems = generateItems(map);
+        ArrayList<GroundItem> groundItems = generateItems(levelNumber, map);
         
     	//create a new level 
         Level newLevel = new Level(map, enemies, groundItems,levelNumber);
@@ -632,10 +633,11 @@ public class LevelGenerator
         return newLevel;
     }
     
-    private ArrayList<GroundItem> generateItems(DungeonTile[][] map)
+    private ArrayList<GroundItem> generateItems(int levelNum, DungeonTile[][] map)
     {
         ArrayList<GroundItem> groundItems = new ArrayList<GroundItem>();
         GroundItem holderItem;
+        Potion holderPotion;
         int numItems = GameConstants.NUM_GROUND_ITEMS;
         Texture itemTexture = GameConstants.ITEM_HEALTH;
         
@@ -646,26 +648,29 @@ public class LevelGenerator
         for(int i = 0; i < numItems; i++)
         {           
             Random rand = new Random();
-            int pickItem = rand.nextInt(3-1)+1;
+            int pickItem = rand.nextInt(4-1)+1;
             
             System.out.println("Item Number = " + pickItem);
             
             if(pickItem == 1)
             {
+                holderPotion = new Potion("health", (GameConstants.BASE_HEALTH_POTION) + (GameConstants.SCALE_FACTOR_POTION * levelNum));
                 itemTexture = GameConstants.ITEM_HEALTH;
             }
             else if(pickItem == 2)
             {
+                holderPotion = new Potion("attack", (GameConstants.BASE_ATTACK_POTION));
                 itemTexture = GameConstants.ITEM_ATTACK;
             }
-            else if(pickItem == 3)
+            else
             {
-                //Add at third
-                
+                //Move Speed
+                holderPotion = new Potion("move", (GameConstants.BASE_MOVE_POTION));
                 itemTexture = GameConstants.ITEM_HEALTH;
             }
             
-            holderItem = new GroundItem(1,1, itemTexture);
+            
+            holderItem = new GroundItem(1,1, itemTexture, holderPotion);
             holderItem.setSpeed(0);
             
             
@@ -761,7 +766,7 @@ public class LevelGenerator
         
         for(int i = 0; i < enemyNumber; i++)
         {
-            holderEnemy = new Enemy(map, enemyTexture);
+            holderEnemy = new Enemy(map, enemyTexture, levelNumber);
             holderEnemy.setHealth(GameConstants.ENEMY_STARTING_HEALTH);
             holderEnemy.setDamage(GameConstants.ENEMY_STARTING_DAMAGE);
             holderEnemy.setDefense(100);

@@ -11,7 +11,7 @@ public class GameConstants {
 	public static final int LEFT = 3 ; 
 	
 	//player variables
-	public static final float PLAYER_BASE_SPEED = 3 ; 
+	public static final float PLAYER_BASE_SPEED = 12 ; 
 	public static final int PLAYER_STARTING_DIRECTION = UP ;
 	public static final long PLAYER_BASE_ATTACK_SPEED = 600000000L ; 
 	public static final float PLAYER_STARTING_HEALTH = 100 ; 
@@ -19,9 +19,10 @@ public class GameConstants {
 	//enemy variables
 	public static final int ENEMY_STARTING_DIRECTION = UP ;
 	public static final float ENEMY_STARTING_HEALTH = 100 ; 
-	public static final float ENEMY_STARTING_DAMAGE = 100 ;
+	public static final float ENEMY_STARTING_DAMAGE = 25 ;
+        public static final float ENEMY_DAMAGE_SCALE = 5;
 	public static final float ENEMY_BASE_SPEED = 3 ; 
-	public static final long ENEMY_BASE_ATTACK_SPEED = 600000000L ; 
+	public static final long ENEMY_BASE_ATTACK_SPEED = 800000000L ; 
 	
 	//level variables
 	public static final int PLAYER_START_X = 2 ; 
@@ -29,6 +30,12 @@ public class GameConstants {
 	public static final int BASE_NUM_ENEMIES = 5 ; 
 	public static final int CAP_NUM_ENEMIES = 20 ; 
         public static final int NUM_GROUND_ITEMS = 3;
+        
+        //Potion variables
+        public static final int BASE_HEALTH_POTION = 50;
+        public static final long BASE_ATTACK_POTION = 100000000L;
+        public static final int BASE_MOVE_POTION = 3;
+        public static final int SCALE_FACTOR_POTION = 10;
 	
 	//visual constants
 	public static final int PLAYER_VIEW_X = 1920 ;

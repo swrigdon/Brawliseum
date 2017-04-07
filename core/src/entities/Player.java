@@ -25,6 +25,7 @@ public class Player extends Entity
 {
     private String playerClass;
     private float health;
+    private float maxHealth;
     private float energy;
     private float experience;
     private float baseAttack;
@@ -41,7 +42,7 @@ public class Player extends Entity
     private ArrayList<Projectile> projectiles;
     
 
-    public Player(float x, float y, Texture playerTexture, Level currentLevel, String playerClass)
+    public Player(float x, float y, Texture playerTexture, Level currentLevel, String playerClass, float startHealth)
     {
         this.setEntityTexture(playerTexture);
         this.setX(x);
@@ -52,6 +53,9 @@ public class Player extends Entity
         this.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         this.setPlayerClass(playerClass);
         this.playerPotion = null;
+        
+        this.maxHealth = startHealth;
+        this.health = startHealth;      
         
         this.setPlayerDirection(GameConstants.UP); 
         
@@ -130,8 +134,8 @@ public class Player extends Entity
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && (com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack > attackSpeed))
         {
         	//System.out.println("Attacking") ; 
-        	//System.out.println("time diff: "+(com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack) ) ; 
-        	//System.out.println("attack speed: "+(attackSpeed) ) ; 
+        	System.out.println("time diff: "+(com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack) ) ; 
+        	System.out.println("attack speed: "+(attackSpeed) ) ; 
             if(playerClass.equals("sword"))
             {
                 swordAttack(map);
@@ -144,6 +148,27 @@ public class Player extends Entity
             lastAttack = com.badlogic.gdx.utils.TimeUtils.nanoTime();
             
             //GameScreen.printGrid(map) ; 
+        }
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.E))
+        {
+            if(playerPotion != null)
+            {
+                if(playerPotion.getPotionName().equals("health"))
+                {
+                    health = Math.min(playerPotion.getValue() + health, maxHealth);
+                }
+                else if(playerPotion.getPotionName().equals("attack"))
+                {
+                    attackSpeed -= playerPotion.getValue();
+                }
+                else if(playerPotion.getPotionName().equals("move"))
+                {
+                    this.setSpeed(this.getSpeed()+playerPotion.getValue());
+                }
+                
+                playerPotion = null;
+            }          
         }
     }
     
@@ -224,11 +249,16 @@ public class Player extends Entity
             return 25;
     }
     
+    public void getHit(float damage)
+    {
+        this.health -= damage;
+    }
+    
     public float defense()
     {
         return 0;
     }
-
+    
     /**
      * @return the health
      */
@@ -387,5 +417,19 @@ public class Player extends Entity
      */
     public void setPlayerPotion(Potion playerPotion) {
         this.playerPotion = playerPotion;
+    }
+
+    /**
+     * @return the maxHealth
+     */
+    public float getMaxHealth() {
+        return maxHealth;
+    }
+
+    /**
+     * @param maxHealth the maxHealth to set
+     */
+    public void setMaxHealth(float maxHealth) {
+        this.maxHealth = maxHealth;
     }
 }

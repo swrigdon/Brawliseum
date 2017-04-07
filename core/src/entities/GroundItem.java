@@ -19,8 +19,9 @@ public class GroundItem extends Entity
 {
     private Potion potion;
     
-    public GroundItem(int x, int y, Texture itemTexture)
+    public GroundItem(int x, int y, Texture itemTexture, Potion potion)
     {
+        this.potion = potion;
         this.setEntityTexture(itemTexture);
         this.set(x, y, (float)this.getEntityTexture().getWidth()/32, (float)this.getEntityTexture().getHeight()/32);
     }
@@ -35,6 +36,20 @@ public class GroundItem extends Entity
     public void move(DungeonTile[][] map) 
     {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * @return the potion
+     */
+    public Potion getPotion() {
+        return potion;
+    }
+
+    /**
+     * @param potion the potion to set
+     */
+    public void setPotion(Potion potion) {
+        this.potion = potion;
     }
     
 }

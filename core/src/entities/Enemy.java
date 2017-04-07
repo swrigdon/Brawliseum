@@ -34,6 +34,13 @@ public class Enemy extends Entity
     private DungeonTile newLocation;
     private int direction ; 
     
+    private long lastAttack ; 
+    private long attackSpeed ; 
+    
+    private int levelNum;
+    
+    private Player player;
+    
     public boolean visited = false;
 
 
@@ -43,16 +50,25 @@ public class Enemy extends Entity
     
     //private boolean finished = true;
     
-    public Enemy(DungeonTile[][] map, Texture enemyTexture)
+    public Enemy(DungeonTile[][] map, Texture enemyTexture, int levelNum)
     {
         this.map  = map;
         newLocation = null;
+        
+        attackSpeed = GameConstants.ENEMY_BASE_ATTACK_SPEED;
+        
+        this.levelNum = levelNum;
 
         this.setEntityTexture(enemyTexture);
         
         this.set(this.getxLocation(), this.getyLocation(), (float)enemyTexture.getWidth()/32, (float)enemyTexture.getHeight()/32);
         
         direction = GameConstants.ENEMY_STARTING_DIRECTION ; 
+    }
+    
+    public void setPlayer(Player player)
+    {
+        this.player = player;
     }
     
     public void setPath()
@@ -154,76 +170,32 @@ public class Enemy extends Entity
     	return (int) Math.sqrt(Math.pow(endX-this.getxLocation(), 2)+Math.pow(endY-this.getyLocation(), 2)) ; 
     }
     
+    private void attackPlayer(Player player)
+    {
+        if((com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack > attackSpeed))
+        {
+            player.getHit(GameConstants.ENEMY_STARTING_DAMAGE + (GameConstants.ENEMY_DAMAGE_SCALE*this.levelNum));
+            lastAttack = com.badlogic.gdx.utils.TimeUtils.nanoTime();
+        }
+    }
+    
     public void move(DungeonTile[][] map) 
     {
     	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY)
         {
-    		return;
+            attackPlayer(player);
+            return;
     	}
     	
     	
     	//outside the range of pathfinding 
     	if(calcDistance() >= MAX_RANGE)
     	{
-            /*
-            ArrayList<Integer> directions = new ArrayList<Integer>(Arrays.asList(0, 1, 2, 3)) ;
-    	 
-            Collections.shuffle(directions);
-            
-            if(newLocation == null)
-            {
-                if(!pathFind)
-                {
-                    if(directions.get(0) == 0 )
-                    {      
-                        if(!map[(int)this.getxLocation()][(int)this.getyLocation()+1].getTileType().equals("wall"))
-                        {
-                            newLocation = map[(int)this.getxLocation()][(int)this.getyLocation()+1];
-                            changeLocation(map[(int)this.getxLocation()][(int)this.getyLocation()+1]);
-                        }
-                    }
-                    else if(directions.get(0) == 1)
-                    {
-                        if(!map[(int)this.getxLocation()+1][(int)this.getyLocation()].getTileType().equals("wall"))
-                        {
-                            newLocation = map[(int)this.getxLocation()+1][(int)this.getyLocation()];
-                            changeLocation(map[(int)this.getxLocation()+1][(int)this.getyLocation()]);
-                        }
-                    }
-                    else if(directions.get(0) == 2)
-                    {
-                        if(!map[(int)this.getxLocation()][(int)this.getyLocation()-1].getTileType().equals("wall"))
-                        {
-                            newLocation = map[(int)this.getxLocation()][(int)this.getyLocation()-1];
-                            changeLocation(map[(int)this.getxLocation()][(int)this.getyLocation()-1]);
-                        }
-                    }
-                    else if(directions.get(0) == 3)
-                    {
-                        if(!map[(int)this.getxLocation()-1][(int)this.getyLocation()].getTileType().equals("wall"))
-                        {
-                            newLocation = map[(int)this.getxLocation()-1][(int)this.getyLocation()];
-                            changeLocation(map[(int)this.getxLocation()-1][(int)this.getyLocation()]);
-                        } 
-                    }
-                }
-            }
-            else if(Math.abs(this.getxLocation()) - newLocation.getX() != 0 ||
-                    Math.abs(this.getyLocation()) - newLocation.getY() != 0)
-            {
-                changeLocation(newLocation);
-            }
-            else
-            {
-                newLocation = null;
-            }
-            */
+          
     	}
         else
         {
-            //if(newLocation != null)
-            //{
-        	if(path!= null){
+            if(path!= null){
                 if(path.size() > 1)
                 {
                     //System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
@@ -266,12 +238,7 @@ public class Enemy extends Entity
                 {
                     path = aStar();
                 }
-        	}
-            //}
-            //else
-            //{
-            //    pathFind = true;
-            //}
+            }
     	}
     }
     
