@@ -773,8 +773,8 @@ public class LevelGenerator
             holderEnemy.setSpeed(GameConstants.ENEMY_BASE_SPEED);
             //holderEnemy.setEntityTexture(enemyTexture);
             
-            enemyLocationX = rand.nextInt((map.length-2) - 1)+1;
-            enemyLocationY = rand.nextInt((map[0].length-2 - 1))+1;
+            enemyLocationX = rand.nextInt((map.length-2) - 6)+7;
+            enemyLocationY = rand.nextInt((map[0].length-2 - 6))+7;
             
             /*
             System.out.println(enemyLocationX);

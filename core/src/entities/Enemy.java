@@ -170,6 +170,11 @@ public class Enemy extends Entity
     	return (int) Math.sqrt(Math.pow(endX-this.getxLocation(), 2)+Math.pow(endY-this.getyLocation(), 2)) ; 
     }
     
+    private float hitDistance()
+    {
+        return Math.round(Math.sqrt(Math.pow(endX-this.getxLocation(), 2)+Math.pow(endY-this.getyLocation(), 2)));
+    }
+            
     private void attackPlayer(Player player)
     {
         if((com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack > attackSpeed))
@@ -183,11 +188,14 @@ public class Enemy extends Entity
     {
     	if((int)this.getxLocation()==(int)endX && (int)this.getyLocation()==(int)endY)
         {
-            attackPlayer(player);
             return;
     	}
-    	
-    	
+        
+    	if(hitDistance() <= 1)
+        {
+            //System.out.println("Attack you bitch");
+            attackPlayer(player);
+        }
     	//outside the range of pathfinding 
     	if(calcDistance() >= MAX_RANGE)
     	{

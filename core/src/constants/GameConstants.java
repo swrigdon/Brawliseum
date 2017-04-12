@@ -11,7 +11,7 @@ public class GameConstants {
 	public static final int LEFT = 3 ; 
 	
 	//player variables
-	public static final float PLAYER_BASE_SPEED = 12 ; 
+	public static final float PLAYER_BASE_SPEED = 3 ; 
 	public static final int PLAYER_STARTING_DIRECTION = UP ;
 	public static final long PLAYER_BASE_ATTACK_SPEED = 600000000L ; 
 	public static final float PLAYER_STARTING_HEALTH = 100 ; 
@@ -19,9 +19,9 @@ public class GameConstants {
 	//enemy variables
 	public static final int ENEMY_STARTING_DIRECTION = UP ;
 	public static final float ENEMY_STARTING_HEALTH = 100 ; 
-	public static final float ENEMY_STARTING_DAMAGE = 25 ;
+	public static final float ENEMY_STARTING_DAMAGE = 15 ;
         public static final float ENEMY_DAMAGE_SCALE = 5;
-	public static final float ENEMY_BASE_SPEED = 3 ; 
+	public static final float ENEMY_BASE_SPEED = (float)2.5; 
 	public static final long ENEMY_BASE_ATTACK_SPEED = 800000000L ; 
 	
 	//level variables
@@ -40,6 +40,11 @@ public class GameConstants {
 	//visual constants
 	public static final int PLAYER_VIEW_X = 1920 ;
 	public static final float PLAYER_VIEW_Y = 1080 ;
+        
+        //experience constants
+        public static final int XP_FROM_ENEMIES = 20;
+        public static final int XP_FROM_LEVEL = 10;
+        public static final int LEVEL_UP_XP = 100;
 	
 	//textures 
 	public static final Texture FLOOR_TEXTURE = new Texture("floorTest.png"); 

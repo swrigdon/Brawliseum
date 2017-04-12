@@ -103,7 +103,7 @@ public class BossLevelGenerator {
 
         for(int i = 0; i < enemyNumber; i++)
         {
-            holderEnemy = new Enemy(map, enemyTexture);
+            holderEnemy = new Enemy(map, enemyTexture, levelNumber);
             holderEnemy.setHealth(GameConstants.ENEMY_STARTING_HEALTH);
             holderEnemy.setDamage(GameConstants.ENEMY_STARTING_DAMAGE);
             holderEnemy.setDefense(100);

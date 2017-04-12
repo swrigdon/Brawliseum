@@ -33,6 +33,8 @@ public class Player extends Entity
     private int level;    
     private long lastAttack ; 
     private long attackSpeed ; 
+    
+    private int finalScore;
 
     private int playerDirection;
        
@@ -53,6 +55,8 @@ public class Player extends Entity
         this.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         this.setPlayerClass(playerClass);
         this.playerPotion = null;
+        this.finalScore = 0;
+        this.experience = 0;
         
         this.maxHealth = startHealth;
         this.health = startHealth;      
@@ -132,10 +136,7 @@ public class Player extends Entity
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && (com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack > attackSpeed))
-        {
-        	//System.out.println("Attacking") ; 
-        	System.out.println("time diff: "+(com.badlogic.gdx.utils.TimeUtils.nanoTime() - lastAttack) ) ; 
-        	System.out.println("attack speed: "+(attackSpeed) ) ; 
+        { 
             if(playerClass.equals("sword"))
             {
                 swordAttack(map);
@@ -147,7 +148,6 @@ public class Player extends Entity
             
             lastAttack = com.badlogic.gdx.utils.TimeUtils.nanoTime();
             
-            //GameScreen.printGrid(map) ; 
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.E))
@@ -250,8 +250,9 @@ public class Player extends Entity
     }
     
     public void getHit(float damage)
-    {
+    {     
         this.health -= damage;
+        System.out.println("Health: " + this.health);
     }
     
     public float defense()
@@ -431,5 +432,19 @@ public class Player extends Entity
      */
     public void setMaxHealth(float maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    /**
+     * @return the finalScore
+     */
+    public int getFinalScore() {
+        return finalScore;
+    }
+
+    /**
+     * @param finalScore the finalScore to set
+     */
+    public void setFinalScore(int finalScore) {
+        this.finalScore = finalScore;
     }
 }

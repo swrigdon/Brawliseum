@@ -1,6 +1,7 @@
 package screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -42,12 +43,12 @@ public class GameScreen extends ScreenAdapter
     
     private String playerClass;
     //Goes to boss level if %5==0, goes to maze level otherwise.
-    private int levelNumber = 1;
+    private int levelNumber = 4;
 
 
     public GameScreen(Application game)
     {
-        if(levelNumber%5==0)
+        if(levelNumber+1%5==0)
         {
             bossGenerator = new BossLevelGenerator(29, 29);
             currentLevel = bossGenerator.generateLevel(levelNumber);
@@ -86,6 +87,14 @@ public class GameScreen extends ScreenAdapter
         
         printGrid(map)  ; 
         
+    }
+    
+    public enum State
+    {
+        PAUSE,
+        RUN,
+        RESUME,
+        STOPPED
     }
     
     public static void printGrid(DungeonTile [][] grid)
@@ -166,13 +175,11 @@ public class GameScreen extends ScreenAdapter
                // System.out.println("i = " + i);
                 map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setOccupied(false);
                 map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setEnemyOnTile(null);
-                
-                System.out.println("Enemy removed loc: (" + (int)currentLevel.getEnemies().get(i).getxLocation() + "," +(int)currentLevel.getEnemies().get(i).getyLocation()+")");
-                
-                
+ 
                 currentLevel.getEnemies().remove(i);
-                
-                System.out.println("Enemy List Size:  " + currentLevel.getEnemies().size());
+
+                player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
+                player.setFinalScore(player.getFinalScore()+1);
                 
                 continue;
             }
@@ -194,60 +201,92 @@ public class GameScreen extends ScreenAdapter
         }
     }
 
+    private State state = State.RUN;
+    
     public void render (float delta)
     {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.setProjectionMatrix(camera.combined);
-        
-        //start the batch
-        batch.begin();
-
-        //draw map 
-        drawMap(batch) ;
-        
-        drawItems(batch);
-        
-        //draw projectile
-        drawProjectiles(batch);
-        
-        //draw player
-        player.draw(batch);
-        
-        //draw enemies
-        drawEnemies(batch) ; 
-        
-        //Sets the camera position to the "player" so that it will follow it
-        //AFTER TESTING, UNCOMMENT
-        //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
-        
-        //cant draw after this point
-        batch.end();
-
-        //checks for enemy collisions with the player and other enemies and projectiles
-        checkEnemies() ; 
-        
-        //checks player's collision 
-        checkPlayer() ; 
-        
-        //checks projectile and wall collision
-        checkProjectiles();
-        
-        //check for beating the level 
-        if(levelWin())
+        switch(state)
         {
-        	resetLevel() ; 
+            case RUN: 
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                batch.setProjectionMatrix(camera.combined);
+
+                //start the batch
+                batch.begin();
+
+                //draw map 
+                drawMap(batch) ;
+
+                drawItems(batch);
+
+                //draw projectile
+                drawProjectiles(batch);
+
+                //draw player
+                player.draw(batch);
+
+                //draw enemies
+                drawEnemies(batch) ; 
+
+                //Sets the camera position to the "player" so that it will follow it
+                //AFTER TESTING, UNCOMMENT
+                //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
+
+                //cant draw after this point
+                batch.end();
+
+                //checks for enemy collisions with the player and other enemies and projectiles
+                checkEnemies() ; 
+
+                //checks player's collision 
+                checkPlayer() ; 
+
+                //checks projectile and wall collision
+                checkProjectiles();
+
+                //check for level up, if player has been defeated, or the level has been beat
+                if(player.getExperience() >= GameConstants.LEVEL_UP_XP)
+                {
+                    this.state = State.PAUSE;
+                    player.setExperience(0);
+                }
+                if(levelWin())
+                {
+                        resetLevel() ; 
+                }
+
+                if(levelLose())
+                {
+                    game.setScreen(new EndScreen(game, player.getFinalScore()));
+                }
+
+                //update camera
+                camera.update();
+                
+                break;
+                
+            case PAUSE:
+                System.out.println("You done a good, level +1");
+                //DO SHIT HERE LAZY ASSHOLES
+                
+                if(Gdx.input.isKeyPressed(Input.Keys.P))
+                    this.state = State.RUN;
+                break;
+                
+            case RESUME:
+                
+                break;
+            default:
+                break;
         }
-        
-        //update camera
-        camera.update();
         
     }
     
     private void resetLevel()
     {
     	//make a new level
-        if(levelNumber%5==0)
+        if(levelNumber+1%5==0)
         {
             currentLevel = bossGenerator.generateLevel(currentLevel.getLevelNumber()+1);
         }
@@ -267,16 +306,31 @@ public class GameScreen extends ScreenAdapter
     	player.setyLocation(GameConstants.PLAYER_START_Y);
         player.setAttackSpeed(GameConstants.PLAYER_BASE_ATTACK_SPEED);
         player.setSpeed(GameConstants.PLAYER_BASE_SPEED);
+        player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
+        player.setFinalScore(player.getFinalScore()+1);
     }
     
     private boolean levelWin()
     {
-    	if(currentLevel.getEnemies().size()==0){
-    		return true ; 
+    	if( currentLevel.getEnemies().isEmpty() && map[(int)player.getxLocation()][(int)player.getyLocation()].getTileType().equals("END"))
+        {
+            return true ; 
     	}else
     	{
-    		return false ; 
+            return false ; 
     	}
+    }
+    
+    private boolean levelLose()
+    {
+        if(player.getHealth() <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     private void checkEnemies()
@@ -315,12 +369,6 @@ public class GameScreen extends ScreenAdapter
                 
                 if(enemy.overlaps(enemy2))
                 {
-                    System.out.println("Enemy 1 X: " + enemy.getxLocation());
-                    System.out.println("Enemy 1 Y: " + enemy.getyLocation());
-                    
-                    System.out.println("Enemy 2 X: " + enemy2.getxLocation());
-                    System.out.println("Enemy 2 Y: " + enemy2.getyLocation());
-                    
                     
                    if(enemy.getDirection()== GameConstants.UP)
                    {
@@ -343,7 +391,6 @@ public class GameScreen extends ScreenAdapter
                        //enemy2.setxLocation(enemy2.getxLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    
-                   System.out.println("CHECK....... " + enemy.overlaps(enemy2));
                }
 
             }
