@@ -50,10 +50,10 @@ public class GameConstants {
 	public static final Texture FLOOR_TEXTURE = new Texture("floorTest.png"); 
 	public static final Texture WALL_TEXTURE = new Texture("wallTest.png");
 	public static final Texture PLAYER_TEXTURE = new Texture("tempTest.png");
-        public static final Texture ARROW_UP_TEXTURE = new Texture("arrowUpTest.png");
-        public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDownTest.png");
-        public static final Texture ARROW_LEFT_TEXTURE = new Texture("arrowLeftTest.png");
-        public static final Texture ARROW_RIGHT_TEXTURE = new Texture("arrowRightTest.png");
+        public static final Texture ARROW_UP_TEXTURE = new Texture("arrowUp.png");
+        public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDown.png");
+        public static final Texture ARROW_LEFT_TEXTURE = new Texture("arrowLeft.png");
+        public static final Texture ARROW_RIGHT_TEXTURE = new Texture("arrowRight.png");
         public static final Texture FIREBALL_TEXTURE = new Texture("fireball.png");
         public static final Texture ITEM_HEALTH = new Texture("healthpot2.png");
         public static final Texture ITEM_ATTACK = new Texture("attackspeedpot.png");
