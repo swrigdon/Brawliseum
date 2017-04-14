@@ -80,9 +80,17 @@ public class MainMenuScreen extends ScreenAdapter {
 				System.out.println("MouseX: " + mouseX);
 				System.out.println("MouseY: " + mouseY);
 				
-				if(mouseX<320 && mouseX>162 && mouseY>430 && mouseY<600){
-					game.setScreen(new GameScreen(game));
+				if(mouseX<620 && mouseX>320 && mouseY>470 && mouseY<650){
+                                    game.setScreen(new GameScreen(game, "bow"));
 				}
+                                else if(mouseX > 860 && mouseX < 1165 && mouseY>470 && mouseY<650)
+                                {
+                                    game.setScreen(new GameScreen(game, "sword"));
+                                }
+                                else if(mouseX > 1450 && mouseX < 1750 && mouseY > 470 && mouseY < 650)
+                                {
+                                    game.setScreen(new GameScreen(game, "mage"));
+                                }
 			}
 			
 		}

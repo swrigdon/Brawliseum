@@ -68,7 +68,7 @@ public class Player extends Entity
         this.setMovingNX(false);
         this.setMovingNY(false);
         
-        this.set(x, y, (float)playerTexture.getWidth()/32, (float)playerTexture.getHeight()/32);
+        this.set(x, y, (float)27/32, (float)27/32);
         
         projectiles = new ArrayList<Projectile>();
         

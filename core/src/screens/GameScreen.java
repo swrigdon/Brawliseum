@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.mygdx.game.Application;
 
 import constants.GameConstants;
@@ -55,7 +59,7 @@ public class GameScreen extends ScreenAdapter
     private int levelNumber = 4;
 
 
-    public GameScreen(Application game)
+    public GameScreen(Application game, String playerClass)
     {
         System.out.println("......................" + levelNumber);
         if(levelNumber%5==0)
@@ -74,8 +78,8 @@ public class GameScreen extends ScreenAdapter
         this.game = game;
         camera = new OrthographicCamera(w, h);
         //AFTER TESTING THIS SHOULD BE: camera.setToOrtho(false, 320*(w/h), 320);
-        //camera.setToOrtho(false, 2*320*(w/h), 2*320);
-        camera.setToOrtho(false, GameConstants.PLAYER_VIEW_X, GameConstants.PLAYER_VIEW_Y); //numbers are pixels player can see 
+        camera.setToOrtho(false, 2*320*(w/h), 2*320);
+        //camera.setToOrtho(false, GameConstants.PLAYER_VIEW_X, GameConstants.PLAYER_VIEW_Y); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
         //test temp textures
@@ -86,8 +90,7 @@ public class GameScreen extends ScreenAdapter
 
         genWall(collisionMatrix, currentLevel);
         
-        //TEMP
-        playerClass = "bow";
+        this.playerClass = playerClass;
         
         System.out.println("........" + ((float)1-(float)(GameConstants.PLAYER_TEXTURE.getWidth())/64));
 
@@ -96,6 +99,7 @@ public class GameScreen extends ScreenAdapter
                 GameConstants.PLAYER_TEXTURE, currentLevel, playerClass, GameConstants.PLAYER_STARTING_HEALTH);
         
         printGrid(map)  ; 
+        createPortal();
     }
     
     public enum State
@@ -140,7 +144,7 @@ public class GameScreen extends ScreenAdapter
         }
     }
     
-    private void drawPortal(SpriteBatch batch, int x, int y)
+    private void createPortal()
     {
         Texture portal = new Texture("portalRings2.png");
         Texture portalClose = new Texture("portalRings1.png");
@@ -174,8 +178,11 @@ public class GameScreen extends ScreenAdapter
         
         
         portalOpen = new Animation<TextureRegion>((float)1/(float)15, portalOpenAnimation);
-        portalClosed = new Animation<TextureRegion>((float)1/(float)15, portalClosedAnimation);
-        
+        portalClosed = new Animation<TextureRegion>((float)1/(float)15, portalClosedAnimation);     
+    }
+    
+    private void drawPortal(SpriteBatch batch, int x, int y)
+    {
         if( currentLevel.getEnemies().isEmpty())
         {
             batch.draw(portalOpen.getKeyFrame(elapsedTime, true), x*32, y*32);
@@ -183,8 +190,7 @@ public class GameScreen extends ScreenAdapter
         else
         {
             batch.draw(portalClosed.getKeyFrame(elapsedTime, true), x*32, y*32);
-        }
-        
+        } 
     }
     
     private void drawMap(SpriteBatch batch)
@@ -248,6 +254,15 @@ public class GameScreen extends ScreenAdapter
                                               currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
         }
     }
+    private void drawPausedEnemies(SpriteBatch batch)
+    {
+        for(int i = 0; i < currentLevel.getEnemies().size(); i++)
+        {
+
+            batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                                              currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+        }
+    }
     
     private void drawProjectiles(SpriteBatch batch)
     {
@@ -256,6 +271,16 @@ public class GameScreen extends ScreenAdapter
             projectile.move(map);
             projectile.draw(batch);
         }
+    }
+    
+    private void createLevelTable(SpriteBatch batch)
+    {
+        batch.draw(GameConstants.LEVEL_TABLE, 32*player.getxLocation(), 32*player.getyLocation());
+    }
+    
+    private void createPauseTable(SpriteBatch batch)
+    {
+        batch.draw(GameConstants.PAUSE_TABLE, 32*player.getxLocation(), 32*player.getyLocation());
     }
 
     private State state = State.RUN;
@@ -275,8 +300,6 @@ public class GameScreen extends ScreenAdapter
 
                 //draw map 
                 drawMap(batch) ;
-                
-                
 
                 drawItems(batch);
 
@@ -291,7 +314,7 @@ public class GameScreen extends ScreenAdapter
 
                 //Sets the camera position to the "player" so that it will follow it
                 //AFTER TESTING, UNCOMMENT
-                //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
+                camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
 
                 //cant draw after this point
                 batch.end();
@@ -304,16 +327,27 @@ public class GameScreen extends ScreenAdapter
 
                 //checks projectile and wall collision
                 checkProjectiles();
+                
+                checkPause();
 
                 //check for level up, if player has been defeated, or the level has been beat
                 if(player.getExperience() >= GameConstants.LEVEL_UP_XP)
                 {
+                    
                     this.state = State.PAUSE;
                     player.setExperience(0);
                 }
+                /*
+                if(Gdx.input.isKeyPressed(Input.Keys.K))
+                {
+                    levelNumber++;
+                    resetLevel();
+                }
+                        */
+                
                 if(levelWin())
                 {
-                        resetLevel() ; 
+                    resetLevel() ; 
                 }
 
                 if(levelLose())
@@ -327,12 +361,51 @@ public class GameScreen extends ScreenAdapter
                 break;
                 
             case PAUSE:
-                System.out.println("You done a good, level +1");
-                //DO SHIT HERE LAZY ASSHOLES
+                //Gdx.graphics.getDeltaTime()
+                batch.begin();
+
+                drawMap(batch) ;
+
+                drawItems(batch);
+
+                //draw projectile
+                drawProjectiles(batch);
+
+                //draw player
+                player.draw(batch);
+
+                //draw enemies
+                drawPausedEnemies(batch) ;
+                
+                createLevelTable(batch);
+                
+                batch.end();
                 
                 if(Gdx.input.isKeyPressed(Input.Keys.P))
                     this.state = State.RUN;
                 break;
+                
+            case STOPPED:
+                batch.begin();
+
+                drawMap(batch) ;
+
+                drawItems(batch);
+
+                //draw projectile
+                drawProjectiles(batch);
+
+                //draw player
+                player.draw(batch);
+
+                //draw enemies
+                drawPausedEnemies(batch) ;
+                
+                createPauseTable(batch);
+                
+                checkPause();
+                
+                batch.end();
                 
             case RESUME:
                 
@@ -341,6 +414,21 @@ public class GameScreen extends ScreenAdapter
                 break;
         }
         
+    }
+    
+    private void checkPause()
+    {
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+        {
+            if(this.state == State.RUN)
+            {
+                this.state = State.STOPPED;
+            }
+            else
+            {
+                this.state = State.RUN;
+            }
+        }
     }
     
     private void resetLevel()
@@ -369,6 +457,9 @@ public class GameScreen extends ScreenAdapter
         player.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
         player.setFinalScore(player.getFinalScore()+1);
+        
+        //reset camera
+        camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
     }
     
     private boolean levelWin()

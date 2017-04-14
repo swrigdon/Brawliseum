@@ -44,7 +44,7 @@ public class GameConstants {
     //experience constants
     public static final int XP_FROM_ENEMIES = 20;
     public static final int XP_FROM_LEVEL = 10;
-    public static final int LEVEL_UP_XP = 100;
+    public static final int LEVEL_UP_XP = 10;
         
     //Boss Level End Portal
     public static final int END_X_LOC = 26;
@@ -53,7 +53,7 @@ public class GameConstants {
 	//textures 
 	public static final Texture FLOOR_TEXTURE = new Texture("floor.png"); 
 	public static final Texture WALL_TEXTURE = new Texture("wall.png");
-	public static final Texture PLAYER_TEXTURE = new Texture("tempTest.png");
+	public static final Texture PLAYER_TEXTURE = new Texture("fighterleft1.png");
     public static final Texture ARROW_UP_TEXTURE = new Texture("arrowUp.png");
     public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDown.png");
     public static final Texture ARROW_LEFT_TEXTURE = new Texture("arrowLeft.png");
@@ -64,4 +64,6 @@ public class GameConstants {
     public static final Texture ITEM_MOVE = new Texture("moveSpeedPot.png") ; 
     public static final Texture MAIN_MENU_SCREEN = new Texture("titleScreen.png") ; 
     public static final Texture CLASS_SELECT_SCREEN = new Texture("classSelectionScreen2.png") ; 
+    public static final Texture LEVEL_TABLE = new Texture("tableTest.png");
+    public static final Texture PAUSE_TABLE = new Texture("table2Test.png");
 }
