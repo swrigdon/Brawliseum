@@ -45,6 +45,10 @@ public class GameConstants {
         public static final int XP_FROM_ENEMIES = 20;
         public static final int XP_FROM_LEVEL = 10;
         public static final int LEVEL_UP_XP = 100;
+        
+        //Boss Level End Portal
+        public static final int END_X_LOC = 26;
+        public static final int END_Y_LOC = 26;
 	
 	//textures 
 	public static final Texture FLOOR_TEXTURE = new Texture("floorTest.png"); 

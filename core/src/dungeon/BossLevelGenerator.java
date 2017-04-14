@@ -32,7 +32,6 @@ public class BossLevelGenerator {
     private DungeonTile[][] generateMap()
     {
         int roomStyle;
-        //THE hard part
         Random rand = new Random();
         roomStyle = rand.nextInt(2);
 
@@ -59,6 +58,10 @@ public class BossLevelGenerator {
                 }
             }
         }
+        
+        map[GameConstants.END_X_LOC][GameConstants.END_Y_LOC] = new DungeonTile("END", 27 , 27);
+        map[GameConstants.END_X_LOC][GameConstants.END_Y_LOC].setTileType("END");
+        
         System.out.println(" Starting map " );
         System.out.println("-----------------------------------" );
       //  printGrid(map) ; //print the map

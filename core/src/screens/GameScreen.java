@@ -48,7 +48,8 @@ public class GameScreen extends ScreenAdapter
 
     public GameScreen(Application game)
     {
-        if(levelNumber+1%5==0)
+        System.out.println("......................" + levelNumber);
+        if(levelNumber%5==0)
         {
             bossGenerator = new BossLevelGenerator(29, 29);
             currentLevel = bossGenerator.generateLevel(levelNumber);
@@ -77,7 +78,7 @@ public class GameScreen extends ScreenAdapter
         genWall(collisionMatrix, currentLevel);
         
         //TEMP
-        playerClass = "mage";
+        playerClass = "bow";
         
         System.out.println("........" + ((float)1-(float)(GameConstants.PLAYER_TEXTURE.getWidth())/64));
 
@@ -286,8 +287,9 @@ public class GameScreen extends ScreenAdapter
     private void resetLevel()
     {
     	//make a new level
-        if(levelNumber+1%5==0)
+        if(levelNumber%5==0)
         {
+            bossGenerator = new BossLevelGenerator(29, 29);
             currentLevel = bossGenerator.generateLevel(currentLevel.getLevelNumber()+1);
         }
         else
@@ -314,6 +316,7 @@ public class GameScreen extends ScreenAdapter
     {
     	if( currentLevel.getEnemies().isEmpty() && map[(int)player.getxLocation()][(int)player.getyLocation()].getTileType().equals("END"))
         {
+            levelNumber++;
             return true ; 
     	}else
     	{
@@ -373,21 +376,25 @@ public class GameScreen extends ScreenAdapter
                    if(enemy.getDirection()== GameConstants.UP)
                    {
                        enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                       
                        //enemy2.setyLocation(enemy2.getyLocation()+(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == GameConstants.RIGHT)
                    {
                         enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                        
                         //enemy2.setxLocation(enemy2.getxLocation()+(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == GameConstants.DOWN)
                    {
                        enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                       
                        //enemy2.setyLocation(enemy2.getyLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == GameConstants.LEFT)
                    {
                        enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
+                       
                        //enemy2.setxLocation(enemy2.getxLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    
