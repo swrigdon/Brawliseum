@@ -666,7 +666,7 @@ public class LevelGenerator
             {
                 //Move Speed
                 holderPotion = new Potion("move", (GameConstants.BASE_MOVE_POTION));
-                itemTexture = GameConstants.ITEM_HEALTH;
+                itemTexture = GameConstants.ITEM_MOVE;
             }
             
             
