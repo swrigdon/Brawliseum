@@ -51,8 +51,8 @@ public class GameConstants {
         public static final int END_Y_LOC = 26;
 	
 	//textures 
-	public static final Texture FLOOR_TEXTURE = new Texture("floorTest.png"); 
-	public static final Texture WALL_TEXTURE = new Texture("wallTest.png");
+	public static final Texture FLOOR_TEXTURE = new Texture("floor.png"); 
+	public static final Texture WALL_TEXTURE = new Texture("wall.png");
 	public static final Texture PLAYER_TEXTURE = new Texture("tempTest.png");
         public static final Texture ARROW_UP_TEXTURE = new Texture("arrowUp.png");
         public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDown.png");

@@ -6,7 +6,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.Application;
 
@@ -28,7 +30,13 @@ public class GameScreen extends ScreenAdapter
     Application game;
     private final SpriteBatch batch;
     private final OrthographicCamera camera;
-
+    float elapsedTime;
+    
+    Animation<TextureRegion> portalOpen;
+    Animation<TextureRegion> portalClosed;
+    TextureRegion[] portalClosedAnimation;
+    TextureRegion[] portalOpenAnimation;
+    
     //testing variables need to move to separate class 
     public Texture endTest; 
     public DungeonTile[][] map ;
@@ -40,6 +48,7 @@ public class GameScreen extends ScreenAdapter
     public Level currentLevel  ; 
     public Player player;
     ArrayList<Projectile> projectiles;
+    
     
     private String playerClass;
     //Goes to boss level if %5==0, goes to maze level otherwise.
@@ -87,7 +96,6 @@ public class GameScreen extends ScreenAdapter
                 GameConstants.PLAYER_TEXTURE, currentLevel, playerClass, GameConstants.PLAYER_STARTING_HEALTH);
         
         printGrid(map)  ; 
-        
     }
     
     public enum State
@@ -132,6 +140,53 @@ public class GameScreen extends ScreenAdapter
         }
     }
     
+    private void drawPortal(SpriteBatch batch, int x, int y)
+    {
+        Texture portal = new Texture("portalRings2.png");
+        Texture portalClose = new Texture("portalRings1.png");
+        
+        TextureRegion[][] tmpFrame = TextureRegion.split(portal, 32, 32);
+        TextureRegion[][] tmp2Frame = TextureRegion.split(portalClose, 32, 32);
+    
+        portalOpenAnimation = new TextureRegion[5];
+        portalClosedAnimation = new TextureRegion[17];
+    
+        for(int i = 0; i < 5; i++)
+        {
+            portalOpenAnimation[i] = tmpFrame[0][i];
+        }  
+        
+        int index = 0;
+        for(int i = 0; i < 5; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                if(index >= 17)
+                {
+                    break;
+                }
+                portalClosedAnimation[index] = tmp2Frame[i][j];
+                
+                index++;
+
+            }
+        }
+        
+        
+        portalOpen = new Animation<TextureRegion>((float)1/(float)15, portalOpenAnimation);
+        portalClosed = new Animation<TextureRegion>((float)1/(float)15, portalClosedAnimation);
+        
+        if( currentLevel.getEnemies().isEmpty())
+        {
+            batch.draw(portalOpen.getKeyFrame(elapsedTime, true), x*32, y*32);
+        }
+        else
+        {
+            batch.draw(portalClosed.getKeyFrame(elapsedTime, true), x*32, y*32);
+        }
+        
+    }
+    
     private void drawMap(SpriteBatch batch)
     {
     	for(int x=0;x<map.length;x++)
@@ -148,7 +203,8 @@ public class GameScreen extends ScreenAdapter
                 }      
                 else if(map[x][y].getTileType().equals("END"))
                 {
-                    batch.draw(endTest, x*endTest.getWidth(), y*endTest.getHeight());
+                    batch.draw(GameConstants.FLOOR_TEXTURE, x*GameConstants.FLOOR_TEXTURE.getWidth(), y*GameConstants.FLOOR_TEXTURE.getHeight());
+                    drawPortal(batch, x, y);
                 }      
             }
         }
@@ -209,6 +265,7 @@ public class GameScreen extends ScreenAdapter
         switch(state)
         {
             case RUN: 
+                elapsedTime += Gdx.graphics.getDeltaTime();
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 batch.setProjectionMatrix(camera.combined);
@@ -218,6 +275,8 @@ public class GameScreen extends ScreenAdapter
 
                 //draw map 
                 drawMap(batch) ;
+                
+                
 
                 drawItems(batch);
 
