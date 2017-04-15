@@ -14,17 +14,21 @@ public class GameConstants {
 	public static final float PLAYER_BASE_SPEED = 3 ; 
 	public static final int PLAYER_STARTING_DIRECTION = UP ;
         
-	public static final long WARRIOR_BASE_ATTACK_SPEED = 600000000L ; 
-        public static final long ARCHER_BASE_ATTACK_SPEED = 400000000L ; 
-        public static final long MAGE_BASE_ATTACK_SPEED = 500000000L ; 
+        public static final int WARRIOR_STARTING_SPEED = 3;
+        public static final int ARCHER_STARTING_SPEED = 5;
+        public static final int MAGE_STARTING_SPEED = 4;
         
-	public static final float WARRIOR_STARTING_HEALTH = 200 ; 
-        public static final float ARCHER_STARTING_HEALTH = 100 ; 
-        public static final float MAGE_STARTING_HEALTH = 100 ; 
+	public static final long WARRIOR_BASE_ATTACK_SPEED = 300000000L ; 
+        public static final long ARCHER_BASE_ATTACK_SPEED = 600000000L ; 
+        public static final long MAGE_BASE_ATTACK_SPEED = 400000000L ; 
         
-        public static final float ARCHER_BASE_DAMAGE = 20;
-        public static final float MAGE_BASE_DAMAGE = 30;
-        public static final float WARRIOR_BASE_DAMAGE = 50;
+	public static final float WARRIOR_STARTING_HEALTH = 400 ; 
+        public static final float ARCHER_STARTING_HEALTH = 150 ; 
+        public static final float MAGE_STARTING_HEALTH = 150 ; 
+        
+        public static final float ARCHER_BASE_DAMAGE = 40;
+        public static final float MAGE_BASE_DAMAGE = 25;
+        public static final float WARRIOR_BASE_DAMAGE = 100;
         
 	
 	//enemy variables
@@ -45,7 +49,7 @@ public class GameConstants {
     //Potion variables
     public static final int BASE_HEALTH_POTION = 50;
     public static final long BASE_ATTACK_POTION = 100000000L;
-    public static final int BASE_MOVE_POTION = 3;
+    public static final int BASE_MOVE_POTION = 2;
     public static final int SCALE_FACTOR_POTION = 10;
 	
 	//visual constants

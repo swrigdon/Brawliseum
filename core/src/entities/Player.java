@@ -74,7 +74,7 @@ public class Player extends Entity
         this.setxLocation(x);
         this.setyLocation(y);
         this.setCurrentLevel(currentLevel);
-        this.setSpeed(GameConstants.PLAYER_BASE_SPEED);
+        
         this.setPlayerClass(playerClass);
         this.playerPotion = null;
         this.enemiesKilled = 0 ; 
@@ -98,18 +98,21 @@ public class Player extends Entity
         
         if(playerClass.equals("sword"))
         {
+            this.setSpeed(GameConstants.WARRIOR_STARTING_SPEED);
             this.setMaxHealth(GameConstants.WARRIOR_STARTING_HEALTH);
             this.attackSpeed = GameConstants.WARRIOR_BASE_ATTACK_SPEED ; 
             this.baseAttack = GameConstants.WARRIOR_BASE_DAMAGE;
         }
         else if(playerClass.equals("bow"))
         {
+            this.setSpeed(GameConstants.ARCHER_STARTING_SPEED);
             this.attackSpeed = GameConstants.ARCHER_BASE_ATTACK_SPEED ; 
             this.setMaxHealth(GameConstants.ARCHER_STARTING_HEALTH);
             this.baseAttack = GameConstants.ARCHER_BASE_DAMAGE;
         }
         else
         {
+            this.setSpeed(GameConstants.MAGE_STARTING_SPEED);
             this.attackSpeed = GameConstants.MAGE_BASE_ATTACK_SPEED ; 
             this.setMaxHealth(GameConstants.MAGE_STARTING_HEALTH);
             this.baseAttack = GameConstants.MAGE_BASE_DAMAGE;

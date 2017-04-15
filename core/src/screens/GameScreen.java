@@ -255,11 +255,6 @@ public class GameScreen extends ScreenAdapter
             currentLevel.getEnemies().get(i).move(map);
             
             currentLevel.getEnemies().get(i).drawEnemy(batch, elapsedTime);
-            
-            /*
-            batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
-                                              currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
-            */
         }
     }
     private void drawPausedEnemies(SpriteBatch batch)
@@ -318,12 +313,36 @@ public class GameScreen extends ScreenAdapter
 
                 //draw enemies
                 drawEnemies(batch) ; 
-
-                //Sets the camera position to the "player" so that it will follow it
-                //AFTER TESTING, UNCOMMENT
-                camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
                 
-                batch.draw(GameConstants.POTION_SLOT,player.getxLocation()*32, player.getyLocation()*32);
+                batch.draw(GameConstants.POTION_SLOT, 32*player.getxLocation() - 15,  32*player.getyLocation()-150);
+                
+                if(player.getPlayerPotion() != null)
+                {
+                    if(player.getPlayerPotion().getPotionName().equals("health"))
+                    {
+                        batch.draw(GameConstants.ITEM_HEALTH, 32*player.getxLocation() , 32*player.getyLocation()-135);
+                    }
+                    else if(player.getPlayerPotion().getPotionName().equals("attack"))
+                    {
+                        batch.draw(GameConstants.ITEM_ATTACK, 32*player.getxLocation() , 32*player.getyLocation()-135);
+                    }
+                    else if(player.getPlayerPotion().getPotionName().equals("move"))
+                    {
+                        batch.draw(GameConstants.ITEM_MOVE, 32*player.getxLocation() , 32*player.getyLocation()-135);
+                    }
+                }
+                
+                batch.draw(GameConstants.EMPTY_BAR, 32*player.getxLocation()+125 , 32*player.getyLocation()+130);
+                batch.draw(GameConstants.RED_BAR, 32*player.getxLocation()+125 , 32*player.getyLocation()+130
+                        , GameConstants.RED_BAR.getWidth()*(player.getHealth()/player.getMaxHealth()), (float) GameConstants.RED_BAR.getHeight());
+                
+                batch.draw(GameConstants.EMPTY_BAR, 32*player.getxLocation()+125 , 32*player.getyLocation()+105);
+                batch.draw(GameConstants.GREEN_BAR, 32*player.getxLocation()+125 , 32*player.getyLocation()+105,
+                        GameConstants.GREEN_BAR.getWidth()*(player.getExperience()/GameConstants.LEVEL_UP_XP), GameConstants.GREEN_BAR.getHeight());
+                
+                batch.draw(GameConstants.EMPTY_BAR, 32*player.getxLocation()+125 , 32*player.getyLocation()+80);
+                batch.draw(GameConstants.BLUE_BAR, 32*player.getxLocation()+125 , 32*player.getyLocation()+80,
+                       GameConstants.BLUE_BAR.getWidth()*(float)(currentLevel.getEnemies().size())/(currentLevel.getTotalEnemies()) , GameConstants.BLUE_BAR.getHeight());
 
                 //cant draw after this point
                 batch.end();
@@ -333,6 +352,8 @@ public class GameScreen extends ScreenAdapter
 
                 //checks player's collision 
                 checkPlayer() ; 
+                camera.position.set((player.getxLocation()*32), player.getyLocation()*32, 0);
+                camera.update();
 
                 //checks projectile and wall collision
                 checkProjectiles();
@@ -362,9 +383,7 @@ public class GameScreen extends ScreenAdapter
                     game.setScreen(new EndScreen(game, scores));
                 }
 
-                //update camera
-                camera.update();
-                
+
                 break;
                 
             case PAUSE:
@@ -575,6 +594,10 @@ public class GameScreen extends ScreenAdapter
     {
     	for(Enemy enemy : currentLevel.getEnemies())
     	{
+            if(enemy.getxLocation() < 0 || enemy.getxLocation() > map.length || enemy.getyLocation() < 0 || enemy.getyLocation() > map[0].length)
+            {
+                enemy.setHealth(0);
+            }
             
             if(enemy.overlaps(player))
             {

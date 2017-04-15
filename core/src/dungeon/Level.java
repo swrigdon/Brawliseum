@@ -19,6 +19,7 @@ public class Level
     private ArrayList<Enemy> enemies;
     private ArrayList<GroundItem> groundItems;
     private int levelNumber ; 
+    private int totalEnemies ; 
 	
 	public Level(DungeonTile [][] map, ArrayList<Enemy> enemies, ArrayList<GroundItem> groundItems, int levelNumber)
         {
@@ -26,6 +27,7 @@ public class Level
             this.enemies = enemies;
             this.groundItems = groundItems;
             this.setMap(map) ; 
+            this.totalEnemies = enemies.size()  ; 
 	}
 
 	public DungeonTile[][] getMap(){
@@ -70,5 +72,19 @@ public class Level
      */
     public void setGroundItems(ArrayList<GroundItem> groundItems) {
         this.groundItems = groundItems;
+    }
+
+    /**
+     * @return the totalEnemies
+     */
+    public int getTotalEnemies() {
+        return totalEnemies;
+    }
+
+    /**
+     * @param totalEnemies the totalEnemies to set
+     */
+    public void setTotalEnemies(int totalEnemies) {
+        this.totalEnemies = totalEnemies;
     }
 }
