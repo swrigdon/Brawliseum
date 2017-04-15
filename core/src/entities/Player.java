@@ -8,7 +8,9 @@ package entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import constants.GameConstants;
 import dungeon.DungeonTile;
@@ -37,16 +39,34 @@ public class Player extends Entity
     private int finalScore;
 
     private int playerDirection;
+    
+    private boolean attacking;
        
     //
     private Potion playerPotion;
     
     private ArrayList<Projectile> projectiles;
     
+    Animation<TextureRegion> playerUp;
+    Animation<TextureRegion> playerDown;
+    Animation<TextureRegion> playerLeft;
+    Animation<TextureRegion> playerRight;
+    Animation<TextureRegion> playerShootUp;
+    Animation<TextureRegion> playerShootDown;
+    Animation<TextureRegion> playerShootLeft;
+    Animation<TextureRegion> playerShootRight;
+    TextureRegion[] playerUpAni;
+    TextureRegion[] playerDownAni;
+    TextureRegion[] playerLeftAni;
+    TextureRegion[] playerRightAni;
+    TextureRegion[] playerShootUpAni;
+    TextureRegion[] playerShootDownAni;
+    TextureRegion[] playerShootLeftAni;
+    TextureRegion[] playerShootRightAni;
+    
 
-    public Player(float x, float y, Texture playerTexture, Level currentLevel, String playerClass, float startHealth)
+    public Player(float x, float y, Level currentLevel, String playerClass, float startHealth)
     {
-        this.setEntityTexture(playerTexture);
         this.setX(x);
         this.setY(y);
         this.setxLocation(x);
@@ -68,19 +88,236 @@ public class Player extends Entity
         this.setMovingNX(false);
         this.setMovingNY(false);
         
-        this.set(x, y, (float)27/32, (float)27/32);
+        this.attacking = false;
+          
+        this.set(x, y, (float)18/32, (float)27/32);
         
         projectiles = new ArrayList<Projectile>();
         
         attackSpeed = GameConstants.PLAYER_BASE_ATTACK_SPEED ; 
         
         this.setHealth(GameConstants.PLAYER_STARTING_HEALTH);
+        
+        createPlayerTexture();
     }
     
-    public void draw(SpriteBatch batch)
+    private void createPlayerTexture()
     {
-    	batch.draw(this.getEntityTexture(), this.getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
-                this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+        TextureRegion[][] tmpFrame = null;
+        TextureRegion[][] tmp2 = null;
+        TextureRegion[][] tmp3 = null;
+        TextureRegion[][] tmp4 = null;
+        
+        TextureRegion[][] tmp5 = null;
+        TextureRegion[][] tmp6 = null;
+        TextureRegion[][] tmp7 = null;
+        TextureRegion[][] tmp8 = null;
+         
+        int classSpeed = 15;
+        
+        if(playerClass.equals("bow"))
+        {
+            tmpFrame = TextureRegion.split(GameConstants.ARCHER_UP, 17, 27);
+            tmp2 = TextureRegion.split(GameConstants.ARCHER_DOWN, 18, 30);
+            tmp3 = TextureRegion.split(GameConstants.ARCHER_LEFT, 21, 28);
+            tmp4 = TextureRegion.split(GameConstants.ARCHER_RIGHT, 21, 27);
+            
+            tmp5 = TextureRegion.split(GameConstants.ARCHER_SHOOT_UP, 32, 31);
+            tmp6 = TextureRegion.split(GameConstants.ARCHER_SHOOT_DOWN, 32, 30);
+            tmp7 = TextureRegion.split(GameConstants.ARCHER_SHOOT_LEFT, 32, 30);
+            tmp8 = TextureRegion.split(GameConstants.ARCHER_SHOOT_RIGHT, 32, 30);
+            
+            classSpeed = 23;
+        }
+        else if(playerClass.equals("sword"))
+        {
+            
+            tmpFrame = TextureRegion.split(GameConstants.WARRIOR_UP, 32, 28);
+            tmp2 = TextureRegion.split(GameConstants.WARRIOR_DOWN, 32, 28);
+            tmp3 = TextureRegion.split(GameConstants.WARRIOR_LEFT, 32, 28);
+            tmp4 = TextureRegion.split(GameConstants.WARRIOR_RIGHT, 32, 28);
+            
+            tmp5 = TextureRegion.split(GameConstants.WARRIOR_SHOOT_UP, 32, 28);
+            tmp6 = TextureRegion.split(GameConstants.WARRIOR_SHOOT_DOWN, 32, 28);
+            tmp7 = TextureRegion.split(GameConstants.WARRIOR_SHOOT_LEFT, 32, 28);
+            tmp8 = TextureRegion.split(GameConstants.WARRIOR_SHOOT_RIGHT, 32, 28);
+            
+            classSpeed = 15;
+        }
+        else
+        {
+            
+            tmpFrame = TextureRegion.split(GameConstants.MAGE_UP, 16, 26);
+            tmp2 = TextureRegion.split(GameConstants.MAGE_DOWN, 16, 26);
+            tmp3 = TextureRegion.split(GameConstants.MAGE_LEFT, 15, 25);
+            tmp4 = TextureRegion.split(GameConstants.MAGE_RIGHT, 15, 25);
+            
+            tmp5 = TextureRegion.split(GameConstants.MAGE_SHOOT_UP, 32, 28);
+            tmp6 = TextureRegion.split(GameConstants.MAGE_SHOOT_DOWN, 32, 28);
+            tmp7 = TextureRegion.split(GameConstants.MAGE_SHOOT_LEFT, 32, 28);
+            tmp8 = TextureRegion.split(GameConstants.MAGE_SHOOT_RIGHT, 32, 28);
+            
+            classSpeed = 10;
+        }
+        
+        playerUpAni = new TextureRegion[9];
+        playerDownAni = new TextureRegion[9];
+        playerLeftAni = new TextureRegion[9];
+        playerRightAni = new TextureRegion[9];
+        
+        if(playerClass.equals("bow"))
+        {
+            playerShootUpAni = new TextureRegion[13];
+            playerShootDownAni = new TextureRegion[13];
+            playerShootLeftAni = new TextureRegion[13];
+            playerShootRightAni = new TextureRegion[13];
+        }
+        else if(playerClass.equals("sword"))
+        {
+            playerShootUpAni = new TextureRegion[8];
+            playerShootDownAni = new TextureRegion[8];
+            playerShootLeftAni = new TextureRegion[8];
+            playerShootRightAni = new TextureRegion[8];
+        }
+        else
+        {
+            playerShootUpAni = new TextureRegion[6];
+            playerShootDownAni = new TextureRegion[6];
+            playerShootLeftAni = new TextureRegion[6];
+            playerShootRightAni = new TextureRegion[6];
+        }
+        
+        for(int i = 0; i < 9; i++)
+        {
+            playerUpAni[i] = tmpFrame[0][i]; 
+            playerDownAni[i] = tmp2[0][i]; 
+            playerLeftAni[i] = tmp3[0][i]; 
+            playerRightAni[i] = tmp4[0][i]; 
+        }
+        
+        for(int i = 0; i < 13; i++)
+        {
+            if(playerClass.equals("sword") && i == 8)
+            {
+                break;
+            }
+            else if(playerClass.equals("mage") && i == 6)
+            {
+                break;
+            }
+            else
+            {
+                playerShootUpAni[i] = tmp5[0][i];
+                playerShootDownAni[i] = tmp6[0][i];
+                playerShootLeftAni[i] = tmp7[0][i];
+                playerShootRightAni[i] = tmp8[0][i];
+            }
+        }
+        
+        playerUp = new Animation<TextureRegion>((float)1/15, playerUpAni);
+        playerDown = new Animation<TextureRegion>((float)1/15, playerDownAni);
+        playerLeft = new Animation<TextureRegion>((float)1/15, playerLeftAni);
+        playerRight = new Animation<TextureRegion>((float)1/15, playerRightAni);
+        
+        playerShootUp = new Animation<TextureRegion>((float)1/classSpeed, playerShootUpAni);
+        playerShootDown = new Animation<TextureRegion>((float)1/classSpeed, playerShootDownAni);
+        playerShootLeft = new Animation<TextureRegion>((float)1/classSpeed, playerShootLeftAni);
+        playerShootRight = new Animation<TextureRegion>((float)1/classSpeed, playerShootRightAni);
+    }
+    
+    public void draw(SpriteBatch batch, float elapsedTime)
+    {
+        //MESSED UP ON TEXTURES
+        float fixingDis = 0;
+        float fixingShootDis = 0;
+        if(playerClass.equals("bow"))
+        {
+            fixingDis = 0;
+            fixingShootDis = (float).25;
+        }
+        else if(playerClass.equals("sword"))
+        {
+            fixingDis = (float).29;
+            fixingShootDis = (float).29;
+        }
+        else
+        {
+            fixingDis = 0;
+            fixingShootDis = (float).29;
+        }
+        
+        if(playerDirection == GameConstants.UP) 
+        {
+            if(attacking)
+            {
+                batch.draw(playerShootUp.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else if(this.isMovingY())
+            {
+                batch.draw(playerUp.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(playerUpAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
+        else if(playerDirection == GameConstants.DOWN)
+        {
+            if(attacking)
+            {
+                batch.draw(playerShootDown.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else if(this.isMovingNY())
+            {
+                batch.draw(playerDown.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(playerDownAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
+        else if(playerDirection == GameConstants.LEFT)
+        {
+            if(attacking)
+            {
+                batch.draw(playerShootLeft.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else if(this.isMovingNX())
+            {
+                batch.draw(playerLeft.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(playerLeftAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
+        else if(playerDirection == GameConstants.RIGHT)
+        {
+            if(attacking)
+            {
+                batch.draw(playerShootRight.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else if(this.isMovingX())
+            {
+                batch.draw(playerRight.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(playerRightAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
     }
     
     @Override
@@ -148,6 +385,14 @@ public class Player extends Entity
             
             lastAttack = com.badlogic.gdx.utils.TimeUtils.nanoTime();
             
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
+        {
+            this.attacking = true;
+        }
+        else 
+        {
+            this.attacking = false;
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.E))

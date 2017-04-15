@@ -78,7 +78,7 @@ public class GameScreen extends ScreenAdapter
         this.game = game;
         camera = new OrthographicCamera(w, h);
         //AFTER TESTING THIS SHOULD BE: camera.setToOrtho(false, 320*(w/h), 320);
-        camera.setToOrtho(false, 2*320*(w/h), 2*320);
+        camera.setToOrtho(false, 320*(w/h), 320);
         //camera.setToOrtho(false, GameConstants.PLAYER_VIEW_X, GameConstants.PLAYER_VIEW_Y); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
@@ -91,12 +91,10 @@ public class GameScreen extends ScreenAdapter
         genWall(collisionMatrix, currentLevel);
         
         this.playerClass = playerClass;
-        
-        System.out.println("........" + ((float)1-(float)(GameConstants.PLAYER_TEXTURE.getWidth())/64));
 
-        player = new Player(2 + ((float)(1)-((float)(GameConstants.PLAYER_TEXTURE.getWidth())/32))/2, 
-                            2 + ((float)(1)-((float)(GameConstants.PLAYER_TEXTURE.getHeight())/32))/2,
-                GameConstants.PLAYER_TEXTURE, currentLevel, playerClass, GameConstants.PLAYER_STARTING_HEALTH);
+        player = new Player(2 + ((float)(1)-((float)27/32))/2, 
+                            2 + ((float)(1)-((float)27/32))/2,
+                                currentLevel, playerClass, GameConstants.PLAYER_STARTING_HEALTH);
         
         printGrid(map)  ; 
         createPortal();
@@ -241,7 +239,7 @@ public class GameScreen extends ScreenAdapter
  
                 currentLevel.getEnemies().remove(i);
 
-                player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
+                player.setExperience(player.getExperience()+GameConstants.XP_FROM_ENEMIES);
                 player.setFinalScore(player.getFinalScore()+1);
                 
                 continue;
@@ -307,7 +305,7 @@ public class GameScreen extends ScreenAdapter
                 drawProjectiles(batch);
 
                 //draw player
-                player.draw(batch);
+                player.draw(batch, elapsedTime);
 
                 //draw enemies
                 drawEnemies(batch) ; 
@@ -372,7 +370,7 @@ public class GameScreen extends ScreenAdapter
                 drawProjectiles(batch);
 
                 //draw player
-                player.draw(batch);
+                player.draw(batch, elapsedTime);
 
                 //draw enemies
                 drawPausedEnemies(batch) ;
@@ -396,7 +394,7 @@ public class GameScreen extends ScreenAdapter
                 drawProjectiles(batch);
 
                 //draw player
-                player.draw(batch);
+                player.draw(batch, elapsedTime);
 
                 //draw enemies
                 drawPausedEnemies(batch) ;
