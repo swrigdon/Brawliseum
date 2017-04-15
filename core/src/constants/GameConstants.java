@@ -49,22 +49,45 @@ public class GameConstants {
     //Boss Level End Portal
     public static final int END_X_LOC = 26;
     public static final int END_Y_LOC = 26;
+    
+    //GUI Table Constants 
+    public static final int TABLE_OFFSET = 100 ; 
 	
-    //textures 
+    //Map Textures
     public static final Texture FLOOR_TEXTURE = new Texture("floor.png"); 
     public static final Texture WALL_TEXTURE = new Texture("wall.png");
+    
+    //Arrow Textures
     public static final Texture ARROW_UP_TEXTURE = new Texture("arrowUp.png");
     public static final Texture ARROW_DOWN_TEXTURE = new Texture("arrowDown.png");
     public static final Texture ARROW_LEFT_TEXTURE = new Texture("arrowLeft.png");
     public static final Texture ARROW_RIGHT_TEXTURE = new Texture("arrowRight.png");
+    
+    //Fireball Texture
     public static final Texture FIREBALL_TEXTURE = new Texture("fireball.png");
+    
+    //Potion Textures
     public static final Texture ITEM_HEALTH = new Texture("healthpot2.png");
     public static final Texture ITEM_ATTACK = new Texture("attackspeedpot.png");
     public static final Texture ITEM_MOVE = new Texture("moveSpeedPot.png") ; 
+    
+    //Main Menu Screen Textures
     public static final Texture MAIN_MENU_SCREEN = new Texture("titleScreen.png") ; 
     public static final Texture CLASS_SELECT_SCREEN = new Texture("classSelectionScreen2.png") ; 
-    public static final Texture LEVEL_TABLE = new Texture("tableTest.png");
-    public static final Texture PAUSE_TABLE = new Texture("table2Test.png");
+    
+    //Pause Table Textures
+    public static final Texture LEVEL_TABLE = new Texture("levelUpGUI.png");
+    public static final Texture PAUSE_TABLE = new Texture("pauseGUI.png");
+    
+    //HUD Textuers
+    public static final Texture GREEN_BAR = new Texture("GreenBar.png") ; 
+    public static final Texture BLUE_BAR = new Texture("BlueBar.png") ; 
+    public static final Texture RED_BAR = new Texture("RedBar.png") ; 
+    public static final Texture EMPTY_BAR = new Texture("EmptyBar.png") ; 
+    public static final Texture POTION_SLOT = new Texture("potionSlot.png") ; 
+    
+    //End Screen Textures 
+    public static final Texture END_SCREEN = new Texture("endScreen.png") ; 
     
     //Player Animations - Archer
     public static final Texture ARCHER_UP = new Texture("archerUp.png");

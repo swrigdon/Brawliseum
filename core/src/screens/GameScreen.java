@@ -57,6 +57,8 @@ public class GameScreen extends ScreenAdapter
     private String playerClass;
     //Goes to boss level if %5==0, goes to maze level otherwise.
     private int levelNumber = 4;
+    
+    private long startTime; 
 
 
     public GameScreen(Application game, String playerClass)
@@ -95,6 +97,8 @@ public class GameScreen extends ScreenAdapter
         
         printGrid(map)  ; 
         createPortal();
+        
+        startTime = com.badlogic.gdx.utils.TimeUtils.nanoTime() ; 
     }
     
     public enum State
@@ -237,7 +241,7 @@ public class GameScreen extends ScreenAdapter
                 currentLevel.getEnemies().remove(i);
 
                 player.setExperience(player.getExperience()+GameConstants.XP_FROM_ENEMIES);
-                player.setFinalScore(player.getFinalScore()+1);
+                player.setEnemiesKilled(player.getEnemiesKilled()+1);
                 
                 continue;
             }
@@ -274,12 +278,12 @@ public class GameScreen extends ScreenAdapter
     
     private void createLevelTable(SpriteBatch batch)
     {
-        batch.draw(GameConstants.LEVEL_TABLE, 32*player.getxLocation(), 32*player.getyLocation());
+        batch.draw(GameConstants.LEVEL_TABLE, 32*player.getxLocation()-GameConstants.TABLE_OFFSET, 32*player.getyLocation()-GameConstants.TABLE_OFFSET);
     }
     
     private void createPauseTable(SpriteBatch batch)
     {
-        batch.draw(GameConstants.PAUSE_TABLE, 32*player.getxLocation(), 32*player.getyLocation());
+        batch.draw(GameConstants.PAUSE_TABLE, 32*player.getxLocation()-GameConstants.TABLE_OFFSET, 32*player.getyLocation()-GameConstants.TABLE_OFFSET);
     }
 
     private State state = State.RUN;
@@ -296,7 +300,7 @@ public class GameScreen extends ScreenAdapter
 
                 //start the batch
                 batch.begin();
-
+                
                 //draw map 
                 drawMap(batch) ;
 
@@ -314,6 +318,8 @@ public class GameScreen extends ScreenAdapter
                 //Sets the camera position to the "player" so that it will follow it
                 //AFTER TESTING, UNCOMMENT
                 camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
+                
+                batch.draw(GameConstants.POTION_SLOT,player.getxLocation()*32, player.getyLocation()*32);
 
                 //cant draw after this point
                 batch.end();
@@ -351,7 +357,12 @@ public class GameScreen extends ScreenAdapter
 
                 if(levelLose())
                 {
-                    game.setScreen(new EndScreen(game, player.getFinalScore()));
+                	long timeTaken = com.badlogic.gdx.utils.TimeUtils.nanoTime() - startTime ; 
+                	timeTaken = timeTaken / 1000000000 ; 
+                	
+                	int[] scores = new int[]{player.getHighestLevel(), player.getEnemiesKilled(),(int)timeTaken} ; 
+                	
+                    game.setScreen(new EndScreen(game, scores));
                 }
 
                 //update camera
@@ -455,7 +466,7 @@ public class GameScreen extends ScreenAdapter
         player.setAttackSpeed(GameConstants.PLAYER_BASE_ATTACK_SPEED);
         player.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
-        player.setFinalScore(player.getFinalScore()+1);
+        player.setHighestLevel(player.getHighestLevel()+1);;
         
         //reset camera
         camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);

@@ -36,7 +36,8 @@ public class Player extends Entity
     private long lastAttack ; 
     private long attackSpeed ; 
     
-    private int finalScore;
+    private int enemiesKilled ;
+    private int highestLevel ; 
 
     private int playerDirection;
     
@@ -75,7 +76,9 @@ public class Player extends Entity
         this.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         this.setPlayerClass(playerClass);
         this.playerPotion = null;
-        this.finalScore = 0;
+        this.enemiesKilled = 0 ; 
+        this.highestLevel = 1 ; 
+        
         this.experience = 0;
         
         this.maxHealth = startHealth;
@@ -679,17 +682,19 @@ public class Player extends Entity
         this.maxHealth = maxHealth;
     }
 
-    /**
-     * @return the finalScore
-     */
-    public int getFinalScore() {
-        return finalScore;
-    }
+	public int getEnemiesKilled() {
+		return enemiesKilled;
+	}
 
-    /**
-     * @param finalScore the finalScore to set
-     */
-    public void setFinalScore(int finalScore) {
-        this.finalScore = finalScore;
-    }
+	public void setEnemiesKilled(int enemiesKilled) {
+		this.enemiesKilled = enemiesKilled;
+	}
+
+	public int getHighestLevel() {
+		return highestLevel;
+	}
+
+	public void setHighestLevel(int highestLevel) {
+		this.highestLevel = highestLevel;
+	}
 }
