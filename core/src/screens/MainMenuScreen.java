@@ -3,6 +3,7 @@ package screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,10 +17,13 @@ public class MainMenuScreen extends ScreenAdapter {
     OrthographicCamera camera;
     private int mainSwitch ; 
     private SpriteBatch batch ; 
+    Music titleMusic = Gdx.audio.newMusic(Gdx.files.internal("Ice9.mp3"));
+    Music levelMusic = Gdx.audio.newMusic(Gdx.files.internal("Sulphaeus.mp3"));
 
 	
 	public MainMenuScreen(Application game)
 	{
+		titleMusic.play();
 		this.game = game ; 
 		this.camera = new OrthographicCamera() ; 
 		this.camera.setToOrtho(false, 1920, 1080);		
@@ -81,16 +85,27 @@ public class MainMenuScreen extends ScreenAdapter {
 				System.out.println("MouseY: " + mouseY);
 				
 				if(mouseX<620 && mouseX>320 && mouseY>470 && mouseY<650){
-                                    game.setScreen(new GameScreen(game, "bow"));
+					titleMusic.stop();
+					titleMusic.dispose();
+					levelMusic.play();
+					game.setScreen(new GameScreen(game, "bow"));
 				}
-                                else if(mouseX > 860 && mouseX < 1165 && mouseY>470 && mouseY<650)
-                                {
-                                    game.setScreen(new GameScreen(game, "sword"));
-                                }
-                                else if(mouseX > 1450 && mouseX < 1750 && mouseY > 470 && mouseY < 650)
-                                {
-                                    game.setScreen(new GameScreen(game, "mage"));
-                                }
+				
+                else if(mouseX > 860 && mouseX < 1165 && mouseY>470 && mouseY<650)
+                {
+                	titleMusic.stop();
+					titleMusic.dispose();
+					levelMusic.play();
+                	game.setScreen(new GameScreen(game, "sword"));
+                }
+				
+                else if(mouseX > 1450 && mouseX < 1750 && mouseY > 470 && mouseY < 650)
+                {
+                	titleMusic.stop();
+					titleMusic.dispose();
+					levelMusic.play();
+                	game.setScreen(new GameScreen(game, "mage"));
+                }
 			}
 			
 		}
