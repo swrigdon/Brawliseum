@@ -13,8 +13,19 @@ public class GameConstants {
 	//player variables
 	public static final float PLAYER_BASE_SPEED = 3 ; 
 	public static final int PLAYER_STARTING_DIRECTION = UP ;
-	public static final long PLAYER_BASE_ATTACK_SPEED = 600000000L ; 
-	public static final float PLAYER_STARTING_HEALTH = 100 ; 
+        
+	public static final long WARRIOR_BASE_ATTACK_SPEED = 600000000L ; 
+        public static final long ARCHER_BASE_ATTACK_SPEED = 400000000L ; 
+        public static final long MAGE_BASE_ATTACK_SPEED = 500000000L ; 
+        
+	public static final float WARRIOR_STARTING_HEALTH = 200 ; 
+        public static final float ARCHER_STARTING_HEALTH = 100 ; 
+        public static final float MAGE_STARTING_HEALTH = 100 ; 
+        
+        public static final float ARCHER_BASE_DAMAGE = 20;
+        public static final float MAGE_BASE_DAMAGE = 30;
+        public static final float WARRIOR_BASE_DAMAGE = 50;
+        
 	
 	//enemy variables
 	public static final int ENEMY_STARTING_DIRECTION = UP ;

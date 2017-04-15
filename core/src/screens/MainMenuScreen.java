@@ -76,37 +76,34 @@ public class MainMenuScreen extends ScreenAdapter {
 		
 		if(Gdx.input.isTouched())
 		{
-			float mouseX = Gdx.input.getX() ;
-			float mouseY = Gdx.input.getY() ;
-			
-			if(state==State.CLASS)
-			{
-				System.out.println("MouseX: " + mouseX);
-				System.out.println("MouseY: " + mouseY);
-				
-				if(mouseX<620 && mouseX>320 && mouseY>470 && mouseY<650){
-					titleMusic.stop();
-					titleMusic.dispose();
-					levelMusic.play();
-					game.setScreen(new GameScreen(game, "bow"));
-				}
-				
-                else if(mouseX > 860 && mouseX < 1165 && mouseY>470 && mouseY<650)
-                {
-                	titleMusic.stop();
-					titleMusic.dispose();
-					levelMusic.play();
-                	game.setScreen(new GameScreen(game, "sword"));
-                }
-				
-                else if(mouseX > 1450 && mouseX < 1750 && mouseY > 470 && mouseY < 650)
-                {
-                	titleMusic.stop();
-					titleMusic.dispose();
-					levelMusic.play();
-                	game.setScreen(new GameScreen(game, "mage"));
-                }
-			}
+                    float mouseX = Gdx.input.getX() ;
+                    float mouseY = Gdx.input.getY() ;
+
+                    if(state==State.CLASS)
+                    {
+                        System.out.println("MouseX: " + mouseX);
+                        System.out.println("MouseY: " + mouseY);
+
+                        if(mouseX<620 && mouseX>320 && mouseY>470 && mouseY<650){
+                            titleMusic.stop();
+                            titleMusic.dispose();
+                            game.setScreen(new GameScreen(game, "bow"));
+                        }
+
+                        else if(mouseX > 860 && mouseX < 1165 && mouseY>470 && mouseY<650)
+                        {
+                                titleMusic.stop();
+                                titleMusic.dispose();
+                                game.setScreen(new GameScreen(game, "sword"));
+                        }
+
+                        else if(mouseX > 1450 && mouseX < 1750 && mouseY > 470 && mouseY < 650)
+                        {
+                                titleMusic.stop();
+                                titleMusic.dispose();
+                                game.setScreen(new GameScreen(game, "mage"));
+                        }
+                    }
 			
 		}
 	}

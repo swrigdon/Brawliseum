@@ -97,9 +97,24 @@ public class Player extends Entity
         
         projectiles = new ArrayList<Projectile>();
         
-        attackSpeed = GameConstants.PLAYER_BASE_ATTACK_SPEED ; 
-        
-        this.setHealth(GameConstants.PLAYER_STARTING_HEALTH);
+        if(playerClass.equals("sword"))
+        {
+            this.setHealth(GameConstants.WARRIOR_STARTING_HEALTH);
+            this.attackSpeed = GameConstants.WARRIOR_BASE_ATTACK_SPEED ; 
+            this.baseAttack = GameConstants.WARRIOR_BASE_DAMAGE;
+        }
+        else if(playerClass.equals("bow"))
+        {
+            this.attackSpeed = GameConstants.ARCHER_BASE_ATTACK_SPEED ; 
+            this.setHealth(GameConstants.ARCHER_STARTING_HEALTH);
+            this.baseAttack = GameConstants.ARCHER_BASE_DAMAGE;
+        }
+        else
+        {
+            this.attackSpeed = GameConstants.MAGE_BASE_ATTACK_SPEED ; 
+            this.setHealth(GameConstants.MAGE_STARTING_HEALTH);
+            this.baseAttack = GameConstants.MAGE_BASE_DAMAGE;
+        }
         
         createPlayerTexture();
     }
@@ -489,12 +504,7 @@ public class Player extends Entity
     
     public float attack()
     {
-        if(playerClass.equals("sword"))
-        {
-            return 50;
-        }
-        else
-            return 25;
+        return getBaseAttack();
     }
     
     public void getHit(float damage)

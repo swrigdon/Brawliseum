@@ -100,7 +100,7 @@ public class BossLevelGenerator {
         int enemyNumber = 1;
 
         Texture enemyTexture = new Texture("enemyTest.png");
-
+        
         float enemyLocationX;
         float enemyLocationY;
 

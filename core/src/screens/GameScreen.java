@@ -3,6 +3,7 @@ package screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -53,10 +54,13 @@ public class GameScreen extends ScreenAdapter
     public Player player;
     ArrayList<Projectile> projectiles;
     
+    Music levelMusic = Gdx.audio.newMusic(Gdx.files.internal("Sulphaeus.mp3"));
+    Music bossMusic = Gdx.audio.newMusic(Gdx.files.internal("Sensorial.mp3"));
+    
     
     private String playerClass;
     //Goes to boss level if %5==0, goes to maze level otherwise.
-    private int levelNumber = 4;
+    private int levelNumber = 1;
     
     private long startTime; 
 
@@ -71,6 +75,7 @@ public class GameScreen extends ScreenAdapter
         }
         else
         {
+            levelMusic.play();
             generator = new LevelGenerator(29, 29);
             currentLevel = generator.generateLevel(levelNumber);
         }
@@ -262,8 +267,7 @@ public class GameScreen extends ScreenAdapter
         for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
 
-            batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
-                                              currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            currentLevel.getEnemies().get(i).drawEnemy(batch, elapsedTime);
         }
     }
     
@@ -342,13 +346,6 @@ public class GameScreen extends ScreenAdapter
                     this.state = State.PAUSE;
                     player.setExperience(0);
                 }
-                /*
-                if(Gdx.input.isKeyPressed(Input.Keys.K))
-                {
-                    levelNumber++;
-                    resetLevel();
-                }
-                        */
                 
                 if(levelWin())
                 {
@@ -371,7 +368,6 @@ public class GameScreen extends ScreenAdapter
                 break;
                 
             case PAUSE:
-                //Gdx.graphics.getDeltaTime()
                 batch.begin();
 
                 drawMap(batch) ;
@@ -391,8 +387,8 @@ public class GameScreen extends ScreenAdapter
                 
                 batch.end();
                 
-                if(Gdx.input.isKeyPressed(Input.Keys.P))
-                    this.state = State.RUN;
+                checkLevelMenuInput();
+                
                 break;
                 
             case STOPPED:
@@ -412,10 +408,12 @@ public class GameScreen extends ScreenAdapter
                 drawPausedEnemies(batch) ;
                 
                 createPauseTable(batch);
+                batch.end();
                 
                 checkPause();
                 
-                batch.end();
+                checkPauseMenuInput();
+                
                 
             case RESUME:
                 
@@ -426,6 +424,79 @@ public class GameScreen extends ScreenAdapter
         
     }
     
+    private void checkLevelMenuInput()
+    {
+        if(Gdx.input.isTouched())
+        {
+            float mouseX = Gdx.input.getX() ;
+            float mouseY = Gdx.input.getY() ;
+
+            System.out.println("Mouse X: " + mouseX);
+            System.out.println("Mouse Y: " + mouseY);
+            
+            //Health
+            if(mouseX > 850 && mouseX < 1075 && mouseY > 365 && mouseY < 445)
+            {    
+                System.out.println("Health before: " + player.getMaxHealth());
+                player.setMaxHealth(player.getMaxHealth() + ((5*levelNumber) + 10));
+                System.out.println("Health after: " + player.getMaxHealth());
+            }
+            
+            //Damage
+            else if(mouseX > 850 && mouseX < 1075 && mouseY>490 && mouseY<575)
+            {    
+                System.out.println("Damage before: " + player.getBaseAttack());
+                player.setBaseAttack(player.getBaseAttack() + (2*levelNumber) + 10);
+                System.out.println("Damage attack: " + player.getBaseAttack());
+            }
+            
+            //Speed
+            else if(mouseX > 850 && mouseX < 1075 && mouseY > 605 && mouseY < 685)
+            {         
+                System.out.println("Speed before: " + player.getSpeed());
+                player.setSpeed(player.getSpeed() + (float).25);
+                System.out.println("Speed before: " + player.getSpeed());
+            }
+            
+            player.setHealth(player.getMaxHealth());
+            state = State.RUN;
+        }      
+    }
+    
+    private void checkPauseMenuInput()
+    {
+        if(Gdx.input.isTouched())
+        {
+            float mouseX = Gdx.input.getX() ;
+            float mouseY = Gdx.input.getY() ;
+
+            //Resume
+            if(mouseX > 850 && mouseX < 1075 && mouseY > 365 && mouseY < 445)
+            {    
+                state = State.RUN;
+            }
+            
+            //Exit
+            else if(mouseX > 850 && mouseX < 1075 && mouseY>490 && mouseY<575)
+            {    
+                long timeTaken = com.badlogic.gdx.utils.TimeUtils.nanoTime() - startTime ; 
+                timeTaken = timeTaken / 1000000000 ; 
+                	
+                int[] scores = new int[]{player.getHighestLevel(), player.getEnemiesKilled(),(int)timeTaken} ;
+                
+                
+                levelMusic.stop();
+                levelMusic.dispose();
+                bossMusic.stop();
+                bossMusic.dispose();	
+                game.setScreen(new EndScreen(game, scores));
+            }
+            
+            player.setHealth(player.getMaxHealth());
+            
+        }      
+    }
+    
     private void checkPause()
     {
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
@@ -433,10 +504,6 @@ public class GameScreen extends ScreenAdapter
             if(this.state == State.RUN)
             {
                 this.state = State.STOPPED;
-            }
-            else
-            {
-                this.state = State.RUN;
             }
         }
     }
@@ -446,11 +513,15 @@ public class GameScreen extends ScreenAdapter
     	//make a new level
         if(levelNumber%5==0)
         {
+            levelMusic.stop();
+            bossMusic.play();
             bossGenerator = new BossLevelGenerator(29, 29);
             currentLevel = bossGenerator.generateLevel(currentLevel.getLevelNumber()+1);
         }
         else
         {
+            bossMusic.stop();
+            levelMusic.play();
             currentLevel = generator.generateLevel(currentLevel.getLevelNumber() + 1);
         }
     	//make a new map 
@@ -488,6 +559,10 @@ public class GameScreen extends ScreenAdapter
     {
         if(player.getHealth() <= 0)
         {
+            levelMusic.stop();
+            levelMusic.dispose();
+            bossMusic.stop();
+            bossMusic.dispose();
             return true;
         }
         else
