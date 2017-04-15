@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import constants.GameConstants;
 
@@ -48,6 +51,23 @@ public class Enemy extends Entity
     
     ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
     
+    Animation<TextureRegion> enemyUp;
+    Animation<TextureRegion> enemyDown;
+    Animation<TextureRegion> enemyLeft;
+    Animation<TextureRegion> enemyRight;
+    Animation<TextureRegion> enemyShootUp;
+    Animation<TextureRegion> enemyShootDown;
+    Animation<TextureRegion> enemyShootLeft;
+    Animation<TextureRegion> enemyShootRight;
+    TextureRegion[] enemyUpAni;
+    TextureRegion[] enemyDownAni;
+    TextureRegion[] enemyLeftAni;
+    TextureRegion[] enemyRightAni;
+    TextureRegion[] enemyShootUpAni;
+    TextureRegion[] enemyShootDownAni;
+    TextureRegion[] enemyShootLeftAni;
+    TextureRegion[] enemyShootRightAni;
+    
     //private boolean finished = true;
     
     public Enemy(DungeonTile[][] map, Texture enemyTexture, int levelNum)
@@ -64,6 +84,163 @@ public class Enemy extends Entity
         this.set(this.getxLocation(), this.getyLocation(), (float)enemyTexture.getWidth()/32, (float)enemyTexture.getHeight()/32);
         
         direction = GameConstants.ENEMY_STARTING_DIRECTION ; 
+        
+        this.setMovingX(false);
+        this.setMovingY(false);
+        this.setMovingNX(false);
+        this.setMovingNY(false);
+        
+        createEnemyTexture();
+    }
+    
+    private void createEnemyTexture()
+    {
+        TextureRegion[][] tmpFrame = null;
+        TextureRegion[][] tmp2 = null;
+        TextureRegion[][] tmp3 = null;
+        TextureRegion[][] tmp4 = null;
+        
+        TextureRegion[][] tmp5 = null;
+        TextureRegion[][] tmp6 = null;
+        TextureRegion[][] tmp7 = null;
+        TextureRegion[][] tmp8 = null;
+         
+        int classSpeed = 15;
+
+        tmpFrame = TextureRegion.split(GameConstants.ENEMY_UP, 32, 27);
+        tmp2 = TextureRegion.split(GameConstants.ENEMY_DOWN, 32, 27);
+        tmp3 = TextureRegion.split(GameConstants.ENEMY_LEFT, 32, 27);
+        tmp4 = TextureRegion.split(GameConstants.ENEMY_RIGHT, 32, 27);
+
+        tmp5 = TextureRegion.split(GameConstants.ARCHER_SHOOT_UP, 32, 31);
+        tmp6 = TextureRegion.split(GameConstants.ARCHER_SHOOT_DOWN, 32, 30);
+        tmp7 = TextureRegion.split(GameConstants.ARCHER_SHOOT_LEFT, 32, 30);
+        tmp8 = TextureRegion.split(GameConstants.ARCHER_SHOOT_RIGHT, 32, 30);
+
+        classSpeed = 23;
+
+        
+        enemyUpAni = new TextureRegion[9];
+        enemyDownAni = new TextureRegion[9];
+        enemyLeftAni = new TextureRegion[9];
+        enemyRightAni = new TextureRegion[9];
+        
+
+        enemyShootUpAni = new TextureRegion[8];
+        enemyShootDownAni = new TextureRegion[8];
+        enemyShootLeftAni = new TextureRegion[8];
+        enemyShootRightAni = new TextureRegion[8];
+
+        
+        for(int i = 0; i < 9; i++)
+        {
+            enemyUpAni[i] = tmpFrame[0][i]; 
+            enemyDownAni[i] = tmp2[0][i]; 
+            enemyLeftAni[i] = tmp3[0][i]; 
+            enemyRightAni[i] = tmp4[0][i]; 
+        }
+        
+        for(int i = 0; i < 8; i++)
+        {
+            enemyShootUpAni[i] = tmp5[0][i];
+            enemyShootDownAni[i] = tmp6[0][i];
+            enemyShootLeftAni[i] = tmp7[0][i];
+            enemyShootRightAni[i] = tmp8[0][i];
+        }
+        
+        enemyUp = new Animation<TextureRegion>((float)1/15, enemyUpAni);
+        enemyDown = new Animation<TextureRegion>((float)1/15, enemyDownAni);
+        enemyLeft = new Animation<TextureRegion>((float)1/15, enemyLeftAni);
+        enemyRight = new Animation<TextureRegion>((float)1/15, enemyRightAni);
+        
+        enemyShootUp = new Animation<TextureRegion>((float)1/classSpeed, enemyShootUpAni);
+        enemyShootDown = new Animation<TextureRegion>((float)1/classSpeed, enemyShootDownAni);
+        enemyShootLeft = new Animation<TextureRegion>((float)1/classSpeed, enemyShootLeftAni);
+        enemyShootRight = new Animation<TextureRegion>((float)1/classSpeed, enemyShootRightAni);
+    }
+    
+    public void drawEnemy(SpriteBatch batch, float elapsedTime)
+    {
+        //MESSED UP ON TEXTURES
+        float fixingDis = (float).29;
+        float fixingShootDis = (float).29;
+        
+        if(direction == GameConstants.UP) 
+        {
+            /*
+            if(attacking)
+            {
+                batch.draw(playerShootUp.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else */ if(this.isMovingY())
+            {
+                batch.draw(enemyUp.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(enemyUpAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
+        else if(direction == GameConstants.DOWN)
+        {
+            /*
+            if(attacking)
+            {
+                batch.draw(playerShootDown.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else */ if(this.isMovingNY())
+            {
+                batch.draw(enemyDown.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(enemyDownAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
+        else if(direction == GameConstants.LEFT)
+        {
+            /*
+            if(attacking)
+            {
+                batch.draw(playerShootLeft.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else */ if(this.isMovingNX())
+            {
+                batch.draw(enemyLeft.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(enemyLeftAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
+        else if(direction == GameConstants.RIGHT)
+        {
+            /*
+            if(attacking)
+            {
+                batch.draw(playerShootRight.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingShootDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else */ if(this.isMovingX())
+            {
+                batch.draw(enemyRight.getKeyFrame(elapsedTime, true), (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                       this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+            else
+            {
+                batch.draw(enemyRightAni[0], (this.getxLocation()-fixingDis) * GameConstants.FLOOR_TEXTURE.getWidth(), 
+                           this.getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            }
+        }
     }
     
     public void setPlayer(Player player)
@@ -252,51 +429,77 @@ public class Enemy extends Entity
     
     private void changeLocation(DungeonTile newLocation)
     {
-        //System.out.println("..............." + ((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2));
-	        if(((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2) < this.getxLocation())
-	        {
-	        	direction = 3 ; 
-	        	
-	            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-	
-	            if((this.getxLocation() < (float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2))
-	            {
-	                this.setxLocation((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2);
-	            }
-	        }
-	        else if((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2 > (this.getxLocation()))
-	        {
-	        	direction = 1 ; 
-	        	
-	            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-	
-	            if((this.getxLocation() > (float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2))
-	            {
-	                this.setxLocation((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2);
-	            }
-	        }
-	        else if((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2 < this.getyLocation())
-	        {
-	        	direction = 2 ; 
-	        	
-	            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
-	
-	            if((this.getyLocation() < (float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2))
-	            {
-	                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
-	            }
-	        }
-	        else if((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2 > this.getyLocation())
-	        {
-	        	direction = 0 ;
-	        	
-	            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
-	
-	            if((this.getyLocation() > (float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2))
-	            {
-	                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
-	            }
-	        }   
+     
+        if(((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2) < this.getxLocation())
+        {
+            direction = 3 ; 
+            this.setMovingNX(true);
+
+            this.setMovingX(false);
+            this.setMovingNY(false);
+            this.setMovingY(false);
+
+            this.setxLocation(this.getxLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getxLocation() < (float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2))
+            {
+                this.setxLocation((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2);
+            }
+        }
+        else if((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2 > (this.getxLocation()))
+        {
+            direction = 1 ; 
+            this.setMovingY(false);
+
+            this.setMovingX(true);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
+
+            this.setxLocation(this.getxLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getxLocation() > (float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2))
+            {
+                this.setxLocation((float)newLocation.getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2);
+            }
+        }
+        else if((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2 < this.getyLocation())
+        {
+            direction = 2 ; 
+            this.setMovingY(false);
+            this.setMovingX(false);
+            this.setMovingNY(true);
+            this.setMovingNX(false);
+
+            this.setyLocation(this.getyLocation() - this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getyLocation() < (float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2))
+            {
+                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
+            }
+        }
+        else if((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2 > this.getyLocation())
+        {
+            direction = 0 ;
+            this.setMovingY(true);
+            this.setMovingX(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
+
+            this.setyLocation(this.getyLocation() + this.getSpeed()*Gdx.graphics.getDeltaTime());
+
+            if((this.getyLocation() > (float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2))
+            {
+                this.setyLocation((float)newLocation.getY()+((float)(1)-((float)(this.getEntityTexture().getHeight())/32))/2);
+            }
+        }   
+        else
+        {
+            this.setMovingY(false);
+
+            this.setMovingX(false);
+            this.setMovingNY(false);
+            this.setMovingNX(false);
+        }
     }
     
     public void getHit(float damage)

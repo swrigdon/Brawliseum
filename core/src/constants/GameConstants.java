@@ -98,4 +98,15 @@ public class GameConstants {
     public static final Texture MAGE_SHOOT_DOWN = new Texture("mageShootDown.png");
     public static final Texture MAGE_SHOOT_LEFT = new Texture("mageShootLeft.png");
     public static final Texture MAGE_SHOOT_RIGHT = new Texture("mageShootRight.png");
+    
+    //Enemy Animations 
+    public static final Texture ENEMY_UP = new Texture("enemyUp.png");
+    public static final Texture ENEMY_DOWN = new Texture("enemyDown.png");
+    public static final Texture ENEMY_LEFT = new Texture("enemyLeft.png");
+    public static final Texture ENEMY_RIGHT = new Texture("enemyRight.png");
+    
+    public static final Texture ENEMY_SHOOT_UP = new Texture("mageShootUp.png");
+    public static final Texture ENEMY_SHOOT_DOWN = new Texture("mageShootDown.png");
+    public static final Texture ENEMY_SHOOT_LEFT = new Texture("mageShootLeft.png");
+    public static final Texture ENEMY_SHOOT_RIGHT = new Texture("mageShootRight.png");
 }

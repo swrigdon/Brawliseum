@@ -82,9 +82,6 @@ public class GameScreen extends ScreenAdapter
         //camera.setToOrtho(false, GameConstants.PLAYER_VIEW_X, GameConstants.PLAYER_VIEW_Y); //numbers are pixels player can see 
         batch = new SpriteBatch();
 
-        //test temp textures
-        endTest = new Texture("endTest.png");
-
         //creating test matrix
         map = currentLevel.getMap() ;
 
@@ -248,8 +245,12 @@ public class GameScreen extends ScreenAdapter
             currentLevel.getEnemies().get(i).setEndY(player.getyLocation());
             currentLevel.getEnemies().get(i).move(map);
             
+            currentLevel.getEnemies().get(i).drawEnemy(batch, elapsedTime);
+            
+            /*
             batch.draw(currentLevel.getEnemies().get(i).getEntityTexture(), currentLevel.getEnemies().get(i).getxLocation() * GameConstants.FLOOR_TEXTURE.getWidth(), 
                                               currentLevel.getEnemies().get(i).getyLocation() * GameConstants.FLOOR_TEXTURE.getHeight());
+            */
         }
     }
     private void drawPausedEnemies(SpriteBatch batch)
