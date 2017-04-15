@@ -98,7 +98,7 @@ public class GameScreen extends ScreenAdapter
 
         player = new Player(2 + ((float)(1)-((float)27/32))/2, 
                             2 + ((float)(1)-((float)27/32))/2,
-                                currentLevel, playerClass, GameConstants.PLAYER_STARTING_HEALTH);
+                                currentLevel, playerClass);
         
         printGrid(map)  ; 
         createPortal();
@@ -534,7 +534,7 @@ public class GameScreen extends ScreenAdapter
     	//reset player
     	player.setxLocation(GameConstants.PLAYER_START_X);
     	player.setyLocation(GameConstants.PLAYER_START_Y);
-        player.setAttackSpeed(GameConstants.PLAYER_BASE_ATTACK_SPEED);
+        player.setAttackSpeed(player.getBaseAttackSpeed());
         player.setSpeed(GameConstants.PLAYER_BASE_SPEED);
         player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
         player.setHighestLevel(player.getHighestLevel()+1);;

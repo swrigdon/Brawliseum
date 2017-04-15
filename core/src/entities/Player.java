@@ -34,7 +34,8 @@ public class Player extends Entity
     private float baseDefense;
     private int level;    
     private long lastAttack ; 
-    private long attackSpeed ; 
+    private long attackSpeed ;
+    private long baseAttackSpeed;
     
     private int enemiesKilled ;
     private int highestLevel ; 
@@ -66,7 +67,7 @@ public class Player extends Entity
     TextureRegion[] playerShootRightAni;
     
 
-    public Player(float x, float y, Level currentLevel, String playerClass, float startHealth)
+    public Player(float x, float y, Level currentLevel, String playerClass)
     {
         this.setX(x);
         this.setY(y);
@@ -80,9 +81,7 @@ public class Player extends Entity
         this.highestLevel = 1 ; 
         
         this.experience = 0;
-        
-        this.maxHealth = startHealth;
-        this.health = startHealth;      
+             
         
         this.setPlayerDirection(GameConstants.UP); 
         
@@ -99,22 +98,25 @@ public class Player extends Entity
         
         if(playerClass.equals("sword"))
         {
-            this.setHealth(GameConstants.WARRIOR_STARTING_HEALTH);
+            this.setMaxHealth(GameConstants.WARRIOR_STARTING_HEALTH);
             this.attackSpeed = GameConstants.WARRIOR_BASE_ATTACK_SPEED ; 
             this.baseAttack = GameConstants.WARRIOR_BASE_DAMAGE;
         }
         else if(playerClass.equals("bow"))
         {
             this.attackSpeed = GameConstants.ARCHER_BASE_ATTACK_SPEED ; 
-            this.setHealth(GameConstants.ARCHER_STARTING_HEALTH);
+            this.setMaxHealth(GameConstants.ARCHER_STARTING_HEALTH);
             this.baseAttack = GameConstants.ARCHER_BASE_DAMAGE;
         }
         else
         {
             this.attackSpeed = GameConstants.MAGE_BASE_ATTACK_SPEED ; 
-            this.setHealth(GameConstants.MAGE_STARTING_HEALTH);
+            this.setMaxHealth(GameConstants.MAGE_STARTING_HEALTH);
             this.baseAttack = GameConstants.MAGE_BASE_DAMAGE;
         }
+        
+        this.baseAttackSpeed = this.getAttackSpeed();
+        this.health = this.getMaxHealth(); 
         
         createPlayerTexture();
     }
@@ -707,4 +709,18 @@ public class Player extends Entity
 	public void setHighestLevel(int highestLevel) {
 		this.highestLevel = highestLevel;
 	}
+
+    /**
+     * @return the baseAttackSpeed
+     */
+    public long getBaseAttackSpeed() {
+        return baseAttackSpeed;
+    }
+
+    /**
+     * @param baseAttackSpeed the baseAttackSpeed to set
+     */
+    public void setBaseAttackSpeed(long baseAttackSpeed) {
+        this.baseAttackSpeed = baseAttackSpeed;
+    }
 }
