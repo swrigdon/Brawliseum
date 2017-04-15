@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -56,7 +57,12 @@ public class GameScreen extends ScreenAdapter
     
     Music levelMusic = Gdx.audio.newMusic(Gdx.files.internal("Sulphaeus.mp3"));
     Music bossMusic = Gdx.audio.newMusic(Gdx.files.internal("Sensorial.mp3"));
-    
+    Sound arrowHit = Gdx.audio.newSound(Gdx.files.internal("arrow hit.wav"));
+    Sound spellHit = Gdx.audio.newSound(Gdx.files.internal("spell hit.wav"));
+    Sound swordHit2 = Gdx.audio.newSound(Gdx.files.internal("sword hit2.wav"));
+    Sound enterPortal = Gdx.audio.newSound(Gdx.files.internal("portal sound.wav"));
+    Sound pickupPotion = Gdx.audio.newSound(Gdx.files.internal("Potion_Pickup.wav"));
+
     
     private String playerClass;
     //Goes to boss level if %5==0, goes to maze level otherwise.
@@ -75,6 +81,8 @@ public class GameScreen extends ScreenAdapter
         }
         else
         {
+        	levelMusic.setVolume(.5f);
+        	levelMusic.setLooping(true);
             levelMusic.play();
             generator = new LevelGenerator(29, 29);
             currentLevel = generator.generateLevel(levelNumber);
@@ -532,6 +540,9 @@ public class GameScreen extends ScreenAdapter
     	//make a new level
         if(levelNumber%5==0)
         {
+        	enterPortal.play(.75f);
+        	bossMusic.setVolume(.5f);
+        	bossMusic.setLooping(true);
             levelMusic.stop();
             bossMusic.play();
             bossGenerator = new BossLevelGenerator(29, 29);
@@ -539,6 +550,9 @@ public class GameScreen extends ScreenAdapter
         }
         else
         {
+        	enterPortal.play(.75f);
+        	levelMusic.setVolume(.5f);
+        	levelMusic.setLooping(true);
             bossMusic.stop();
             levelMusic.play();
             currentLevel = generator.generateLevel(currentLevel.getLevelNumber() + 1);
@@ -687,6 +701,12 @@ public class GameScreen extends ScreenAdapter
             {
                 if(enemy.overlaps(player.getProjectiles().get(i)))
                 {
+                	if(player.getPlayerClass().equals("bow"))
+                		arrowHit.play(.75f);
+                	
+                	else if(player.getPlayerClass().equals("mage"))
+                		spellHit.play(.75f);
+                	
                     enemy.getHit(player.getProjectiles().get(i).getDamage());
                     player.getProjectiles().remove(i);
                     break;
@@ -739,6 +759,7 @@ public class GameScreen extends ScreenAdapter
             {
                 if(player.getPlayerPotion() == null)
                 {
+                	pickupPotion.play(1.0f);
                     player.setPlayerPotion(currentLevel.getGroundItems().get(i).getPotion());
                     currentLevel.getGroundItems().remove(i);
                 }

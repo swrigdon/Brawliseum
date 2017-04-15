@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -67,6 +68,8 @@ public class Enemy extends Entity
     TextureRegion[] enemyShootDownAni;
     TextureRegion[] enemyShootLeftAni;
     TextureRegion[] enemyShootRightAni;
+    
+    Sound swordHit2 = Gdx.audio.newSound(Gdx.files.internal("sword hit2.wav"));
     
     //private boolean finished = true;
     
@@ -506,6 +509,7 @@ public class Enemy extends Entity
     {
         //System.out.println("Tis but a flesh wound ");
         this.setHealth(this.getHealth()-damage);
+        swordHit2.play(.75f);
         //System.out.println("My health: " + this.getHealth() + "\n");
     }
 

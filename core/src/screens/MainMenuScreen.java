@@ -18,11 +18,12 @@ public class MainMenuScreen extends ScreenAdapter {
     private int mainSwitch ; 
     private SpriteBatch batch ; 
     Music titleMusic = Gdx.audio.newMusic(Gdx.files.internal("Ice9.mp3"));
-    Music levelMusic = Gdx.audio.newMusic(Gdx.files.internal("Sulphaeus.mp3"));
 
 	
 	public MainMenuScreen(Application game)
 	{
+		titleMusic.setVolume(.5f);
+		titleMusic.setLooping(true);
 		titleMusic.play();
 		this.game = game ; 
 		this.camera = new OrthographicCamera() ; 

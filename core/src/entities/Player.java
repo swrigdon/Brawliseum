@@ -7,6 +7,7 @@ package entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -66,6 +67,10 @@ public class Player extends Entity
     TextureRegion[] playerShootLeftAni;
     TextureRegion[] playerShootRightAni;
     
+    Sound arrowShoot = Gdx.audio.newSound(Gdx.files.internal("arrow shoot.wav"));
+    Sound spellShoot = Gdx.audio.newSound(Gdx.files.internal("spell shoot.wav"));
+    Sound swordHit = Gdx.audio.newSound(Gdx.files.internal("sword hit.wav"));
+    Sound drinkPotion = Gdx.audio.newSound(Gdx.files.internal("Potion_Use.wav"));
 
     public Player(float x, float y, Level currentLevel, String playerClass)
     {
@@ -403,6 +408,11 @@ public class Player extends Entity
             }
             else if(playerClass.equals("bow") || playerClass.equals("mage"))
             {
+            	if(playerClass.equals("mage"))
+            		spellShoot.play(.75f);
+            	if(playerClass.equals("bow"))
+            		arrowShoot.play(.75f);
+            	
                 rangeAttack(map);
             }
             
@@ -424,14 +434,17 @@ public class Player extends Entity
             {
                 if(playerPotion.getPotionName().equals("health"))
                 {
+                	drinkPotion.play(7.5f);
                     health = Math.min(playerPotion.getValue() + health, maxHealth);
                 }
                 else if(playerPotion.getPotionName().equals("attack"))
                 {
+                	drinkPotion.play(7.5f);
                     attackSpeed -= playerPotion.getValue();
                 }
                 else if(playerPotion.getPotionName().equals("move"))
                 {
+                	drinkPotion.play(7.5f);
                     this.setSpeed(this.getSpeed()+playerPotion.getValue());
                 }
                 
@@ -513,7 +526,8 @@ public class Player extends Entity
     }
     
     public void getHit(float damage)
-    {     
+    {   
+    	swordHit.play(1.0f);
         this.health -= damage;
         System.out.println("Health: " + this.health);
     }
