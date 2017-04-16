@@ -107,16 +107,16 @@ public class BossLevelGenerator {
         for(int i = 0; i < enemyNumber; i++)
         {
             holderEnemy = new Enemy(map, enemyTexture, levelNumber);
-            holderEnemy.setHealth(GameConstants.ENEMY_STARTING_HEALTH);
-            holderEnemy.setDamage(GameConstants.ENEMY_STARTING_DAMAGE);
+            holderEnemy.setHealth(GameConstants.BOSS_STARTING_HEALTH);
+            holderEnemy.setDamage(GameConstants.BOSS_STARTING_DAMAGE);
             holderEnemy.setDefense(100);
-            holderEnemy.setSpeed(GameConstants.ENEMY_BASE_SPEED);
+            holderEnemy.setSpeed(GameConstants.BOSS_BASE_SPEED);
 
             enemyLocationX = width / 2;
             enemyLocationY = height / 3;
 
-            holderEnemy.setxLocation(enemyLocationX+((float)(1)-((float)(enemyTexture.getHeight())/32))/2);
-            holderEnemy.setyLocation(enemyLocationY+((float)(1)-((float)(enemyTexture.getHeight())/32))/2);
+            holderEnemy.setxLocation(enemyLocationX);
+            holderEnemy.setyLocation(enemyLocationY);
 
             map[(int)enemyLocationX][(int)enemyLocationY].setOccupied(true);
 

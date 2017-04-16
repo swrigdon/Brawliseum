@@ -38,6 +38,11 @@ public class GameConstants {
     public static final float ENEMY_DAMAGE_SCALE = 5;
 	public static final float ENEMY_BASE_SPEED = (float)2.5; 
 	public static final long ENEMY_BASE_ATTACK_SPEED = 800000000L ; 
+        
+        //boss variables
+        public static final float BOSS_STARTING_HEALTH = 1000 ; 
+	public static final float BOSS_STARTING_DAMAGE = 25 ;
+        public static final float BOSS_BASE_SPEED = (float)2.5; 
 	
 	//level variables
 	public static final int PLAYER_START_X = 2 ; 
@@ -143,8 +148,18 @@ public class GameConstants {
     public static final Texture ENEMY_LEFT = new Texture("enemyLeft.png");
     public static final Texture ENEMY_RIGHT = new Texture("enemyRight.png");
     
-    public static final Texture ENEMY_SHOOT_UP = new Texture("mageShootUp.png");
-    public static final Texture ENEMY_SHOOT_DOWN = new Texture("mageShootDown.png");
-    public static final Texture ENEMY_SHOOT_LEFT = new Texture("mageShootLeft.png");
-    public static final Texture ENEMY_SHOOT_RIGHT = new Texture("mageShootRight.png");
+    public static final Texture ENEMY_SHOOT_UP = new Texture("enemyShootUp.png");
+    public static final Texture ENEMY_SHOOT_DOWN = new Texture("enemyShootDown.png");
+    public static final Texture ENEMY_SHOOT_LEFT = new Texture("enemyShootLeft.png");
+    public static final Texture ENEMY_SHOOT_RIGHT = new Texture("enemyShootRight.png");
+    
+    public static final Texture BOSS_UP = new Texture("bossUp.png");
+    public static final Texture BOSS_DOWN = new Texture("bossDown.png");
+    public static final Texture BOSS_LEFT = new Texture("bossLeft.png");
+    public static final Texture BOSS_RIGHT = new Texture("bossRight.png");
+    
+    public static final Texture BOSS_SHOOT_UP = new Texture("bossShootUp.png");
+    public static final Texture BOSS_SHOOT_DOWN = new Texture("bossShootDown.png");
+    public static final Texture BOSS_SHOOT_LEFT = new Texture("bossShootLeft.png");
+    public static final Texture BOSS_SHOOT_RIGHT = new Texture("bossShootRight.png");
 }

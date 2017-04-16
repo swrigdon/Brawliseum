@@ -66,7 +66,7 @@ public class GameScreen extends ScreenAdapter
     
     private String playerClass;
     //Goes to boss level if %5==0, goes to maze level otherwise.
-    private int levelNumber = 1;
+    private int levelNumber = 4;
     
     private long startTime; 
 
@@ -240,16 +240,15 @@ public class GameScreen extends ScreenAdapter
     {
     	for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
-            //THIS WILL NEED TO BE CHANGED
             currentLevel.getEnemies().get(i).setPlayer(player);
-            //*******************
             
             if(currentLevel.getEnemies().get(i).getHealth() <= 0)
             {
-                //System.out.println(currentLevel.getEnemies().size());
-               // System.out.println("i = " + i);
-                map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setOccupied(false);
-                map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setEnemyOnTile(null);
+                if(!(currentLevel.getEnemies().get(i).getxLocation() > map.length || currentLevel.getEnemies().get(i).getyLocation() > map[0].length))
+                {
+                    map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setOccupied(false);
+                    map[(int)currentLevel.getEnemies().get(i).getxLocation()][(int)currentLevel.getEnemies().get(i).getyLocation()].setEnemyOnTile(null);
+                }
  
                 currentLevel.getEnemies().remove(i);
 
