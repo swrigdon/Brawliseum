@@ -62,9 +62,6 @@ public class BossLevelGenerator {
         map[GameConstants.END_X_LOC][GameConstants.END_Y_LOC] = new DungeonTile("END", 27 , 27);
         map[GameConstants.END_X_LOC][GameConstants.END_Y_LOC].setTileType("END");
         
-        System.out.println(" Starting map " );
-        System.out.println("-----------------------------------" );
-      //  printGrid(map) ; //print the map
         return map;
     }
 

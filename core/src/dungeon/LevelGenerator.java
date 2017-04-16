@@ -70,18 +70,14 @@ public class LevelGenerator
             }
         }
         
+        /*
         System.out.println(" Starting map " );
         System.out.println("-----------------------------------" );
         printGrid(map) ; //print the map
+        */
         
         //declares player start location on map
         map[GameConstants.PLAYER_START_X][GameConstants.PLAYER_START_Y] = new DungeonTile("START", GameConstants.PLAYER_START_X, GameConstants.PLAYER_START_Y);
-        
-        System.out.println("LengthX = " + map.length);
-        System.out.println("LengthY = " + map[0].length);
-        //System.out.println("X = " + endLocationX);
-        //System.out.println("Y = " + endLocationY);
-        System.out.println("Room number: "+ roomStyle);
         
         //generate the maze (we can put this under room style later ) 
         map = generateMaze(map,GameConstants.PLAYER_START_X,GameConstants.PLAYER_START_Y) ; 
@@ -89,10 +85,7 @@ public class LevelGenerator
         //Generates the end location (NEEDS WORK)
         endLocationX = rand.nextInt((map.length-2) - ((map.length*3)/4)) + (((map.length*3)/4));
         endLocationY = rand.nextInt((map[0].length-2) - ((map[0].length*3)/4)) + (((map[0].length*3)/4));
-        /*
-        System.out.println("X = " + endLocationX);
-        System.out.println("Y = " + endLocationY);
-        */
+
         while(map[(int)endLocationX][(int)endLocationY].getTileType().equals("wall"))
         {
             if(!(map[(int)endLocationX][(int)endLocationY+1].getTileType().equals("wall")))
@@ -140,11 +133,11 @@ public class LevelGenerator
         
         map[endLocationX][endLocationY].setTileType("END");
         
-        
+        /*
         System.out.println(" Ending map " );
         System.out.println("-----------------------------------" );
         printGrid(map) ; //print the map
-
+        */
         
         //random level style
         switch(roomStyle)
@@ -650,8 +643,6 @@ public class LevelGenerator
             Random rand = new Random();
             int pickItem = rand.nextInt(4-1)+1;
             
-            System.out.println("Item Number = " + pickItem);
-            
             if(pickItem == 1)
             {
                 holderPotion = new Potion("health", (GameConstants.BASE_HEALTH_POTION) + (GameConstants.SCALE_FACTOR_POTION * levelNum));
@@ -762,8 +753,6 @@ public class LevelGenerator
             }
         }
         
-        System.out.println(enemyNumber);
-        
         for(int i = 0; i < enemyNumber; i++)
         {
             holderEnemy = new Enemy(map, enemyTexture, levelNumber);
@@ -771,15 +760,9 @@ public class LevelGenerator
             holderEnemy.setDamage(GameConstants.ENEMY_STARTING_DAMAGE);
             holderEnemy.setDefense(100);
             holderEnemy.setSpeed(GameConstants.ENEMY_BASE_SPEED);
-            //holderEnemy.setEntityTexture(enemyTexture);
             
             enemyLocationX = rand.nextInt((map.length-2) - 6)+7;
             enemyLocationY = rand.nextInt((map[0].length-2 - 6))+7;
-            
-            /*
-            System.out.println(enemyLocationX);
-            System.out.println(enemyLocationY);
-            */
             
             while(map[(int)enemyLocationX][(int)enemyLocationY].getTileType().equals("wall"))
             {

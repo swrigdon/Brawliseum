@@ -313,7 +313,6 @@ public class Enemy extends Entity
             //This means that the current location is already at the player
             if(current == map[(int)endX][(int)endY])
             {
-            	//System.out.println("WE'RE BREAKING FREEE");
                 break;
             }
             
@@ -341,11 +340,9 @@ public class Enemy extends Entity
                     {
                         DungeonTile neighbor= map[neighborX][neighborY]; 
                         if(!open.contains(neighbor) && !closed.contains(neighbor)){
-                        	//System.out.println("THIS IS A TEST");
                         	neighbor.getHeuristic();
                         	maxDepth= Math.max(maxDepth, neighbor.setParent(current));
                         	open.add(neighbor);
-                        	//System.out.println(open.size());
                         }
                     }
                 }
@@ -361,8 +358,6 @@ public class Enemy extends Entity
         ArrayList<DungeonTile> path = new ArrayList<DungeonTile>();
         DungeonTile target = map[(int)endX][(int)endY];
         while(target!= map[(int)this.getxLocation()][(int)this.getyLocation()]){
-        	//System.out.println("Tile X: "+ target.getX());
-    		//System.out.println("Tile Y: "+ target.getY());
         	path.add(target);
         	target=target.getParent();
         }
@@ -399,7 +394,6 @@ public class Enemy extends Entity
         
     	if(hitDistance() <= 1)
         {
-            //System.out.println("Attack you bitch");
             attacking = true;
             attackPlayer(player);
         }
@@ -417,9 +411,6 @@ public class Enemy extends Entity
             if(path!= null){
                 if(path.size() > 1)
                 {
-                    //System.out.println("Heading to: (" + path.get(path.size()-1).getX() + ", " + path.get(path.size()-1).getY() + ")");
-                    //System.out.println("from: (" + (int)this.getxLocation() + ", " + (int)this.getyLocation() + ")");
-
                     changeLocation(path.get(path.size()-1)) ;
 
                     if(!(Math.abs(this.getxLocation() - ((float)path.get(path.size()-1).getX()+((float)(1)-((float)(this.getEntityTexture().getWidth())/32))/2)) 
@@ -538,10 +529,8 @@ public class Enemy extends Entity
     
     public void getHit(float damage)
     {
-        //System.out.println("Tis but a flesh wound ");
         this.setHealth(this.getHealth()-damage);
         swordHit2.play(.75f);
-        //System.out.println("My health: " + this.getHealth() + "\n");
     }
 
     /**

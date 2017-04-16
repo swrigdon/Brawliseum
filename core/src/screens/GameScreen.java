@@ -63,17 +63,16 @@ public class GameScreen extends ScreenAdapter
     Sound enterPortal = Gdx.audio.newSound(Gdx.files.internal("portal sound.wav"));
     Sound pickupPotion = Gdx.audio.newSound(Gdx.files.internal("Potion_Pickup.wav"));
 
-    
     private String playerClass;
+    
     //Goes to boss level if %5==0, goes to maze level otherwise.
-    private int levelNumber = 4;
+    private int levelNumber = 1;
     
     private long startTime; 
 
 
     public GameScreen(Application game, String playerClass)
     {
-        System.out.println("......................" + levelNumber);
         if(levelNumber%5==0)
         {
             bossGenerator = new BossLevelGenerator(29, 29);
@@ -81,8 +80,8 @@ public class GameScreen extends ScreenAdapter
         }
         else
         {
-        	levelMusic.setVolume(.5f);
-        	levelMusic.setLooping(true);
+            levelMusic.setVolume(.5f);
+            levelMusic.setLooping(true);
             levelMusic.play();
             generator = new LevelGenerator(29, 29);
             currentLevel = generator.generateLevel(levelNumber);
@@ -108,7 +107,7 @@ public class GameScreen extends ScreenAdapter
                             2 + ((float)(1)-((float)27/32))/2,
                                 currentLevel, playerClass);
         
-        printGrid(map)  ; 
+        //printGrid(map)  ; 
         createPortal();
         
         startTime = com.badlogic.gdx.utils.TimeUtils.nanoTime() ; 
@@ -268,7 +267,6 @@ public class GameScreen extends ScreenAdapter
     {
         for(int i = 0; i < currentLevel.getEnemies().size(); i++)
         {
-
             currentLevel.getEnemies().get(i).drawEnemy(batch, elapsedTime);
         }
     }
@@ -300,6 +298,7 @@ public class GameScreen extends ScreenAdapter
         {
             case RUN: 
                 elapsedTime += Gdx.graphics.getDeltaTime();
+                
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 batch.setProjectionMatrix(camera.combined);
@@ -456,32 +455,23 @@ public class GameScreen extends ScreenAdapter
         {
             float mouseX = Gdx.input.getX() ;
             float mouseY = Gdx.input.getY() ;
-
-            System.out.println("Mouse X: " + mouseX);
-            System.out.println("Mouse Y: " + mouseY);
             
             //Health
             if(mouseX > 850 && mouseX < 1075 && mouseY > 365 && mouseY < 445)
             {    
-                System.out.println("Health before: " + player.getMaxHealth());
                 player.setMaxHealth(player.getMaxHealth() + ((5*levelNumber) + 10));
-                System.out.println("Health after: " + player.getMaxHealth());
             }
             
             //Damage
             else if(mouseX > 850 && mouseX < 1075 && mouseY>490 && mouseY<575)
             {    
-                System.out.println("Damage before: " + player.getBaseAttack());
                 player.setBaseAttack(player.getBaseAttack() + (2*levelNumber) + 10);
-                System.out.println("Damage attack: " + player.getBaseAttack());
             }
             
             //Speed
             else if(mouseX > 850 && mouseX < 1075 && mouseY > 605 && mouseY < 685)
             {         
-                System.out.println("Speed before: " + player.getSpeed());
                 player.setSpeed(player.getSpeed() + (float).25);
-                System.out.println("Speed before: " + player.getSpeed());
             }
             
             player.setHealth(player.getMaxHealth());
@@ -539,21 +529,23 @@ public class GameScreen extends ScreenAdapter
     	//make a new level
         if(levelNumber%5==0)
         {
-        	enterPortal.play(.75f);
-        	bossMusic.setVolume(.5f);
-        	bossMusic.setLooping(true);
+            enterPortal.play(.75f);
+            bossMusic.setVolume(.5f);
+            bossMusic.setLooping(true);
             levelMusic.stop();
             bossMusic.play();
+            
             bossGenerator = new BossLevelGenerator(29, 29);
             currentLevel = bossGenerator.generateLevel(currentLevel.getLevelNumber()+1);
         }
         else
         {
-        	enterPortal.play(.75f);
-        	levelMusic.setVolume(.5f);
-        	levelMusic.setLooping(true);
+            enterPortal.play(.75f);
+            levelMusic.setVolume(.5f);
+            levelMusic.setLooping(true);
             bossMusic.stop();
             levelMusic.play();
+            
             currentLevel = generator.generateLevel(currentLevel.getLevelNumber() + 1);
         }
     	//make a new map 
@@ -616,19 +608,15 @@ public class GameScreen extends ScreenAdapter
             {
                 if(enemy.getDirection()== GameConstants.UP)
                 {
-                    //System.out.println("Collision Going Up");
                     enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
                 }else if(enemy.getDirection() == GameConstants.RIGHT)
                 {
-                    //System.out.println("Collision Going Right");
                     enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
                 }else if(enemy.getDirection() == GameConstants.DOWN)
                 {
-                    //System.out.println("Collision Going Down");
                     enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
                 }else if(enemy.getDirection() == GameConstants.LEFT)
                 {
-                    //System.out.println("Collision Going Left");
                     enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
                 }
             }
@@ -647,30 +635,20 @@ public class GameScreen extends ScreenAdapter
                    if(enemy.getDirection()== GameConstants.UP)
                    {
                        enemy.setyLocation(enemy.getyLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                       
-                       //enemy2.setyLocation(enemy2.getyLocation()+(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == GameConstants.RIGHT)
                    {
                         enemy.setxLocation(enemy.getxLocation()-(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                        
-                        //enemy2.setxLocation(enemy2.getxLocation()+(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == GameConstants.DOWN)
                    {
                        enemy.setyLocation(enemy.getyLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                       
-                       //enemy2.setyLocation(enemy2.getyLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
                    }
                    else if(enemy.getDirection() == GameConstants.LEFT)
                    {
                        enemy.setxLocation(enemy.getxLocation()+(float)enemy.getSpeed()*Gdx.graphics.getDeltaTime());
-                       
-                       //enemy2.setxLocation(enemy2.getxLocation()-(float)enemy2.getSpeed()*Gdx.graphics.getDeltaTime());
-                   }
-                   
+                   }         
                }
-
             }
             
             for(int i = 0; i < collisionMatrix.size(); i++)
@@ -732,22 +710,18 @@ public class GameScreen extends ScreenAdapter
                 if(player.isMovingY())
                 {	
                     player.setyLocation(player.getyLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
                 else if(player.isMovingX())
                 {
                     player.setxLocation(player.getxLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
                 else if(player.isMovingNY())
                 {
                     player.setyLocation(player.getyLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
                 else if(player.isMovingNX())
                 {
                     player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
             }
         }
@@ -758,7 +732,7 @@ public class GameScreen extends ScreenAdapter
             {
                 if(player.getPlayerPotion() == null)
                 {
-                	pickupPotion.play(1.0f);
+                    pickupPotion.play(1.0f);
                     player.setPlayerPotion(currentLevel.getGroundItems().get(i).getPotion());
                     currentLevel.getGroundItems().remove(i);
                 }
@@ -771,33 +745,23 @@ public class GameScreen extends ScreenAdapter
             {
                 if(player.isMovingY())
                 {	
-                    //System.out.println("Player Collision Going Up");
                     player.setyLocation(player.getyLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
                 else if(player.isMovingX())
                 {
-                    //System.out.println("Player Collision Going Right");
                     player.setxLocation(player.getxLocation() - (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
                 else if(player.isMovingNY())
                 {
-                    //System.out.println("Player Collision Going Down");
                     player.setyLocation(player.getyLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
                 else if(player.isMovingNX())
                 {
-                    //System.out.println("Player Collision Going Left");
                     player.setxLocation(player.getxLocation() + (float)player.getSpeed()*Gdx.graphics.getDeltaTime());
-                    //break;
                 }
             }
         }
-                
 
-        //camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
         camera.update();
     }
     

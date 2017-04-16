@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Application;
 
 import constants.GameConstants;
-import screens.GameScreen.State;
 
 public class MainMenuScreen extends ScreenAdapter {
 	final Application game  ;
@@ -82,9 +81,6 @@ public class MainMenuScreen extends ScreenAdapter {
 
                     if(state==State.CLASS)
                     {
-                        System.out.println("MouseX: " + mouseX);
-                        System.out.println("MouseY: " + mouseY);
-
                         if(mouseX<620 && mouseX>320 && mouseY>470 && mouseY<650){
                             titleMusic.stop();
                             titleMusic.dispose();
