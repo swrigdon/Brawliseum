@@ -472,6 +472,7 @@ public class GameScreen extends ScreenAdapter
             else if(mouseX > 850 && mouseX < 1075 && mouseY > 605 && mouseY < 685)
             {         
                 player.setSpeed(player.getSpeed() + (float).25);
+                player.setNormalSpeed(player.getSpeed());
             }
             
             player.setHealth(player.getMaxHealth());
@@ -559,9 +560,20 @@ public class GameScreen extends ScreenAdapter
     	player.setxLocation(GameConstants.PLAYER_START_X);
     	player.setyLocation(GameConstants.PLAYER_START_Y);
         player.setAttackSpeed(player.getBaseAttackSpeed());
-        player.setSpeed(GameConstants.PLAYER_BASE_SPEED);
+        if(player.getPlayerClass().equals("sword"))
+        {
+            player.setSpeed(player.getNormalSpeed());
+        }
+        else if(player.getPlayerClass().equals("bow"))
+        {
+            player.setSpeed(player.getNormalSpeed());
+        }
+        else
+        {
+            player.setSpeed(player.getNormalSpeed());
+        }
         player.setExperience(player.getExperience()+GameConstants.XP_FROM_LEVEL);
-        player.setHighestLevel(player.getHighestLevel()+1);;
+        player.setHighestLevel(player.getHighestLevel()+1);
         
         //reset camera
         camera.position.set(player.getxLocation()*32, player.getyLocation()*32, 0);
